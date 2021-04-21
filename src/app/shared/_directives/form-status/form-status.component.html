@@ -1,0 +1,20 @@
+<div class="form-group">
+  <div class="row mrl0">
+      <div class="col-md-3 col-lg-3">
+          <div class="form-label">
+              {{ label }}
+              <em class="fa fa-info-circle" *ngIf='tooltip && tooltipPosition' matTooltipPosition="{{ tooltipPosition }}" matTooltip="{{ tooltip }}"></em>
+          </div>
+      </div>
+      <div class="col-md-8 col-lg-8">
+          <div [ngClass]="{'disableUI': disable == 'true'}">
+              <mat-slide-toggle [(ngModel)]="value" color="blue" class='primary'> {{buttonLabel}}
+              </mat-slide-toggle>
+          </div>
+          <mat-error class="error" *ngIf="validated == 'false' && !val">
+              {{validationMsg}}
+          </mat-error>
+      </div>
+      <div class="clearfix"></div>
+  </div>
+</div>

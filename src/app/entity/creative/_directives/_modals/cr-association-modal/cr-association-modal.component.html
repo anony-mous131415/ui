@@ -1,0 +1,174 @@
+<div mat-dialog-content class="modal-body p-0">
+    <div class='page-container  p-0'>
+        <div class='row m-0'>
+            <div class='col-8 p-0'>
+                <div id='list-header' class=''>
+                    <div class="float-left mrr30 d-flex flex-column">
+
+                        <div class="b-crumbs">
+                            <mdb-breadcrumb customClass="black-text purple lighten-4">
+                                <mdb-breadcrumb-item>
+                                    <span class='bc-title link'>Campaigns</span>
+                                    <a class='bc-name' *ngIf='selectedCampaign.name'>:&nbsp;{{selectedCampaign.name}}</a>
+                                </mdb-breadcrumb-item>
+                                <mdb-breadcrumb-item *ngIf='selectedCampaign.name'>
+                                    <em class="fa fa-angle-right mr-1 mrt-2"></em>
+                                    <span class='bc-title'>Strategies</span>
+                                </mdb-breadcrumb-item>
+                            </mdb-breadcrumb>
+                        </div>
+
+                        <div class='py-1'>
+                            <button mat-button (click)="backToParent()">Go Back</button>
+                        </div>
+
+                    </div>
+                    <div class='float-right'>
+                        <a mat-button id="list-refresh-btn" (click)="reload()" matTooltip="Refresh" matTooltipPosition="above">
+                            <em class="fa fa-refresh"></em>
+                        </a>
+                    </div>
+                    <div class="float-right mrr10">
+                        <mat-form-field>
+                            <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                            <input matInput id='cd-filter' (keyup)="searchFilter($event.target.value)" placeholder="Search" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+
+                    <div class='clearfix'></div>
+                </div>
+                <div id='associate-body'>
+                    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+                    <div id='table-container'>
+                        <div #tableContent id='table-content'>
+                            <app-slider [activePane]="SHOW_TABLE == appConst.ENTITY.CAMPAIGN ? 'left' : 'right'">
+                                <div leftPane>
+                                    <div *ngIf='SHOW_TABLE == appConst.ENTITY.CAMPAIGN'>
+                                        <mat-table id="str-associate-table" [ngClass]="{'table-scroll' : campagins && campagins.length!==0}" [dataSource]="campSource" matSort>
+                                            <ng-container matColumnDef="active">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='after'>
+                                                    <em class='fa fa-circle mrr3 text-default'></em>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" id='camp-active'>
+                                                    <em class='fa fa-circle mc-status' [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></em>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='after'>
+                                                    Campaigns
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" id='cam-id'>
+                                                    {{row.name}}</mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="action">
+                                                <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                                <mat-cell *matCellDef="let row" (click)="selectCampaign(row)">
+                                                    <button mat-button><em class='fa fa-caret-right'></em></button>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;">
+                                            </mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                        </mat-table>
+
+                                        <div *ngIf='!showProgressBar && campagins.length===0' class='my-4 text-center no-data'>
+                                            <em class='fa fa-warning'></em> No data available currently.</div>
+
+                                        <mat-paginator [pageSize]='5' [pageSizeOptions]="[5, 10, 50, 100, 200]">
+                                        </mat-paginator>
+                                    </div>
+
+                                </div>
+
+
+                                <div rightPane>
+                                    <div *ngIf='SHOW_TABLE == appConst.ENTITY.STRATEGY'>
+                                        <mat-table [ngClass]="{'table-scroll' : strategies && strategies.length!==0}" id="str-associate-table" [dataSource]="strSource" matSort>
+
+                                            <ng-container matColumnDef="action">
+                                                <mat-header-cell *matHeaderCellDef>
+                                                    <mat-checkbox [(ngModel)]="allRowSelected" (change)="selectAllClick()">
+                                                    </mat-checkbox>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row">
+                                                    <mat-checkbox [(ngModel)]="row.action" (change)="pushStrToBucket(row, row.action)">
+                                                    </mat-checkbox>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="active">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='after'>
+                                                    <em class='fa fa-circle mrr3 text-default'></em>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" id='camp-active'>
+                                                    <em class='fa fa-circle mc-status' [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></em>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="name">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='after'>
+                                                    Strategies
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row" id='cam-id'>
+                                                    {{row.name}}</mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                        </mat-table>
+
+                                        <div *ngIf='!showProgressBar && strategies.length===0' class='my-4 text-center no-data'>
+                                            <em class='fa fa-warning'></em> No data available currently.</div>
+
+
+                                        <mat-paginator [pageSize]='5' [pageSizeOptions]="[5, 10, 50, 100, 200 , 400 ,500]">
+                                        </mat-paginator>
+                                    </div>
+
+                                </div>
+                            </app-slider>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-4 pr-0'>
+
+                <mat-card class="tp-card">
+                    <mat-card-content>
+                        <h6 class='mrb20'>My Selections</h6>
+                        <div class='selection-body' *ngIf='campagins'>
+                            <p *ngFor='let str of strategiesBucket'>
+                                <em class='fa fa-square'></em>
+                                <span>{{str.name}}</span>
+                                <span class='pull-right pointer' title='Remove'>
+                  <em (click)="pushStrToBucket(str, false)" class='text-gray text13 fa fa-close'></em></span>
+                                <span class='clearfix'></span>
+                            </p>
+                        </div>
+                        <div id='clearAll' *ngIf='strategiesBucket.length > 0' (click)="clearAllClick()" class='text-default text-gray text12 link'>Clear All Selections</div>
+                    </mat-card-content>
+                </mat-card>
+
+            </div>
+            <div class='clearfix'></div>
+        </div>
+    </div>
+</div>
+<div class='modal-footer'>
+    <span class='pull-left mrr10'>
+    <div *ngIf='showErrorMessage' class="error-message pull-left">
+      <em class="fa fa-warning" aria-hidden="true"></em>
+      {{showErrorMessage}}
+    </div>
+  </span>
+    <span class='pull-right'>
+    <button id='associateStrCancle' mat-button class='mrr10 mrl10' (click)="cancel()">Cancel</button>
+    <button id='saveStrategies' mat-raised-button class='btn-primary'
+      [ngClass]="{'disableUI': disableSaveButton == true}" [appDisableDemo]='appConst.DISABLE' appDisableRO
+      (click)="saveStrategies()">Save
+      Strategies</button>
+  </span>
+    <span class='clearfix'></span>
+</div>

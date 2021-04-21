@@ -1,0 +1,106 @@
+$danger-color: #f44336;
+#dimension-form-cover {
+    input {
+        float: left;
+        width: 100px;
+        font-size: 12px;
+    }
+    span {
+        float: left;
+        margin-top: 8px;
+    }
+    .text-gray {
+        font-style: normal;
+    }
+    .errorMsg {
+        color: $danger-color;
+        margin-left: 10px;
+        i {
+            margin-right: 5px;
+        }
+        small {
+            font-size: 11px;
+            color: $danger-color;
+        }
+    }
+}
+
+.file-cover {
+    min-height: 180px;
+    // border: 1px solid #dddddd;
+    padding: 10px 20px;
+    .file-cover-header {
+        padding: 10px;
+        background-color: #fbfbfb;
+        .title {
+            color: #333;
+            float: left;
+        }
+        .action {
+            color: #888;
+            float: right;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    }
+    .file-cover-body {
+        padding: 10px;
+        .cr-icon {
+            min-height: 120px;
+            width: 120px;
+            border: 1px solid #ebebeb;
+            float: left;
+            display: flex;
+            margin: auto;
+            .img-icon {
+                width: 100%;
+                margin: auto;
+            }
+        }
+        .cr-video-icon {
+            min-height: 120px;
+            width: 120px;
+            border: 1px solid #ebebeb;
+            float: left;
+            margin-right: 20px;
+            #video-icon {
+                width: 100%;
+            }
+        }
+    }
+}
+
+.form-group {
+    .form-txt {
+        margin-top: 6px;
+        color: #555555;
+    }
+}
+
+#dynamic-variable-form {
+    padding: 10px;
+    .dv-cover {
+        padding: 0px 20px 0px 20px;
+    }
+    .file-card {
+        // padding: 10px;
+        color: #777;
+        .text-normal {
+            font-weight: normal !important;
+        }
+    }
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}
+
+.mrt20 {
+    margin-top: 20px !important;
+}

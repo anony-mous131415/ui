@@ -1,0 +1,17 @@
+<div class="form-group mb-0" id="modalSource">
+  <div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{config.title}}</h4>
+  </div>
+  <div mat-dialog-content class="d-flex flex-column modal-body col-12 p-0">
+
+    <!-- REVX-974 : can select default logo in native flow -->
+    <app-image-grid [key]="config.key" [advId]="config.advId" [type]="config.type" [title]="config.title"
+      [canSelectMultiple]="config.canSelectMultiple" [showTitle]="config.showTitle" [imgList]="config.imgList"
+      [canSelectDefaultLogo]="config.canSelectDefaultLogo" (selectedImagesEvent)="selectedImagesReceived($event)">
+    </app-image-grid>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-button class="btn-primary text-white" (click)="onSaveClick()">Done</button>
+  </div>
+</div>

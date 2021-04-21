@@ -1,0 +1,177 @@
+<block-ui>
+    <div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+        <h4 class="flex-grow-1 my-auto modal-title">{{config.title}}</h4>
+    </div>
+    <mat-progress-bar *ngIf="requestInProgress" mode="indeterminate"></mat-progress-bar>
+    <div mat-dialog-content class="my-2 d-flex flex-column modal-body col-12 p-0">
+        <div class="alert alert-danger alert-dismissible" *ngIf="showError">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{errorMessage}}</strong>
+        </div>
+        <div class="d-flex flex-row flex-wrap" *ngIf="showInputBox">
+            <input #fileInput type="file" (change)="fileChanged($event)" (click)="fileInput.value = null" id="fileLoader" name="files" accept=".csv" title="Load File" />
+            <button class="btn primary btn-link text-primary" (click)="openFilePicker()"><strong>Upload a CSV
+          file</strong></button>
+            <p class="my-auto px-2"><strong>OR</strong></p>
+            <p class="text-secondary my-auto pl-2"><strong>Copy Paste the list below</strong></p>
+        </div>
+        <div class="d-flex flex-row">
+            <!-- first view -->
+            <div class="left d-flex flex-row col-12 p-2" *ngIf="showInputBox">
+                <textarea [(ngModel)]="inpStrategiesData" class="textarea"></textarea>
+            </div>
+
+            <!-- validation view -->
+            <div class="left d-flex flex-row col-12 p-2" *ngIf="showValidationResult">
+                <div id="valid" class="d-flex flex-column col-6 p-0 mr-1">
+                    <ul class="list-group list-group-fixed-height list-group-flush border border-dark">
+                        <li class="list-group-item px-2 py-1" *ngFor="let strategy of validStrategies">
+                            <div class="d-flex flex-row col-12 p-0">
+                                <div class="col-2 p-0 px-2">
+                                    {{strategy.id}}
+                                </div>
+                                <div class="col-10 p-0">
+                                    {{strategy.name}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="text-success bg-light p-2 border border-dark">
+                        <strong>{{validStrategiesCount}} Strategies validated.</strong>
+                    </div>
+                </div>
+                <div id="invalid" class="d-flex flex-column col-6 p-0">
+                    <ul class="list-group list-group-fixed-height list-group-flush border border-dark">
+                        <li class="list-group-item px-2 py-1" *ngFor="let strategy of invalidStrategies">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex flex-row col-12 p-0">
+                                    <div class="col-2 p-0 px-2">
+                                        {{strategy.id}}
+                                    </div>
+                                    <div class="col-10 p-0">
+                                        {{strategy.name}}
+                                    </div>
+                                </div>
+                                <div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item p-0 px-2 border-0" *ngFor="let msg of strategy.messages">
+                                            <p class="text-muted text-danger small m-0"><em class="fa fa-circle text-dark"></em>&nbsp; {{msg}}
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="text-danger bg-light p-2 border border-dark">
+                        <strong>{{invalidStrategiesCount}} Invalid Strategies</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- update view -->
+            <div class="left d-flex flex-column col-12 p-2" *ngIf="showUpdateResult">
+
+                <table class="table table-hover" aria-describedby="">
+                    <thead class="bg-light">
+                        <tr>
+                            <th scope="col">CAMPAIGN ID</th>
+                            <th scope="col">CAMPAIGN NAME</th>
+                            <th scope="col">STRATEGIES PROCESSED</th>
+                            <th scope="col">UPDATED</th>
+                            <th scope="col">FAILED TO UPDATE</th>
+                            <th scope="col">NO CHANGE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let campaign of campaignList">
+                            <td>{{campaign.id}}</td>
+                            <td>{{campaign.name}}</td>
+                            <td>{{campaign.processed}}</td>
+                            <td>{{campaign.updated}}</td>
+                            <td>{{campaign.failed}}</td>
+                            <td>{{campaign.noChange}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex flex-column">
+                    <h5><small>
+              <strong>LOGS:</strong>
+            </small></h5>
+                    <div id="invalid" class="d-flex flex-column p-0 mb-3" *ngIf="strategyUpdateDetails.log.invalid.length > 0">
+                        <div class="text-danger bg-light p-2 border">
+                            <strong>Strategies Failed to Update</strong>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item px-2 py-1" *ngFor="let strategy of strategyUpdateDetails.log.invalid">
+                                <div class="d-flex flex-row col-12 p-0">
+                                    <div class="col-2 p-0 px-2">
+                                        {{strategy.id}}
+                                    </div>
+                                    <div class="col-5 p-0">
+                                        {{strategy.name}}
+                                    </div>
+                                    <div class="col-5 p-0">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item p-0 px-2 border-0" *ngFor="let msg of strategy.messages">
+                                                <p class="text-muted text-danger small m-0"><em class="fa fa-circle text-dark"></em>&nbsp; {{msg}}
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="valid" class="d-flex flex-column p-0" *ngIf="strategyUpdateDetails.log.valid.length > 0">
+                        <div class="text-success bg-light p-2 border d-flex flex-row" data-toggle="collapse" data-target="#updValidList" (click)="collapse = !collapse;">
+                            <strong>Updated Strategies</strong> <em class="fa ml-auto my-auto" [ngClass]="{'fa-chevron-down': collapse, 'fa-chevron-up': !collapse}"></em>
+                        </div>
+                        <ul class="list-group list-group-flush collapse" id="updValidList">
+                            <li class="list-group-item px-2 py-1" *ngFor="let strategy of strategyUpdateDetails.log.valid">
+                                <div class="d-flex flex-row col-12 p-0">
+                                    <div class="col-2 p-0 px-2">
+                                        {{strategy.id}}
+                                    </div>
+                                    <div class="col-5 p-0">
+                                        {{strategy.name}}
+                                    </div>
+                                    <div class="col-5 p-0">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item p-0 px-2 border-0" *ngFor="let msg of strategy.messages">
+                                                <p class="text-muted text-danger small m-0"><em class="fa fa-circle text-dark"></em>&nbsp; {{msg}}
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="d-flex flex-row flex-wrap mt-2 mx-2" *ngIf="showInputBox">
+            <div class="validate ml-auto my-auto" *ngIf="config.isValidateRequired">
+                <span class="small text-secondary mr-2 my-auto">Only the valid strategies will be saved on clicking save</span>
+                <button mat-raised-button class="btn-primary" [disabled]="checkIsDisabled()" (click)="validateStrategies()">
+          <em class="fa fa-check">&nbsp;Validate</em></button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer d-flex flex-row justify-content-start">
+        <span *ngIf="showInputBox || showValidationResult">
+      <button mat-button class="mr-2" (click)="onBackClick()" *ngIf="showValidationResult">Back</button>
+      <button mat-raised-button class='btn-primary mr-2' (click)="onSaveClick()"
+        [disabled]="!isStrategiesValidated">Save</button>
+      <button mat-button class="mrr15 mrl15" (click)="onCancelClick()">Cancel</button>
+    </span>
+        <span *ngIf="showUpdateResult">
+      <button mat-raised-button class="btn-primary" (click)="onOkClick()">Ok</button>
+    </span>
+    </div>
+</block-ui>

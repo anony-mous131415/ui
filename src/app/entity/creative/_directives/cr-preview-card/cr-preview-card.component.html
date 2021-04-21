@@ -1,0 +1,98 @@
+<mat-card *ngIf='list.length > 0'>
+    <div id='' class='{{cardObj.bg}}'>
+        <div class='mleft'>
+            <div><em class='{{cardObj.icon}}'></em></div>
+            <div>{{list.length}} {{cardObj.title}}</div>
+            <div>
+                <mat-slide-toggle [(ngModel)]="selectedType" class='primary' (change)='handleToggle()'>
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <div class='mright' [ngClass]="{'disableUI':selectedType == false}">
+            <div class='creative-card' *ngFor="let cr of list; index as i"
+                [ngClass]="{'border-bottom1': (i < (list.length - 1) && list.length > 1 ) }">
+
+                <div class='topright' *ngIf='cr.errorMsg'>
+                    <em class='fa fa-warning text-danger pointer' matTooltipPosition="above"
+                        matTooltip="{{ cr.errorMsg }}"></em>
+                </div>
+                <!-- Image-->
+                <div class='cr-icon' *ngIf='cardType == crConst.ALLOWED_TYPES.IMAGE'>
+                    <img id='img-icon' class='img-icon' [src]='cr.previewUrl' alt="creative icon" />
+                </div>
+                <!-- zippedhtml -->
+                <div class='cr-icon'
+                    *ngIf='cardType == crConst.ALLOWED_TYPES.HTML'>
+                    <em class='img-icon fa fa-file-code-o text25 mrt10 text-gray'></em>
+                </div>
+
+                <!-- video -->
+                <div class='cr-video-icon' *ngIf='cardType == crConst.ALLOWED_TYPES.VIDEO'>
+                    <video id='video-icon' width="100%" controls>
+                        <source [src]="cr.videoAttributes[0].videoPath" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                </div>
+                <!-- companion ad -->
+                <div class='cr-icon'
+                    *ngIf='cardType == crConst.ALLOWED_TYPES.VIDEO && cr.videoAttributes[0].hasCompanion'>
+                    <img id='campanion-ad' class='img-icon' [src]='cr.videoAttributes[0].companionPath'
+                        alt="Companion Ad" />
+                </div>
+
+
+                <div class='cr-details'>
+                    <div class="cr-title d-flex flex-column" title=''>
+                        <span>{{cr.name}}</span>
+                        <span *ngIf=" cardType == crConst.ALLOWED_TYPES.HTML && cr.originalFileName !== null"
+                            class="text-muted">{{cr.originalFileName}}</span>
+                    </div>
+
+                    <div class='cr-body'>
+                        <span class='cr-subtitle'
+                            *ngIf='cardType == crConst.ALLOWED_TYPES.VIDEO || cardType == crConst.ALLOWED_TYPES.NATIVE_VIDEO || cardType == crConst.ALLOWED_TYPES.NATIVE_IMAGE || cardType == crConst.ALLOWED_TYPES.IMAGE'>
+                            <span>{{cr.size.width}}x{{cr.size.height}}</span>
+                            <span class='pipe-saparator'>|</span>
+                        </span>
+
+                        <span id='dimension-form-cover'
+                            *ngIf='cardType == crConst.ALLOWED_TYPES.HTML'>
+                            <input title='Width' class='form-control' [(ngModel)]='cr.size.width'
+                                (keydown)="updateDimensionOfCreative(cr)"
+                                [ngClass]="{'error':!formValidated && !cr.size.width}" type='number' min='1'
+                                placeholder="width" />
+                            <span class='text-gray'>&nbsp;x&nbsp;</span>
+                            <input title='Height' class='form-control' [(ngModel)]='cr.size.height'
+                                (keydown)="updateDimensionOfCreative(cr)"
+                                [ngClass]="{'error':!formValidated && !cr.size.width}" type='number' min='1'
+                                placeholder="height" />
+                            <span class='errorMsg' *ngIf='formValidated && (!cr.size.width || !cr.size.height)'>
+                                <em class='fa fa-warning'></em>
+                                <small>Field is missing.</small>
+                            </span>
+
+                            <span class='pipe-saparator'>|</span>
+                        </span>
+                        <span class='cr-action'>
+                            <span *ngIf='cardType != crConst.ALLOWED_TYPES.HTML'>
+                                <span class='cr-preview'
+                                    [ngClass]="{'disableUI': cr.nativeAd == true && !validNativeAsset}"
+                                    (click)="showPreviewModal(cr)">
+                                    <em class="fa fa-eye"></em> Preview
+                                </span>
+                                <span class='pipe-saparator'>|</span>
+                            </span>
+                            <span class='cr-delete' (click)='removeRawCreative(i)'><em class="fa fa-trash"></em>
+                                Remove</span>
+                        </span>
+                        <div class='clearfix'></div>
+                    </div>
+
+                </div>
+                <div class='clearfix'></div>
+            </div>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+</mat-card>

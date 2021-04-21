@@ -1,0 +1,72 @@
+<navbar></navbar>
+<div class='page-container'>
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+    <app-adv-static-header *ngIf="advId" entityId="{{advId}}" activeTab="3"></app-adv-static-header>
+
+    <div id='page-content'>
+        <div class='page-title-cover'>
+            <div class='page-content-breadcrumbs'>
+                <span class='parent' [routerLink]="['/advertiser/'+advId+'/catalog']">CATALOG FEED</span>
+                <span class='navigator'><em class='fa fa-angle-right'></em></span>
+                <span>{{catalogFeed.name}}</span>
+            </div>
+        </div>
+
+        <div class='entity-details' *ngIf="catalogFeed.id">
+            <div class='row'>
+                <div class='col-md-11'>
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_CATALOG_STATUS}}" rowValue="{{catalogFeed.active==true?'Active':'Inactive'}}" prefixIcon="fa-circle text-success" marginBottom="mrb15">
+                    </app-entity-details-row>
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_CATALOG_NAME}}" rowValue="{{catalogFeed.name}}" marginBottom="mrb15">
+                    </app-entity-details-row>
+
+                    <div class='row mrb15'>
+                        <div class='col-md-5 text-bold'>{{advConst.COLUMN_CATALOG_SOURCE}}</div>
+                        <div class='col-md-4 text-fade text-hover'>
+                            {{catalogFeed.source}}</div>
+
+                        <div class='col-md-2 text-fade'>
+
+                            <!--for demo user-->
+                            <p *ngIf='isDemoUser()' class='download-anchor no-cursor-wrapper'>
+                                <span class="no-ptr-events"><em class="fa fa-download" aria-hidden="true"></em>&nbsp;
+                  DOWNLOAD</span>
+                            </p>
+
+                            <!--for non-demo user-->
+                            <a *ngIf='!isDemoUser()' class='download-anchor' href="{{catalogFeed.source}} ">
+                                <em class="fa fa-download" aria-hidden="true"></em>DOWNLOAD
+                            </a>
+
+                        </div>
+                        <div class='clearfix'></div>
+                    </div>
+
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_CATALOG_UPDATED_FREQUENCY}}" rowValue="{{catalogFeed.updateFrequency}}" marginBottom="mrb15">
+                    </app-entity-details-row>
+
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_CATALOG_LAST_UPDATED}}" rowValue="{{lastUpdated}}" marginBottom="mrb15">
+                    </app-entity-details-row>
+
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_CATALOG_UPDATE_STATUS}}" rowValue="{{catalogFeed.updatedStatus}}" marginBottom="mrb15">
+                    </app-entity-details-row>
+
+                    <app-entity-details-row *ngIf="catalogFeed.objectsFound" rowTitle="{{advConst.COLUMN_ITEMS_IMPORTED}}" rowValue="{{catalogFeed.objectsParsed}} ({{catalogFeed.objectsFound}})" marginBottom="mrb15">
+                    </app-entity-details-row>
+
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_SUCCCESS_RATE}}" rowValue="{{catalogFeed.successRate}}%" marginBottom="mrb15">
+                    </app-entity-details-row>
+
+                    <app-entity-details-row rowTitle="{{advConst.COLUMN_VARIABLES_MAPPED}}" rowValue="{{catalogFeed.variablesMapped}}" marginBottom="mrb15">
+                    </app-entity-details-row>
+                </div>
+            </div>
+        </div>
+        <app-generic-list entity="CATALOG_DETAILS" removeDefaultFilter=true advId="{{advId}}" entityId="{{catalogId}}" hideAutoCompleteSearch=true listTitle="CATALOG MAPPING" hideActivateDeActivateBtn=true detailsPageLink="/advertiser/{{entityId}}/catalog/" dataUnavailableMsg="No catalog feeds available for the advertiser"></app-generic-list>
+    </div>
+</div>

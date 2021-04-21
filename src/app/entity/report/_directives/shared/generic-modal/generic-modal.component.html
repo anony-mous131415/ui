@@ -1,0 +1,124 @@
+<div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{config.title}}</h4>
+</div>
+
+<div mat-dialog-content class="modal-body">
+    <div class='my-container'>
+        <div class='row'>
+            <div class='col-8'>
+                <div id='list-header' class=''>
+                    <div class="float-left mrr30 d-flex flex-column">
+
+                    </div>
+                    <div class='float-right'>
+                        <button id="list-refresh-btn" class='btn btn-primary btn-default' title='Refresh' [disabled]='showProgressBar' (click)='reload()'><em class='fa fa-refresh'></em></button>
+                    </div>
+                    <div class="float-right mrr10">
+                        <div class="input-group">
+                            <input #searchInput id='cd-filter' [disabled]='showProgressBar' (keyup)="searchFilter($event.target.value)" class="form-control form-control-sm" placeholder="Search" autocomplete="off" />
+                            <span class='icon-inside'>
+                              <em class="fa fa-search" aria-hidden="true"></em>
+                          </span>
+                        </div>
+                    </div>
+
+                    <div class='clearfix'></div>
+                </div>
+
+                <div id='list-body'>
+                    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+                    <div id='table-container'>
+                        <div #tableContent id='table-content'>
+
+                            <!-------------------------------Advertiser--------------------------------->
+                            <div>
+                                <mat-table id="adv-table" class='table-scroll' [dataSource]="listSource" matSort>
+
+                                    <ng-container *ngFor="let column of listMetrics" [matColumnDef]="column.id">
+
+                                        <div *ngIf="column.id == 'select'">
+                                            <mat-header-cell *matHeaderCellDef>
+                                                <mat-checkbox [(ngModel)]="allRowSelected" (change)="selectAllClick()" [disabled]='showProgressBar'>
+                                                </mat-checkbox>
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let row">
+                                                <mat-checkbox [(ngModel)]="row.select" (change)="pushToBucket(row, row.select)" [disabled]='showProgressBar'>
+                                                </mat-checkbox>
+                                            </mat-cell>
+                                        </div>
+                                        <div *ngIf="column.id!='select'">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='after'>
+                                                {{column.title}}
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let row">
+                                                {{row.name}}</mat-cell>
+                                        </div>
+
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;">
+                                    </mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                </mat-table>
+                                <mat-paginator [pageSize]='5' [length]="listLen" [pageSizeOptions]="[5, 10, 50, 100, 200]" showFirstLastButtons>
+                                </mat-paginator>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-----------------------------My selection------------------------------------->
+            <div class='col-4'>
+
+                <mat-card class="tp-card">
+                    <mat-card-content>
+                        <h6 class='mrb20'>My Selections</h6>
+
+                        <div class='selection-body'>
+                            <div class='' *ngIf='bucket.length'>
+                                <p class='entity-disp text-center'>Selected</p>
+                                <p *ngFor='let obj of bucket'>
+                                    <em class='fa fa-square'></em>
+                                    <span>{{obj.name}}</span>
+                                    <span class='pull-right pointer' title='Remove'>
+                                      <em (click)="pushToBucket( obj, false)" [ngClass]="{'disableUI':showProgressBar}"
+                                          class='text-gray text13 fa fa-close'></em></span>
+                                    <span class='clearfix'></span>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div id='clearAll' *ngIf='bucket.length' (click)="clearAllClick()" [ngClass]="{'disableUI':showProgressBar}" class='text-default text-gray text12 link'>Clear All Selections
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+        </div>
+
+    </div>
+    <div class='clearfix'></div>
+</div>
+
+
+
+<div class='modal-footer'>
+    <span class='pull-left mrr10'>
+      <div *ngIf='!modalValidated' class="error-message pull-left">
+          <em class="fa fa-warning" aria-hidden="true"></em>
+          {{config.errMsg}}
+      </div>
+  </span>
+    <span class='pull-right'>
+      <button id='associateStrCancle' [disabled]='showProgressBar' mat-button class='mrr15 mrl15'
+          (click)="cancel()">Cancel</button>
+      <button id='saveStrategies' mat-raised-button class='btn-primary' [disabled]='showProgressBar'
+          appDisableRO (click)="done()">Done</button>
+  </span>
+    <span class='clearfix'></span>
+</div>

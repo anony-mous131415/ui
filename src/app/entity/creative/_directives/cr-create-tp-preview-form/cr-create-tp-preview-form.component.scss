@@ -1,0 +1,55 @@
+$danger-color: #f44336;
+$success-color: #4fa845;
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff !important;
+}
+
+.false-footer {
+    padding: 16px 0;
+}
+
+.creative-card {
+    padding: 10px;
+    border: 1px solid #ddd;
+    .topright {
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 45px;
+        font-size: 13px;
+        color: var(--primary-color);
+    }
+    .cr-icon {
+        height: 70px;
+        text-align: center;
+        float: left;
+        width: 120px;
+        background: #fafaee;
+        img {
+            width: 110px;
+        }
+        margin-right: 20px;
+        padding: 5px;
+        justify-content: center;
+        display: flex;
+    }
+    .cr-details {
+        height: 60px;
+        .cr-title {
+            margin-top: 3px;
+        }
+        .cr-body {
+            margin-top: 10px;
+        }
+    }
+}
+
+#dimension-form-cover {
+    float: left;
+}

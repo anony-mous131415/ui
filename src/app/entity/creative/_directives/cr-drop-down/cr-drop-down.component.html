@@ -1,0 +1,20 @@
+<div class="form-group {{marginBottom}} wd130">
+    <div class="col-md-12 col-lg-12">
+        <div>
+            <mat-form-field class="wd-full">
+                <mat-select [formControl]="listCtrl" [(ngModel)]="value" (ngModelChange)='emitAdvRegion()'
+                    placeholder="{{label}}" #singleSelect multiple>
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="listFilterCtrl" placeholderLabel="Search"
+                            noEntriesFoundLabel="No entries are found">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let en of filteredLists | async" [value]="en">
+                        {{ en.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>

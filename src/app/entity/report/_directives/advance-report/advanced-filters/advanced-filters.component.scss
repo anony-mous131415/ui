@@ -1,0 +1,33 @@
+#advFilter .mat-expansion-panel-header {
+    padding: 0 24px 0 10px !important;
+    height: 48px !important;
+    margin-left: 0;
+}
+
+.mrl20 {
+    margin-left: 20px !important;
+}
+
+.mrt20 {
+    margin-top: 20px !important;
+}
+
+#advFilter .mat-expansion-panel {
+    margin: 7px 0;
+    border: 1px solid #ccc;
+}
+
+.mat-flat-button.mat-accent {
+    background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-flat-button.cdk-program-focused .mat-button-focus-overlay {
+    opacity: 0;
+}
+
+.mat-flat-button.mat-accent i,
+.mat-flat-button.mat-accent em {
+    margin-right: 5px;
+    font-size: 11px;
+    line-height: 36px;
+}

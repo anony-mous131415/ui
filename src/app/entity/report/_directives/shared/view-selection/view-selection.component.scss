@@ -1,0 +1,34 @@
+.selection-body {
+    max-height: 300px;
+    overflow-x: hidden;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 15px;
+    p {
+        i {
+            font-size: 8px;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+    }
+}
+
+.my-container {
+    padding: 20px 20px;
+    h4 {
+        font-size: 18px;
+    }
+    h5 {
+        font-size: 16px;
+    }
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff !important;
+}

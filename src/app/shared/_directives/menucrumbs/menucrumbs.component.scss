@@ -1,0 +1,194 @@
+$menutab: #ebebeb;
+.dropdown:hover>.dropdown-menu {
+    display: block;
+}
+
+.dropdown>.dropdown-toggle:active {
+    /*Without this, clicking will make it sticky*/
+    pointer-events: none;
+}
+
+.navbar-left {
+    margin-left: 80px;
+    .nav-item {
+        // margin-right: 10px;
+        cursor: pointer;
+        .nav-link {
+            font-size: 14px;
+            padding: 0 25px;
+            color: black;
+            line-height: 52px;
+            font-weight: 500;
+        }
+        &:hover {
+            background: $menutab;
+        }
+        .dropdown-menu {
+            background: $menutab;
+            border: none;
+            border-radius: 0 0 0.25rem 0.25rem;
+            margin-top: 0px;
+            padding: 0px;
+            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+            //-------------------------------------------MENU LEFT SIDE STYLES START-----------------------------/
+            .mc-left {
+                padding: 10px 0px 5px 15px;
+                .mc-section-top {
+                    .mc-title {
+                        font-size: 20px;
+                        padding: 10px 0;
+                    }
+                    .mc-subtitle {
+                        font-weight: bold;
+                        font-size: 13px;
+                        padding: 3px 0px 3px 10px;
+                        margin-bottom: 8px;
+                        a {
+                            color: black;
+                            text-decoration: none;
+                        }
+                        &:hover {
+                            background-color: white;
+                        }
+                    }
+                    .mc-subtitle-active {
+                        background-color: white;
+                    }
+                }
+                .mc-section-bottom {
+                    .mc-title {
+                        font-size: 20px;
+                        padding: 10px 0;
+                    }
+                    .mc-create,
+                    .mc-subtitle {
+                        font-size: 13px;
+                        margin-bottom: 8px;
+                        padding: 0px 5px 0px 5px;
+                        a {
+                            color: var(--primary-color);
+                            .fa-plus {
+                                font-size: 8px;
+                                position: relative;
+                                top: -1;
+                            }
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+            }
+            //-------------------------------------------MENU LEFT SIDE STYLES END-----------------------------/
+            //-------------------------------------------MENU RIGHT SIDE STYLES START -------------------------/
+            .mc-right {
+                padding: 10px 10px 5px 15px;
+                background: white;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12px;
+                .menu-searchbar-container {
+                    .input-group {
+                         ::placeholder {
+                            font-size: 11px;
+                            font-weight: bold;
+                        }
+                        margin-bottom: 10px;
+                        input {
+                            font-size: 12px;
+                        }
+                    }
+                    .m-list-container {
+                        min-height: 240px;
+                        .list-row {
+                            margin: 5px 0px;
+                            .mc-status {
+                                margin-right: 8px;
+                                font-size: 9px;
+                                position: relative;
+                                top: -1px;
+                            }
+                            .mc-li-title {
+                                font-size: 12px;
+                                font-weight: bold;
+                                color: #888;
+                                 :hover {
+                                    color: var(--primary-color);
+                                    text-decoration: none;
+                                }
+                                a {
+                                    font-size: 12px;
+                                    padding: 0px;
+                                    font-family: Arial, Helvetica, sans-serif;
+                                    color: #888;
+                                     :hover {
+                                        color: var(--primary-color);
+                                        text-decoration: none;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .menu-search-footer {
+                        margin-top: 20px;
+                        border-top: 1px dotted #cccccc;
+                        padding: 5px 0px;
+                        a {
+                            color: var(--primary-color);
+                            font-size: 12px;
+                            font-weight: bold;
+                        }
+                    }
+                }
+            }
+            //-------------------------------------------MENU RIGHT SIDE STYLES END -------------------------/
+        }
+    }
+    .navtab-active {
+        background: var(--primary-color) !important;
+        span,
+        .nav-link {
+            color: white !important;
+        }
+    }
+    .menucrumb {
+        width: 500px;
+        .mc-left {
+            width: 30%;
+            float: left;
+        }
+        .mc-right {
+            width: 70%;
+            float: left;
+        }
+    }
+    //-------------------------------------------REPORTS MENU STYLES-------------------------/
+    .menucrumb-list {
+        width: 150px;
+    }
+    .mc-left-list {
+        padding: 10px 15px 5px 15px;
+        .mc-section-top {
+            .mc-title {
+                font-size: 20px;
+                padding: 10px 0;
+            }
+            .mc-subtitle {
+                font-weight: bold;
+                font-size: 13px;
+                padding: 3px 0px 3px 10px;
+                margin-bottom: 8px;
+                a {
+                    color: black;
+                    text-decoration: none;
+                }
+                &:hover {
+                    background-color: white;
+                }
+            }
+            .mc-list-subtitle-active {
+                background-color: white;
+            }
+        }
+    }
+    //-------------------------------------------REPORTS MENU STYLES END-------------------------/
+}

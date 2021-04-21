@@ -1,0 +1,129 @@
+$danger-color: #f44336;
+.false-footer {
+    padding: 16px 0;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff !important;
+}
+
+.mrt20 {
+    margin-top: 20px !important;
+}
+
+.dynamic-variable-form {
+    border: 1px solid #aaa !important;
+    padding: 10px;
+}
+
+.uploadfilecontainer {
+    border: 1px dashed #aaa !important;
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+    i {
+        font-size: 40px;
+        color: var(--primary-color);
+    }
+    &:hover {
+        cursor: pointer;
+        background-color: #aaaaaa;
+        border: 1px dashed var(--primary-color) !important;
+    }
+}
+
+.uploadFormContainer {
+    border: 1px dashed #aaa !important;
+    padding: 10px;
+    i {
+        font-size: 30px;
+        color: #bbb;
+    }
+    &:hover {
+        i {
+            color: var(--primary-color) !important;
+        }
+        cursor: pointer;
+        background-color: #aaaaaa;
+        border: 1px dashed var(--primary-color) !important;
+    }
+}
+
+.file-icon {
+    max-height: 70px;
+    text-align: center;
+    margin: 0 auto;
+    background: #fafafa;
+    img {
+        max-height: 70px;
+        max-width: 100%;
+    }
+}
+
+.file-title {
+    margin-top: 2px;
+    font-size: 10px;
+    color: #888;
+}
+
+.file-subtitle {
+    font-size: 10px;
+    color: #888;
+}
+
+.file-remove {
+    margin-top: 4px;
+    font-size: 10px;
+    color: #f44336;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+}
+
+.html-bg {
+    height: 70px;
+}
+
+.customMenu {
+    height: 200px !important;
+}
+
+.mat-menu-item {
+    line-height: 35px;
+    height: 35px;
+}
+
+.validation-failed {
+    font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: $danger-color;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.text-center.cursor-pointer:hover span em {
+    color: var(--link-color) !important;
+}
+.support-dimension {
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: center;
+    margin: 0; 
+}
+.support-col {
+    border-radius: 16px !important;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 14px;
+    margin: 2px 0; 
+}
+.support-column {
+    padding: 3px 5px; 
+}

@@ -1,0 +1,46 @@
+<div id='modal-content' class='modal-content mh-100'>
+
+    <div id='modal-header' class="modal-header">
+        <h4 class="modal-title">Create Audience</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModal()" title='close'>
+      <em class='fa fa-times'></em>
+    </button>
+    </div>
+
+    <div id='modal-body' class="modal-body">
+
+        <div id='WEBSITE' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===audConst.OBJECTIVE.WEBSITE ? 'highlight' : '']" (click)="setObjective(audConst.OBJECTIVE.WEBSITE)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa  big-icon" [ngClass]="[objective===audConst.OBJECTIVE.WEBSITE ? 'fa-check circle' : 'fa-laptop']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="pt-2 text-secondary">Website</h1>
+                <span>Segment user based on their activity on desktop website or mobile optimized site.</span>
+            </div>
+        </div>
+
+        <div id='MOBILE' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===audConst.OBJECTIVE.MOBILE ? 'highlight' : '']" (click)="setObjective(audConst.OBJECTIVE.MOBILE)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa big-icon" [ngClass]="[objective===audConst.OBJECTIVE.MOBILE ? 'fa-check circle' : 'fa-mobile']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="text-secondary pt-2">Mobile App</h1>
+                <span>Segment user based on their activity on your Mobile App.</span>
+            </div>
+        </div>
+
+        <div *ngIf='showDmpObjective' id='DMP' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===audConst.OBJECTIVE.DMP ? 'highlight' : '']" (click)="setObjective(audConst.OBJECTIVE.DMP)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa big-icon" [ngClass]="[objective===audConst.OBJECTIVE.DMP ? 'fa-check circle' : 'fa-users']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="text-secondary pt-2">Affle DMP</h1>
+                <span>Affle DMP audience.</span>
+            </div>
+        </div>
+    </div>
+    <div id='modal-footer' class="modal-footer d-flex justify-content-end">
+        <button id='aud-cancel-btn' mat-button class="mrr15" (click)='dismissModal()'>Cancel</button>
+        <button id='aud-done-btn' mat-raised-button type="button" class="btn-primary" [disabled]='!objective' (click)="done()">Done</button>
+    </div>
+</div>

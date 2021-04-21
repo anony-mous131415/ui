@@ -1,0 +1,109 @@
+<navbar></navbar>
+<div class='page-container'>
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+    <div id="all-details">
+        <app-adv-static-header *ngIf="advId" entityId="{{advId}}" activeTab="2"></app-adv-static-header>
+
+        <div id='page-content'>
+
+            <!-- REVX-588 : ui shows loader when calling api -->
+            <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+            <div class='page-title-cover'>
+                <div class='float-left'>
+                    <div class='page-content-breadcrumbs'>
+                        <span class='parent' [routerLink]="['/advertiser/'+advId+'/pixel']">Conversion Tracker</span>
+                        <span class='navigator'><em class='fa fa-angle-right'></em></span>
+                        <span>{{pixel.name}}</span>
+                    </div>
+                </div>
+                <div class='float-right'>
+
+                    <button mat-raised-button class='btn-secondary mrr10' [routerLink]="['/advertiser/'+advId+'/pixel/tracker/'+pixel.id]" id="adv-edit-btn">
+            <em class='fa fa-code'></em>
+            <span>Get Tracker Code</span>
+          </button>
+                    <button mat-raised-button class="btn-secondary mrr10" [routerLink]="['/advertiser/'+advId+'/pixel/create/'+pixel.id]" id="adv-edit-btn">
+            <em class='fa fa-pencil'></em>
+            <span>Edit</span>
+          </button>
+
+                    <button *ngIf="pixel.active==false" [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class='btn-primary mrr10' (click)='updateStatus(1)' id="adv-deactivate-btn">
+            <em class='fa fa-play'></em>
+            <span>Activate</span>
+          </button>
+                    <button *ngIf="pixel.active==true" [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class='btn-primary mrr10' (click)='updateStatus(0)' id="adv-deactivate-btn">
+            <em class='fa fa-pause'></em>
+            <span>Deactivate</span>
+          </button>
+                </div>
+                <div class='clearfix'></div>
+            </div>
+
+
+
+
+            <div class='entity-details' *ngIf="pixel.id">
+                <div class='row'>
+                    <div class='col-md-8'>
+                        <app-entity-details-row rowTitle="{{pixelConst.PIXEL_STATUS}}" rowValue="{{pixel.active?'Active':'Inactive'}}" prefixIcon="{{pixel.active?'fa-circle text-success':'fa-circle text-danger'}}" marginBottom="mrb15">
+                        </app-entity-details-row>
+
+                        <app-entity-details-row rowTitle="{{pixelConst.PIXEL_TYPE}}" rowValue="{{pixel.type.name|pixelType}}" marginBottom="mrb15">
+                        </app-entity-details-row>
+
+                        <app-entity-details-row rowTitle="{{pixelConst.PIXEL_ADVERTISER}}" rowValue="{{pixel.advertiserPojo.name}}" marginBottom="mrb15">
+                        </app-entity-details-row>
+
+                        <!--C2C : hide for view-conv-->
+                        <app-entity-details-row *ngIf="pixel.type.id != 0" rowTitle="{{pixelConst.PIXEL_MAX_TIME_C2C}}" rowValue="{{pixel.clickValidityWindow|secondsToTime}}" marginBottom="mrb15">
+                        </app-entity-details-row>
+
+                        <!--V2C : hide for click-conv-->
+                        <app-entity-details-row *ngIf="pixel.type.id != 1" rowTitle="{{pixelConst.PIXEL_MAX_TIME_V2C}}" rowValue="{{pixel.viewValidityWindow|secondsToTime}}" marginBottom="mrb15">
+                        </app-entity-details-row>
+
+                        <!--hide if user selects : (count every conversion) from ui -->
+                        <app-entity-details-row *ngIf="pixel.fcapDuration != -1 " rowTitle="{{pixelConst.PIXEL_COUNT_PER_USER}}" rowValue="{{pixel.userFcap}} Conversion(s) per user every {{pixel.fcapDuration|secondsToTime}}" marginBottom="mrb15">
+                        </app-entity-details-row>
+
+                    </div>
+
+                    <div class='col-md-1'>&nbsp;</div>
+                    <div class='col-md-3'>
+                        <mat-card class="mrr10">
+                            <div class='text-fade'>{{pixelConst.PXL_PERF_CLICKS}}</div>
+
+                            <table class='table bgWhite text-revx mrt10 text12' aria-describedby="">
+                                <tr>
+                                    <td>{{pixelConst.LABEL_IMPRESSIONS}}</td>
+                                    <td class='text-primary text20 text-right'>
+                                        {{(pixel.impressions?pixel.impressions:0) | numFormat}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{pixelConst.LABEL_CONVERSIONS}}</td>
+                                    <td class='text-primary text20 text-right'>
+                                        {{(pixel.conversions?pixel.conversions:0) | numFormat}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{pixelConst.LABEL_CLICKS}}</td>
+                                    <td class='text-primary text20 text-right'>
+                                        {{(pixel.clicks?pixel.clicks:0) | numFormat}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </mat-card>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

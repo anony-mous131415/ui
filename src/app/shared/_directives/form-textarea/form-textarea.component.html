@@ -1,0 +1,18 @@
+<div class="col-md-8 col-lg-8 {{marginTop}}">
+    <div [ngClass]="{'no-cursor-wrapper': disable ===true}">
+        <div [ngClass]="{'no-ptr-events': disable ===true}">
+            <mat-form-field class="wd-full">
+                <!--REVX-439-->
+                <!-- <textarea id="{{ id }}" name="{{ name }}" maxlength="{{ maxLen }}" minlength="{{ minLen }}" [(ngModel)]="value" matInput placeholder="{{label}}" matTooltipPosition="{{tooltipPosition}}" matTooltip="{{tooltip}}" autocomplete="none">
+                      </textarea> -->
+                <input id="{{ id }}" name="{{ name }}" maxlength="{{ maxLen }}" minlength="{{ minLen }}"
+                    [(ngModel)]="value" matInput placeholder="{{label}}" matTooltipPosition="{{tooltipPosition}}"
+                    matTooltip="{{tooltip}}" autocomplete="off">
+            </mat-form-field>
+        </div>
+    </div>
+    <mat-error class="error" *ngIf="validated == 'false' && !val">
+        {{ validationMsg }}
+    </mat-error>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,51 @@
+<!-- vast url form start -->
+<div id='form-container'>
+    <app-form-textarea [(ngModel)]="crBasicDetails.name" tooltipPosition="above" label="{{crConst.LABEL_VAST_TP_URL}}*" tooltip="" maxLen="1024" minLen="4" id="vast_tp_url" validated="{{formValidated}}" validationMsg="{{crConst.VALIDATION_ADDRESS}}" width="wd500"
+        height="ht150">
+    </app-form-textarea>
+    <div class="clearfix mrb15"></div>
+
+    <app-form-radio id='video_format' tooltip='{{crConst.LABEL_VIDEO_FORMAT}}' tooltipPosition="above" label='{{crConst.LABEL_VIDEO_FORMAT}}' options='{{crObj.vastVideoFormats}}' [(ngModel)]='crObj.vastVideoFormatSelected'>
+    </app-form-radio>
+    <div class="clearfix mrb15"></div>
+
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-3 col-lg-3">
+                <div class="form-label pt-3">
+                    {{ crConst.LABEL_VIDEO_SIZE }}
+                    <em class="fa fa-info-circle" matTooltipPosition="{{ tooltipPosition }}" matTooltip="{{ tooltip }}"></em>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-lg-8">
+                <div class='float-left mrr10'>
+                    <mat-form-field class="wd100">
+                        <input matInput id="video_size" name="{{ crBasicDetails.name }}" [ngClass]="{ 'input-danger': videoSizeWidth === 'false' && !val }" [(ngModel)]="value" placeholder="Width" type='number' min=0 autocomplete="off" />
+                    </mat-form-field>
+
+                </div>
+                <div class='float-left'>
+                    <mat-form-field class="wd100">
+                        <input matInput id="video_size" name="{{ crBasicDetails.name }}" [ngClass]="{ 'input-danger': videoSizeHeight === 'false' && !val }" [(ngModel)]="value" min=0 placeholder="Height" type='number' autocomplete="off" />
+                    </mat-form-field>
+                </div>
+                <mat-error class="error" *ngIf="formValidated == 'false' && !val">
+                    {{ crConst.LABEL_VIDEO_SIZE }}
+                </mat-error>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix mrb15"></div>
+
+    <app-form-input [(ngModel)]="crBasicDetails.name" tooltipPosition="above" label="{{crConst.LABEL_VIDEO_DURATION}}*" maxLen="256" minLen="4" id="video_duration" validationMsg="{{crConst.LABEL_VIDEO_DURATION}}" validated="{{formValidated}}" width="wd100">
+    </app-form-input>
+    <div class="clearfix mrb15"></div>
+
+
+    <app-form-checkbox [(ngModel)]="crBasicDetails.isDCO" label="{{crConst.LABEL_HAS_END_CARD}}" tooltipPosition="above" tooltip="{{crConst.LABEL_HAS_END_CARD}}" checkboxLevel="{{crBasicDetails.isDCO==true?'Yes':'No'}}">
+    </app-form-checkbox>
+    <div class="clearfix mrb15"></div>
+</div>
+<!-- vast url form end -->

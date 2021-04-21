@@ -1,0 +1,57 @@
+<block-ui>
+    <div class="form-body">
+        <div>
+            <div class="d-flex ml-3">
+                <app-cr-drop-down label="Size" [options]='sizeFilter' (valchange)='valchange($event,"size")'></app-cr-drop-down>
+                <app-cr-drop-down label="No. of slots" [options]='slotsFilter' (valchange)='valchange($event,"slots")'></app-cr-drop-down>
+                <app-cr-drop-down label="Preview" [options]='previewFilter' (valchange)='valchange($event,"preview")'></app-cr-drop-down>
+                <div style="position: absolute;right: 0;margin-right: 2rem;">
+                    <span>No. of templates selected: {{selectedTemplates.length}}</span>
+                    <button mat-raised-button class='btn-secondary mrl15' (click)="clearSelections()"
+                     [disabled]="selectedTemplates.length===0">Clear Selections</button>
+                </div>
+            </div>
+            <div class="d-flex ml-3">
+                <span [ngClass]="{'activeShow':showAllTemplates, 'notActiveShow': !showAllTemplates}"
+                (click)="allTemplatesClickHandler()"
+                >All Templates</span>
+                <span style="margin: 5px">|</span>
+                <span [ngClass]="{'activeShow':!showAllTemplates, 'notActiveShow': showAllTemplates}"
+                (click)="showSelectedTemplatesClickHandler()"
+                >Selected templates</span>
+            </div>
+            <div class="m-3" [hidden]="!showAllTemplates">
+                <h6>All Templates</h6>
+                <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+                    <div *ngIf="filteredTemplates.length===0">
+                        No templates to display.
+                    </div>
+                    <div class="row" id="templates" style="position: relative;">
+                    </div>
+                    <div id='list-footer' [hidden]='filteredTemplates.length<11'>
+                        <mat-paginator id='generic-paginator' [length]="filteredTemplates.length" [pageSize]="10"
+                            [pageSizeOptions]="[10,20,50]" showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+            <div class="m-3" [hidden]="showAllTemplates">
+                <h6>Selected Templates</h6><br/>
+                <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+                    <div *ngIf="selectedTemplates.length===0">
+                        No templates selected.
+                    </div>
+                    <div class="row" id="selectedTemplates" style="position: relative;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+    <div class='false-footer mrr15'>
+        <button mat-raised-button class='btn-primary pull-right mrl15' (click)="onContinueClick()" [disabled]="selectedTemplates.length===0">Continue</button>
+        <button mat-button class='pull-right mrl15' (click)="onGoBackClick()">Go Back</button>
+        <div class='clearfix'></div>
+    </div>
+
+</block-ui>

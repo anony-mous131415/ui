@@ -1,0 +1,187 @@
+<block-ui>
+
+    <div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+        <h4 class="flex-grow-1 my-auto modal-title">
+            Quick Edit Strategy
+        </h4>
+    </div>
+
+
+    <!--BODY-->
+    <div mat-dialog-content class="modal-body">
+        <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+        <div class='my-container'>
+
+            <div id='page-content' class="mrb0">
+                <div id='form-container'>
+                    <div class='form-body p-0'>
+                        <div class=''>
+
+                            <div class="form-body py-2">
+
+                                <!--name-->
+                                <div class="form-group mb-3">
+                                    <div class="d-flex flex-row col-12 p-0">
+                                        <div class="col-md-8 col-lg-8 pl-0">
+                                            <mat-form-field class="wd-full">
+                                                <input id="strategy-name" [(ngModel)]="strQuickDetails.strategyName" autocomplete="off" matInput placeholder="{{SCONST.BASIC_STR_NAME_LABEL}}" matTooltipPosition="above" matTooltip="{{SCONST.BASIC_STR_NAME_TIP}}">
+                                            </mat-form-field>
+                                            <mat-error class="error" *ngIf="error['name'].hasError">
+                                                {{error['name'].msg}}
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <!--fcap-->
+                                <div class="form-group mb-3">
+                                    <div class="d-flex flex-row col-12 p-0">
+                                        <div class="col-3 pl-0">
+                                            <div class="form-label my-auto">
+                                                {{ SCONST.BASIC_DAILY_FREQ_CAP_LABEL }}
+                                                <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{ SCONST.BASIC_DAILY_FREQ_CAP_TIP }}"></em>
+                                            </div>
+                                        </div>
+                                        <div class="col-9 d-flex flex-column pl-0">
+                                            <div>
+                                                <mat-radio-group [(ngModel)]="strQuickDetails.dailyFCap" class="d-flex flex-column">
+                                                    <mat-radio-button id="campaign-fcap" class="mb-2 d-flex flex-row flex-wrap" [value]="true">
+                                                        <div class="my-auto">Use Campaign FCap Setting - Show Ad no more than
+                                                            <strong>{{campaignFCap}}</strong> times per user in one day</div>
+                                                    </mat-radio-button>
+                                                    <mat-radio-button id="override-fcap" class="mb-2" [value]="false">
+                                                        <div class="d-flex flex-row">
+                                                            <div class="mr-1 my-auto">Show ad no more than
+                                                            </div>
+
+                                                            <!-- <div *ngIf="!strQuickDetails.dailyFCap">
+                                                                <mat-form-field class="wd80">
+                                                                    <input id="strategy-fcap-value" [(ngModel)]="strQuickDetails.dailyFCapValue" maxlength="1024" minlength="4" autocomplete="off" matInput>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div *ngIf="!strQuickDetails.dailyFCap" class="ml-1 my-auto">
+                                                                times per user in one day
+                                                            </div> -->
+
+                                                            <mat-form-field class="wd80 mt-1" *ngIf="!strQuickDetails.dailyFCap">
+                                                                <input matInput type="number" id="strategy-fcap-value" [(ngModel)]="strQuickDetails.dailyFCapValue" maxlength="1024" minlength="4" />
+                                                            </mat-form-field>
+                                                            <div *ngIf="!strQuickDetails.dailyFCap" class="mx-1 my-auto"> times per user in
+                                                            </div>
+                        
+                                                            <mat-form-field class="wd80 mt-1" *ngIf="!strQuickDetails.dailyFCap">
+                                                                <input matInput type="number" id="strategy-fcap-freq" [(ngModel)]="strQuickDetails.fcapInterval" maxlength="1024" minlength="4" />
+                                                            </mat-form-field>
+                                                            <div *ngIf="!strQuickDetails.dailyFCap" class="ml-1 my-auto">hours
+                                                            </div>
+
+
+                                                        </div>
+                                                    </mat-radio-button>
+                                                </mat-radio-group>
+                                                <div class="help-text d-flex flex-row flex-wrap mt-2" *ngIf="error['fCap'].hasError">
+                                                    <em class="fa fa-exclamation-triangle"></em>
+                                                    <div class="m-0 my-auto ">&nbsp;&nbsp;{{error['fCap'].msg}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Bidding -->
+                                <div class="form-group mb-3">
+                                    <div class="d-flex flex-row col-12 p-0">
+                                        <div class="col-md-8 col-lg-8  pl-0">
+                                            <div class="d-flex flex-row">
+                                                <mat-form-field class="wd-full">
+                                                    <mat-select id="bid-type" [(ngModel)]="strQuickDetails.bidType" (selectionChange)="onBidTypeChange($event)" placeholder="{{ SCONST.BUDGET_BID_TYPE_LABEL }}">
+                                                        <mat-option id="bid-type-opt-{{bidType.value}}" *ngFor="let bidType of optBidType" [value]="bidType.value">
+                                                            {{ bidType.title }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                                <span class="ml-1 my-auto">{{bidTypeDesc}}</span>
+                                            </div>
+                                            <mat-error class="error" *ngIf="error['bidType'].hasError">
+                                                {{error['bidType'].msg}}
+                                            </mat-error>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <div class="d-flex flex-row col-12 p-0">
+                                        <div class="col-md-8 col-lg-8 pl-0">
+                                            <mat-form-field class="wd-full">
+                                                <input [(ngModel)]="strQuickDetails.bidPrice" id="bid-price" matInput placeholder="{{SCONST.BUDGET_BID_PRICE_LABEL}}" autocomplete="off">
+                                                <span matSuffix>{{campaignCurrency}}</span>
+                                            </mat-form-field>
+                                            <mat-error class="error" *ngIf="error['bidPrice'].hasError">
+                                                {{error['bidPrice'].msg}}
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="d-flex flex-row col-12 p-0">
+                                        <div class="col-md-2 col-lg-2 my-1 pl-0">
+                                            <div class="form-label">
+                                                {{ SCONST.BUDGET_BID_RANGE_LABEL }}
+                                                <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{ SCONST.BUDGET_BID_RANGE_TIP }}"></em>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-9 col-lg-9 p-0">
+                                            <div class="col-md-5 col-lg-5 pl-0 pull-left">
+                                                <mat-form-field class="wd-full">
+                                                    <input id="bid-range-min" name="flowRate" maxlength="256" minlength="10" [(ngModel)]="strQuickDetails.bidRangeMin" matInput placeholder="Min" autocomplete="off">
+                                                    <span matSuffix>{{campaignCurrency}}</span>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="pt-4 pull-left col-md-2 text-center">to</div>
+                                            <div class="col-md-5 col-lg-5 pl-0 pull-left">
+                                                <mat-form-field class="wd-full">
+                                                    <input id="bid-range-max" name="flowRate" maxlength="256" minlength="10" [(ngModel)]="strQuickDetails.bidRangeMax" matInput placeholder="Max" autocomplete="off">
+                                                    <span matSuffix>{{campaignCurrency}}</span>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <mat-error class="error" *ngIf="error['bidRangeMin'].hasError">
+                                                {{error['bidRangeMin'].msg}}
+                                            </mat-error>
+
+                                            <mat-error class="error" *ngIf="error['bidRangeMax'].hasError">
+                                                {{error['bidRangeMax'].msg}}
+                                            </mat-error>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--FOOTER-->
+    <div class='modal-footer'>
+        <span class='pull-right' [ngClass]="{'no-cursor-wrapper':showProgressBar}">
+      <button id='associateStrCancle' mat-button class='mrr15 mrl15' (click)="cancel()">Cancel</button>
+      <button id='saveStrategies' mat-raised-button class='btn-primary' [ngClass]="{'no-ptr-events':showProgressBar}"
+        [appDisableDemo]='appConst.DISABLE' appDisableRO (click)="done()">Done</button>
+    </span>
+        <span class='clearfix'></span>
+    </div>
+
+</block-ui>

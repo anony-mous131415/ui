@@ -1,0 +1,35 @@
+<div class="left-options d-flex flex-row flex-wrap justify-content-between">
+    <mat-form-field>
+        <mat-select multiple [(value)]="selChartMetrics">
+            <div class="d-flex flex-row col-12">
+                <button mat-raised-button class="btn btn-primary flex-fill m-2" [ngClass]="{'btn-default': !toggleRTSelection}" (click)="onRTSelected()">Re-Targeting</button>
+                <button mat-raised-button class="btn btn-primary flex-fill m-2" [ngClass]="{'btn-default': !toggleUASelection}" (click)="onUASelected()">User Acquisition</button>
+            </div>
+            <mat-option id="chartmetric-{{metric.id}}" *ngFor="let metric of ddMetrics" [value]="metric.id" (onSelectionChange)="onChartMetricSelectionChanged($event)">
+                {{metric.title}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select [(value)]="selFrequency" (selectionChange)="onFrequencySelectionChanged($event)">
+            <mat-option id="chartfreq-{{freq.id}}" *ngFor="let freq of frequencies" [value]="freq.id" [disabled]="freq.disabled" [hidden]="freq.disabled">
+                {{freq.title}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div class="left-chart-container mt-2">
+    <mat-progress-bar *ngIf="showChartProgressBar" mode="indeterminate"></mat-progress-bar>
+    <div *ngIf="chartData?.length > 0">
+        <div id="slicex-chart-container-base" class="w-100" (mousemove)="synchronizeTooltips($event)">
+            <app-slicex-chart class="bg-white w-100" *ngFor="let chart of chartData" [data]="chart" [option]="baseChartOptions" [compare]="isCompareEnabled"></app-slicex-chart>
+        </div>
+
+    </div>
+    <div *ngIf="chartData?.length <= 0 && !showChartProgressBar">
+        <div class="alert alert-secondary text-dark">
+            No data to display.
+        </div>
+    </div>
+
+</div>

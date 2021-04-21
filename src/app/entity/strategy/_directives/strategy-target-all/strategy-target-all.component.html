@@ -1,0 +1,62 @@
+<div class="card bg-light text-dark border form-group mb-0">
+    <div class="card-body d-flex flex-row p-0">
+        <div class="left p-3 my-auto">
+            <em class="fa fa-3x {{icon}} primary-icon"></em>
+        </div>
+        <div class="middle py-2 px-3 flex-grow-1 d-flex flex-column border-right border-left">
+            <div class="d-flex flex-column w-100 my-auto">
+                <div class="line1">
+                    <input id="{{identifier}}-auto-complete" disabled class="p-0 form-control border border-default" type="text" matInput autocomplete="off" [formControl]="ctrl" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" matAutocompletePosition="below">
+                        <mat-option id="{{identifier}}-search-result-header" class="bg-light small" (click)="$event.stopPropagation()">
+                            <div id="{{entity}}-search-result-header-empty" (click)="$event.stopPropagation()" class="small" *ngIf="optionsLength === 0">
+                                No result
+                            </div>
+                            <div id="{{identifier}}-search-result-header-non-empty" (click)="$event.stopPropagation()" *ngIf="optionsLength > 0">
+                                <div class="d-flex flex-row ">
+                                    <h6 class="my-auto flex-grow-1 small">{{optionsLength}} Result(s)</h6>
+                                    <button id="{{identifier}}-search-result-header-add-all" class="btn btn-sm btn-link primary small" (click)="addToSelection(-1)">
+                    <strong><em class="fa fa-plus"></em>&nbsp;Add all</strong>
+                  </button>
+                                </div>
+                            </div>
+                        </mat-option>
+                        <mat-option id="{{identifier}}-{{option.id}}" class="small " *ngFor="let option of options">
+                            <div *ngIf="optionsLength > 0" (click)="$event.stopPropagation()">
+                                <div class="d-flex flex-row">
+                                    <h6 class="my-auto flex-grow-1 small" (click)="$event.stopPropagation()">{{option.name}}</h6>
+                                    <button id="{{identifier}}-search-result-add" class="btn btn-sm btn-link primary small" *ngIf="!option.selected" (click)="$event.stopPropagation(); addToSelection(option.id, option)">
+                    <strong><em class="fa fa-plus"></em>&nbsp;Add</strong>
+                  </button>
+                                    <button class="btn btn-sm bg-transparent small" *ngIf="option.selected">
+                    <strong><em class="fa fa-check text-success"></em></strong>
+                  </button>
+                                </div>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <div class="line2 mt-2" *ngIf="targetOptions !== null && targetOptions !== undefined">
+                    <mat-radio-group [name]="identifier" class="d-flex flex-row justify-content-start" [(ngModel)]="selTargetOption">
+                        <mat-radio-button class="mr-2" *ngFor="let opt of targetOptions" id="{{identifier}}-{{opt.id}}" [value]="opt.value" (change)="onRadioChange($event)">
+                            <div class="my-auto">{{opt.name}}</div>
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+        <div class="right my-auto">
+            <button id="{{identifier}}-action-btn" class="btn btn-default" [disabled]="disableInput" (click)="onClickBrowse()">{{actionBtnLabel}}</button>
+        </div>
+    </div>
+    <div class="card-footer bg-white p-0">
+        <ul *ngIf="!showTargetAllText" class="list-group">
+            <li class="list-group-item d-flex flex-row" *ngFor="let item of selectionList" id="{{identifier}}-{{item.id}}">
+                <span class="flex-grow-1">{{item.name}}</span>
+                <span><em class="fa fa-times" id="{{identifier}}-{{item.id}}-close"
+            (click)="removeItemFromSelection(item)"></em></span>
+            </li>
+        </ul>
+        <div class="p-3 m-0" *ngIf="showTargetAllText">{{targetAlltext}}</div>
+    </div>
+</div>

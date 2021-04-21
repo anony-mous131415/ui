@@ -1,0 +1,14 @@
+.download-anchor {
+  color: var(--primary-color) !important;
+  &:hover {
+    color: var(--primary-color) !important;
+  }
+}
+
+.text-hover {
+    cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: #888;
+  }
+}

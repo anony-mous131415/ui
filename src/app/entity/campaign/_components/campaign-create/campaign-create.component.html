@@ -1,0 +1,753 @@
+<navbar></navbar>
+<block-ui>
+  <div class='page-container cmp-form-container'>
+    <div class='page-header'>
+      <div class='breadcrumbs-container' id='id1'>
+        <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+
+      <div class='clearfix'></div>
+    </div>
+
+    <div id='page-content'>
+
+      <div class='row justify-content-center'>
+        <div class='col-xs-12 col-md-10 col-lg-8'>
+
+          <div id='form-container'>
+            <div class='form-header sticky-top z10'>
+              <span class=''>{{campaignDto && campaignDto.id ? "Edit Campaign" : "Create Campaign"}}</span>
+            </div>
+            <!-- <div class="warning_msg_alert mrl20 mrr20">
+                            <ngb-alert *ngIf="!closed" (close)="closed=true" type="warning">Below is the campaign creation form. Please ensure to check the advertiser ID before creating a campaign as you have be advertisers with the same name</ngb-alert>
+                        </div> -->
+            <mat-accordion id='campaign-form' [multi]="true">
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile-basic'>
+                    <div class="campsteppers">1</div>
+                    <div class="accor-titles">{{cmpConst.BASIC_DETAILS}}</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div>
+                  <!--ui for details-->
+                  <div class='pad20-side'>
+                    <div id='page-content'>
+                      <div id='form-container'>
+                        <div class='form-body'>
+                          <div class='col-12 mrl15'>
+                            <!---------------------------Advertise Id------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label">
+                                    {{ cmpConst.ADVERTISER_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ cmpConst.ADVERTISER_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+                                <div class="col-8 mrt-5 mt-1">
+                                  <div class='d-flex flex-row'>
+                                    <div *ngIf='bmForAdvertiser && editAdvAllowed' class='mrr10 editModal  pt-2'
+                                      (click)="openModal('ADVERTISER')">
+                                      Edit
+                                    </div>
+                                    <div *ngIf='bmForAdvertiser' class='form-txt gotoLink pt-2' (click)="gotoAdv()">
+                                      {{bmForAdvertiser.name}}</div>
+
+                                    <div *ngIf='!bmForAdvertiser'>
+                                      <button id="advSelectBtn"
+                                        [ngClass]="{ 'btn-danger': !formValidated && !bmForAdvertiser}"
+                                        class='btn-primary' mat-raised-button (click)='openModal("ADVERTISER")'>
+                                        <em class='fa fa-file-image-o'></em>
+                                        <span>{{cmpConst.BTN_ADVERTISER}}</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <mat-error class="error mt-2" *ngIf="!formValidated && !bmForAdvertiser">
+                                    {{cmpConst.VALIDATION_ADVERTISER}}
+                                  </mat-error>
+                                </div>
+                              </div>
+                              <div class="clearfix mrb15"></div>
+                            </div>
+
+                            <!---------------------------Bd-1 : Campaign name--------------------------------------------------->
+                            <app-form-input [(ngModel)]="campaignDto.name" tooltipPosition="above"
+                              label="{{cmpConst.CAMPAIGN_NAME_LABEL}}*" tooltip="{{cmpConst.CAMPAIGN_NAME_TOOLTIP}}"
+                              maxLen="100" minLen="4" id="cmpName" name="cmpName"
+                              validationMsg="{{cmpConst.VALIDATION_CAMPAIGN_NAME}}" validated="{{formValidated}}"
+                              width="wd250">
+                            </app-form-input>
+                            <div class="clearfix mrb15"></div>
+
+
+
+                            <!---------------------------Bd-2 : Retargeting checkbox (REVX-724 )------------------------------>
+                            <app-form-checkbox id="retargetingCheck" name="retargetingCheck"
+                              [(ngModel)]="campaignDto.retargeting" label="{{cmpConst.RETARGETING_LABEL}}"
+                              [disable]="campaignDto && campaignDto.skadTarget" tooltipPosition="above"
+                              checkboxLevel="{{campaignDto.retargeting ==true?'Yes':'No'}}">
+                            </app-form-checkbox>
+                            <div class="clearfix mrb15"></div>
+
+                            <!---------------------------Bd-3 : Objective ------------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label">
+                                    {{ cmpConst.OBJECTIVE_LABEL }}
+                                  </div>
+                                </div>
+                                <div class="col-8 mt-1">
+                                  <div class='d-flex flex-column'>
+                                    <div>
+                                      <span *ngIf='showObjectiveEditOption()' id='objEdit' class='mrr10 editModal'
+                                        (click)="openObjectiveModal()">Edit</span>
+                                      <span id='objName' *ngIf='campaignDto.objective!==null'
+                                        class="form-txt">{{campaignDto.objective | campaignObjective}}</span>
+
+                                    </div>
+                                    <mat-error class="error mt-2" *ngIf="!formValidated && !campaignDto.objective">
+                                      {{cmpConst.VALIDATION_OBJECTIVE}}
+                                    </mat-error>
+                                  </div>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+                              </div>
+                            </div>
+                            <div class="clearfix mrb15"></div>
+
+                            <!--------------------------- REVX-724 : SKAD checkbox--------------------------------------------->
+                            <app-form-checkbox id="skad" name="skad" [(ngModel)]="campaignDto.skadTarget"
+                              label="{{cmpConst.SKAD_LABEL}}"
+                              checkboxLevel="{{campaignDto.skadTarget ==true?'Yes':'No'}}"
+                              [disable]="cmpId >=0 || !skadAllowed" (advEvent)="onSkadCbChange($event)">
+                            </app-form-checkbox>
+                            <div class="clearfix mrb15"></div>
+
+
+                            <!---------------------------Bd-4 : Pixel --------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label">
+                                    {{ cmpConst.CONV_TRACK_PIXEL_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ cmpConst.CONV_TRACK_PIXEL_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+                                <div class="col-8 mrt-5 mt-1">
+                                  <div class='d-flex flex-row'>
+                                    <div *ngIf='campaignDto.pixel && editPxlAllowed' class='mrr10 editModal pt-2'
+                                      (click)="openModal('PIXEL')">
+                                      Edit
+                                    </div>
+                                    <div *ngIf='campaignDto.pixel' class='form-txt gotoLink pt-2' (click)='gotoPixel()'>
+                                      {{campaignDto.pixel.name}}
+                                    </div>
+
+                                    <div *ngIf='!campaignDto.pixel'>
+                                      <button id="pxlSelect-btn" [ngClass]="{ 'btn-danger': !formValidated && bmForPricing && bmForPricing.name==='CPA'
+                                                                              && !campaignDto.pixel}"
+                                        class='btn-primary' mat-raised-button (click)='openModal("PIXEL")'
+                                        [disabled]='!bmForAdvertiser'>
+                                        <em class='fa fa-file-image-o'></em>
+                                        <span>{{cmpConst.BTN_TRACKING_PIXEL}}</span>
+                                      </button>
+                                    </div>
+                                    <div *ngIf='campaignDto.pixel && !cmpId' (click)='campaignDto.pixel=null'><em
+                                        class="fa fa-times pxl-close mt-2" aria-hidden="true"></em>
+                                    </div>
+                                  </div>
+                                  <mat-error class="error mt-2"
+                                    *ngIf="!formValidated && bmForPricing && bmForPricing.name==='CPA' && !campaignDto.pixel">
+                                    {{cmpConst.VALIDATION_PIXEL}}
+                                  </mat-error>
+                                </div>
+                              </div>
+                              <div class="clearfix"></div>
+                            </div>
+
+                            <!---------------------------Bd-4 : Pixel (ends)--------------------------------------------->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </mat-expansion-panel>
+
+
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile-schedule'>
+                    <div class="campsteppers">2</div>
+                    <div class="accor-titles">{{cmpConst.SCHEDULE}}</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div>
+                  <!--ui for schedulae-->
+                  <div class='pad20-side'>
+                    <div id='page-content'>
+                      <div id='form-container'>
+                        <div class='form-body'>
+                          <div class='col-12 mrl15'>
+                            <!-------------------------------SCH:1 - start Date ----------------------------------------------->
+                            <div id='id2' class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label">
+                                    {{ cmpConst.START_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ cmpConst.START_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+
+                                <div class="col-8 d-flex flex-column">
+                                  <div class='wd250' [ngClass]="{'warning-brdr':!formValidated && !cmpId && !assigner.startDateCb && !assigner.startDate,
+                                                                        'brdr-disable' : assigner.startDateCb}">
+                                    <ejs-datetimepicker id='startDateEjs' [step]='1' [showTodayButton]='false'
+                                      [disabled]="assigner.startDateCb || cmpId" [(ngModel)]="assigner.startDate"
+                                      [min]='assigner.minStartDate' [showClearButton]='false' [allowEdit]='false'
+                                      (change)="onStartTimeChange($event)">
+                                    </ejs-datetimepicker>
+                                  </div>
+                                  <div [ngClass]="{'no-cursor-wrapper':cmpId}">
+                                    <mat-checkbox id='startChkBox' [(ngModel)]="assigner.startDateCb"
+                                      [ngClass]="{'txt-clr':!assigner.startDateCb , 'no-ptr-events':cmpId }"
+                                      [disabled]="cmpId" class='primary' (change)="onCheckboxChange($event, 1)">
+                                      {{cmpConst.START_CHECKBOX}}
+                                    </mat-checkbox>
+                                  </div>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !cmpId && !assigner.startDateCb && !assigner.startDate">
+                                    {{cmpConst.VALIDATION_START_DATE}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !cmpId && !assigner.startDateCb && assigner.startDate && expiredStartDateMsg">
+                                    {{expiredStartDateMsg}}
+                                  </mat-error>
+                                </div>
+
+                              </div>
+                              <div class="clearfix mrb15"></div>
+                            </div>
+                            <!-------------------------------SCH:2 - end Date ----------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label">
+                                    {{ cmpConst.END_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ cmpConst.END_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+
+                                <div class="col-8 d-flex flex-column">
+                                  <div class='wd250' [ngClass]="{'warning-brdr':!formValidated && !assigner.endDateCb && !assigner.endDate ,
+                                                                        'brdr-disable' : assigner.endDateCb}">
+                                    <ejs-datetimepicker id='endDateEjs' [step]='1' [showTodayButton]='false'
+                                      [disabled]="assigner.endDateCb" [(ngModel)]="assigner.endDate"
+                                      [min]='assigner.minEndDate' [showClearButton]='false' [allowEdit]='false'>
+                                    </ejs-datetimepicker>
+                                  </div>
+                                  <div>
+                                    <mat-checkbox id='endChkBox' [(ngModel)]="assigner.endDateCb"
+                                      [checked]='cmpId && campaignDto.endTime >=cmpConst.NEVER_ENDING_EPOCH'
+                                      [ngClass]="{'txt-clr':!assigner.endDateCb}" class='primary'
+                                      (change)="onCheckboxChange($event, -1)">
+                                      {{cmpConst.END_CHECKBOX}}
+                                    </mat-checkbox>
+                                  </div>
+                                  <!--both : in create/edit mode-->
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !assigner.endDateCb && !assigner.endDate">
+                                    {{cmpConst.VALIDATION_END_DATE}}
+                                  </mat-error>
+                                  <!--only in create mode-->
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !cmpId && !assigner.startDateCb && !assigner.endDateCb && assigner.startDate && assigner.endDate && getEpochValue(assigner.startDate)>=getEpochValue(assigner.endDate)">
+                                    {{cmpConst.VALIDATION_SCHEDULE}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated &&  !assigner.endDateCb && assigner.endDate && expiredEndDateMsg">
+                                    {{expiredEndDateMsg}}
+                                  </mat-error>
+                                </div>
+
+                              </div>
+                              <div class="clearfix"></div>
+                            </div>
+                            <!-------------------------------SCH:2 - end Date(ends) ----------------------------------------------->
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+
+
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile-pricing'>
+                    <div class="campsteppers">3</div>
+                    <div class="accor-titles"> {{cmpConst.PRICING_AND_BUDGET}} </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div>
+                  <!--ui for pricing-->
+                  <div class='pad20-side'>
+                    <div id='page-content'>
+                      <div id='form-container'>
+                        <div class='form-body'>
+                          <div class='col-12 mrl15'>
+
+                            <!--------------------------------------PB1 select begins------------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label pt-3">
+                                    {{ cmpConst.CAMPAIGN_PRICING_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ cmpConst.CAMPAIGN_PRICING_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+                                <div class="col-8">
+                                  <div class="d-flex flex-row">
+                                    <div>
+                                      <mat-form-field [ngClass]="{ 'input-danger':!formValidated  && !bmForPricing}"
+                                        class="wd250" (click)='resetFilterList(myInput)'>
+                                        <mat-select id="pricingSelect" [formControl]="listCtrl"
+                                          [(ngModel)]="bmForPricing"
+                                          (selectionChange)='pricingIdChange("dummy",$event, pb3_input , pb3_after ,pb4_input , pb4_after , pb5_input , pb5_after)'
+                                          #singleSelect disableOptionCentering>
+
+                                          <input class="myInput" #myInput id='pricingInput' focused="'true'" type="text"
+                                            (keyup)="search($event.target.value)" autocomplete="off"
+                                            placeholder="Search" trim="blur">
+
+                                          <mat-option id="pricingSelectOpt" *ngFor="let en of filteredLists"
+                                            [value]="en">
+                                            {{ en.name }}
+                                          </mat-option>
+
+                                          <label class='noResultLabel' *ngIf="!filteredLists.length">No
+                                            entries are found
+                                          </label>
+                                        </mat-select>
+                                      </mat-form-field>
+                                    </div>
+                                    <div class='mx-3 pt-3 mrt-3'>at</div>
+                                    <mat-form-field class="wd60">
+                                      <input id="flowRate" matInput name="flowRate" #flowRate maxlength="256"
+                                        minlength="10"
+                                        [ngClass]="{ 'input-danger': !formValidated && ((isInvalidNumber(assigner.flowRate) || !isValidFlowRate(assigner.flowRate)) || (bmForPricing && bmForPricing.name!==cmpConst.PRICING.MARGIN && !isInvalidNumber(assigner.flowRate) && isValidFlowRate(assigner.flowRate) && !isInvalidNumber(assigner.dailyBudget) && getNum(assigner.flowRate)>getNum(assigner.dailyBudget)) )}"
+                                        [(ngModel)]="assigner.flowRate" (change)="onFlowRateChange()" />
+                                    </mat-form-field>
+
+                                  </div>
+                                  <mat-error class="error" *ngIf="!formValidated && !bmForPricing">
+                                    {{cmpConst.VALIDATION_PRICING_NOT_SELECTED}}
+                                  </mat-error>
+                                  <mat-error class="error" *ngIf="!formValidated && isNEU(assigner.flowRate)">
+                                    {{cmpConst.VALIDATION_PRICING_INPUT_BLANK}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated  && !isNEU(assigner.flowRate) && (isInvalidNumber(assigner.flowRate) || !isValidFlowRate(assigner.flowRate)) && bmForPricing && bmForPricing.name === cmpConst.PRICING.MARGIN">
+                                    {{cmpConst.VALIDATION_PRICING_RATE_FOR_MARGIN}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated  && !isNEU(assigner.flowRate) && (isInvalidNumber(assigner.flowRate) || !isValidFlowRate(assigner.flowRate)) && bmForPricing && bmForPricing.name !== cmpConst.PRICING.MARGIN">
+                                    {{cmpConst.VALIDATION_PRICING_RATE_FOR_NON_MARGIN}}
+                                  </mat-error>
+                                  <!-- when flow rate is more than daily budget-->
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && bmForPricing && bmForPricing.name!==cmpConst.PRICING.MARGIN && !isInvalidNumber(assigner.flowRate) && isValidFlowRate(assigner.flowRate) &&
+                                                                  !isInvalidNumber(assigner.dailyBudget) && getNum(assigner.flowRate)>getNum(assigner.dailyBudget)">
+                                    {{cmpConst.VALIDATION_PRICING_VALUE}}
+                                  </mat-error>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+                              </div>
+                            </div>
+                            <div class="clearfix mrb15"></div>
+                            <!--------------------------------------PB1 select ends-------------------------------------------------------->
+
+                            <!--------------------------------------PB2 radio Begins-------------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-3">
+                                  <div class="form-label">
+                                    {{ cmpConst.LIFETIME_MEDIA_BUDGET_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ cmpConst.LIFETIME_MEDIA_BUDGET_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+                                <div class="col-8">
+                                  <div>
+                                    <div>
+                                      <mat-radio-group id='lifetimeBudgetRadioGp' [(ngModel)]="ngModelPricing.radio"
+                                        class="example-radio-group">
+                                        <mat-radio-button id='unlimitedRadio' [value]="1" class='mb-1'
+                                          [ngClass]='[ngModelPricing.radio===1?"":"text-secondary"]'>
+                                          Unlimited
+                                        </mat-radio-button>
+                                        <mat-radio-button id='limitedRadio' [value]="2"
+                                          [ngClass]='[ngModelPricing.radio===2?"":"text-secondary"]'>
+                                          <div class="d-flex flex-row">
+                                            <div class='mr-1 mt-1' [hidden]='ngModelPricing.radio==2'>
+                                              Limit to
+                                            </div>
+                                            <div class="budMed" [hidden]='ngModelPricing.radio==1'>
+                                              <div class='mr-1 pt-4 mrt1r' [hidden]='ngModelPricing.radio==1'>
+                                                Limit to
+                                              </div>
+
+                                              <mat-form-field class="wd180 pt-4" [hidden]='ngModelPricing.radio==1'>
+                                                <input matInput [(ngModel)]="ngModelPricing.inpt"
+                                                  id="lifetimeMediaBudget" maxlength="1024" minlength="4"
+                                                  [ngClass]="{ 'input-danger': !formValidated &&ngModelPricing.radio===2 && isInvalidNumber(ngModelPricing.inpt)}" />
+                                              </mat-form-field>
+                                            </div>
+                                          </div>
+                                          <mat-error class="error"
+                                            *ngIf="!formValidated && ngModelPricing.radio===2 && isNEU(ngModelPricing.inpt)">
+                                            {{cmpConst.VALIDATION_LIFETIME_MEDIA_BUDGET_BLANK}}
+                                          </mat-error>
+                                          <mat-error class="error"
+                                            *ngIf="!formValidated && ngModelPricing.radio===2 && ngModelPricing.inpt && isInvalidNumber(ngModelPricing.inpt) && hasSpclChars(ngModelPricing.inpt)">
+                                            {{cmpConst.VALIDATION_SPECIAL_CHAR}}
+                                          </mat-error>
+                                          <mat-error class="error"
+                                            *ngIf="!formValidated && ngModelPricing.radio===2 && ngModelPricing.inpt && isInvalidNumber(ngModelPricing.inpt) && !hasSpclChars(ngModelPricing.inpt) && getNum(0)>getNum(ngModelPricing.inpt)">
+                                            {{cmpConst.VALIDATION_NEGATIVE}}
+                                          </mat-error>
+                                        </mat-radio-button>
+                                      </mat-radio-group>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="clearfix"></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="clearfix mrb15"></div>
+                          <!------------------------------------PB2 radio ends------------------------------------------------------>
+                        </div>
+                        <div class='form-body pt-0'>
+                          <div class='col-12 mrl15'>
+                            <!--------------------------------------PB3 Begins-------------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-md-8 col-lg-8">
+                                  <mat-form-field class="wd-full">
+                                    <input #pb3_input id="lifetimeDeliveryCap" name="lifetimeDeliveryCap"
+                                      maxlength="1024" [(ngModel)]="campaignDto.lifetimeDeliveryCap" matInput
+                                      placeholder="{{cmpConst.LIFETIME_DELIVERY_CAP_LABEL}}" matTooltipPosition="above"
+                                      matTooltip="{{cmpConst.LIFETIME_DELIVERY_CAP_TOOLTIP}}" autocomplete="off"
+                                      [disabled]='cmpId && (campaignDto.pricingId===cmpConst.PRICING_ID.MARGIN || campaignDto.pricingId===cmpConst.PRICING_ID.CPI)'
+                                      [ngClass]="{'input-danger':!formValidated && !isNEU(campaignDto.lifetimeDeliveryCap) && isInvalidNumber(campaignDto.lifetimeDeliveryCap)}">
+                                    <div #pb3_after matSuffix class='pbsuffix'></div>
+                                  </mat-form-field>
+                                  <!-- <div #pb3_after class='ml-1 form-txt'></div> -->
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !isNEU(campaignDto.lifetimeDeliveryCap) && isInvalidNumber(campaignDto.lifetimeDeliveryCap) && hasSpclChars(campaignDto.lifetimeDeliveryCap)">
+                                    {{cmpConst.VALIDATION_SPECIAL_CHAR}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !isNEU(campaignDto.lifetimeDeliveryCap) && isInvalidNumber(campaignDto.lifetimeDeliveryCap) && !hasSpclChars(campaignDto.lifetimeDeliveryCap) && getNum(0)>getNum(campaignDto.lifetimeDeliveryCap)">
+                                    {{cmpConst.VALIDATION_NEGATIVE}}
+                                  </mat-error>
+                                </div>
+                                <div class="clearfix"></div>
+                              </div>
+                            </div>
+                            <!--------------------------------------PB3 ends------------------------------------------------------------>
+
+                            <!--------------------------------------PB4 Begins---------------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-md-8 col-lg-8">
+                                  <mat-form-field class="wd-full">
+                                    <input #pb4_input id="dailyMediaBudget" name="dailyMediaBudget" maxlength="1024"
+                                      [ngClass]="{ 'input-danger': !formValidated && ((!isNEU(assigner.dailyBudget)&& isInvalidNumber(assigner.dailyBudget))||(ngModelPricing.radio===2
+                                                                  && !isInvalidNumber(assigner.dailyBudget) && !isInvalidNumber(ngModelPricing.inpt) && getNum(assigner.dailyBudget)>getNum(ngModelPricing.inpt))) }"
+                                      [(ngModel)]="assigner.dailyBudget" matInput
+                                      placeholder="{{cmpConst.DAILY_MEDIA_BUDGET_LABEL}}" matTooltipPosition="above"
+                                      matTooltip="{{cmpConst.DAILY_MEDIA_BUDGET_TOOLTIP}}" autocomplete="off">
+                                    <div #pb4_after matSuffix class='pbsuffix'></div>
+                                  </mat-form-field>
+                                  <!-- <div #pb4_after class='ml-1 form-txt'></div> -->
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !isNEU(assigner.dailyBudget) && isInvalidNumber(assigner.dailyBudget) && hasSpclChars(assigner.dailyBudget)">
+                                    {{cmpConst.VALIDATION_SPECIAL_CHAR}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !isNEU(assigner.dailyBudget) && isInvalidNumber(assigner.dailyBudget) && !hasSpclChars(assigner.dailyBudget) && getNum(0)>getNum(assigner.dailyBudget)">
+                                    {{cmpConst.VALIDATION_NEGATIVE}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated &&  ngModelPricing.radio===2 && !isInvalidNumber(assigner.dailyBudget)
+                                                              && !isInvalidNumber(ngModelPricing.inpt) && getNum(assigner.dailyBudget)>getNum(ngModelPricing.inpt)">
+                                    {{cmpConst.VALIDATION_DAILY_BDGET_LESS}}
+                                  </mat-error>
+                                </div>
+                                <div class="clearfix"></div>
+                              </div>
+                            </div>
+                            <!--------------------------------------PB4 ends----------------------------------------------------------->
+
+                            <!--------------------------------------PB5 Begins---------------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row mrl0">
+                                <div class="col-md-8 col-lg-8">
+                                  <mat-form-field class="wd-full">
+                                    <input #pb5_input id="dailydeliveryCap" name="dailydeliveryCap" maxlength="1024"
+                                      [ngClass]="{ 'input-danger': !formValidated && ((!isNEU(campaignDto.dailyDeliveryCap) && isInvalidNumber(campaignDto.dailyDeliveryCap))|| (!bmForPricing || bmForPricing && bmForPricing.name!==cmpConst.PRICING.MARGIN && bmForPricing.name!==cmpConst.PRICING.CPI)&& !isInvalidNumber(campaignDto.lifetimeDeliveryCap) &&
+                                                                  !isInvalidNumber(campaignDto.dailyDeliveryCap) && getNum(campaignDto.dailyDeliveryCap)>getNum(campaignDto.lifetimeDeliveryCap)) }"
+                                      [(ngModel)]="campaignDto.dailyDeliveryCap"
+                                      [disabled]='cmpId && (campaignDto.pricingId===cmpConst.PRICING_ID.MARGIN || campaignDto.pricingId===cmpConst.PRICING_ID.CPI)'
+                                      matInput placeholder="{{cmpConst.DAILY_DELIVERY_CAP_LABEL}}"
+                                      matTooltipPosition="above" matTooltip="{{ cmpConst.DAILY_DELIVERY_CAP_TOOLTIP}}"
+                                      autocomplete="off">
+                                    <div #pb5_after matSuffix class='pbsuffix'></div>
+                                  </mat-form-field>
+                                  <!-- <div #pb5_after class='ml-1 form-txt'></div> -->
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !isNEU(campaignDto.dailyDeliveryCap) && isInvalidNumber(campaignDto.dailyDeliveryCap) && hasSpclChars(campaignDto.dailyDeliveryCap)">
+                                    {{cmpConst.VALIDATION_SPECIAL_CHAR}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && !isNEU(campaignDto.dailyDeliveryCap) && isInvalidNumber(campaignDto.dailyDeliveryCap) && !hasSpclChars(campaignDto.dailyDeliveryCap) && getNum(0)>getNum(campaignDto.dailyDeliveryCap)">
+                                    {{cmpConst.VALIDATION_NEGATIVE}}
+                                  </mat-error>
+                                  <mat-error class="error"
+                                    *ngIf="!formValidated && (!bmForPricing || bmForPricing && bmForPricing.name!==cmpConst.PRICING.MARGIN && bmForPricing.name!==cmpConst.PRICING.CPI)&& !isInvalidNumber(campaignDto.lifetimeDeliveryCap) &&
+                                                              !isInvalidNumber(campaignDto.dailyDeliveryCap) && getNum(campaignDto.dailyDeliveryCap)>getNum(campaignDto.lifetimeDeliveryCap)">
+                                    {{cmpConst.VALIDATION_DAILY_DCAP_LESS}}
+                                  </mat-error>
+                                </div>
+                                <div class="clearfix"></div>
+                              </div>
+                            </div>
+                            <!--------------------------------------PB5 ends-------------------------------------------------------------->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div [hidden]="!campaignDto || !campaignDto.skadTarget">
+                  <mat-action-row class="mrr15">
+                    <button id='cmpCancel' mat-button [routerLink]="['/campaign']">Cancel</button>
+                    <button id='cmpSaveExit' [appDisableDemo]='appConst.DISABLE' mat-raised-button
+                      class='btn-secondary ml-3' appDisableRO (click)="save()">Save &
+                      Exit</button>
+                  </mat-action-row>
+                </div>
+
+              </mat-expansion-panel>
+
+
+              <div [hidden]="campaignDto.skadTarget">
+                <mat-expansion-panel expanded="true" hideToggle disabled>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title id='tile-advanced'>
+                      <div class="campsteppers">4</div>
+                      <div class="accor-titles">{{cmpConst.ADVANCED_SETTINGS}}</div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div>
+
+                    <!--ui for advanced-->
+                    <div class='pad20-side'>
+                      <div id='page-content'>
+                        <div id='form-container'>
+
+                          <div class='form-body'>
+                            <div class='col-12 mrl15'>
+                              <!-------------------------ngIf----------------------------------------------------------------->
+                              <div *ngIf='true'>
+                                <div class='form-group'>
+                                  <!---------------------- ADV-1 : dailyUserFcap (begins)------------------------------------------>
+                                  <div class="row mrl0">
+                                    <div class="col-3">
+                                      <div class="form-label pt-3">
+                                        {{ cmpConst.DEFAULT_DAILY_FREQ_CAP_LABEL }}
+                                        <em class="fa fa-info-circle" matTooltipPosition="above"
+                                          matTooltip="{{ cmpConst.DEFAULT_DAILY_FREQ_CAP_TOOLTIP }}"></em>
+                                      </div>
+                                    </div>
+                                    <div class="col-8">
+                                      <div class="d-flex flex-row">
+                                        <div class='adv-settings pt-4'>Show Ad no more than </div>
+                                        <mat-form-field class="wd60 mrt-3">
+                                          <input matInput [(ngModel)]='campaignDto.dailyUserFcap' id="userFCAP"
+                                            name="userFCAP" maxlength="10" minlength="4"
+                                            [ngClass]="{ 'input-danger': !formValidated &&(( isInvalidNumber(campaignDto.dailyUserFcap))||(getNum(1)>getNum(campaignDto.dailyUserFcap)))}" />
+                                        </mat-form-field>
+                                        <div class='adv-settings pt-4'>times per user in one day
+                                        </div>
+                                      </div>
+                                      <mat-error class="error"
+                                        *ngIf="!formValidated && isNEU(campaignDto.dailyUserFcap)">
+                                        {{cmpConst.VALIDATION_REQUIRED}}
+                                      </mat-error>
+                                      <mat-error class="error"
+                                        *ngIf="!formValidated && !isNEU(campaignDto.dailyUserFcap) && isInvalidNumber(campaignDto.dailyUserFcap) && hasSpclChars(campaignDto.dailyUserFcap)">
+                                        {{cmpConst.VALIDATION_SPECIAL_CHAR}}
+                                      </mat-error>
+                                      <mat-error class="error"
+                                        *ngIf="!formValidated && !isNEU(campaignDto.dailyUserFcap) && isInvalidNumber(campaignDto.dailyUserFcap) && !hasSpclChars(campaignDto.dailyUserFcap) && getNum(1)>getNum(campaignDto.dailyUserFcap)">
+                                        {{cmpConst.VALIDATION_REQUIRED_NUMBER_GREATER_THAN_ZERO}}
+                                      </mat-error>
+                                    </div>
+                                    <div class="clearfix mrb25"></div>
+                                  </div>
+                                  <!----------------------ADV-1 : dailyUserFcap (ends)------------------------------------------------>
+                                  <!----------------------ADV-2 : lifetimefcap(begins)----------------------------------------------->
+                                  <div class="form-group">
+                                    <div class="row mrl0">
+                                      <div class="col-3">
+                                        <div class="form-label">
+                                          {{ cmpConst.LIFETIME_FREQ_CAP_LABEL }}
+                                          <em class="fa fa-info-circle" matTooltipPosition="above"
+                                            matTooltip="{{cmpConst.LIFETIME_FREQ_CAP_TOOLTIP}}"></em>
+                                        </div>
+                                      </div>
+                                      <div class="col-8">
+                                        <mat-radio-group id='lifetimeFcapRadioGp' [(ngModel)]="ngModelAdvanced.radio"
+                                          class="example-radio-group">
+                                          <mat-radio-button id='unlimitedPricingRd' [value]="1" class='mb-1'
+                                            [ngClass]='[ngModelAdvanced.radio===1?"":"text-secondary"]'>
+                                            Unlimited
+                                          </mat-radio-button>
+                                          <mat-radio-button id='limitedPricingRd' [value]="2"
+                                            [ngClass]='[ngModelAdvanced.radio===2?"":"text-secondary"]'>
+                                            <div class="d-flex flex-row">
+                                              <div class='mr-1 mt-1' [hidden]='ngModelAdvanced.radio!=1'>
+                                                Limit to
+                                              </div>
+                                              <div class="advFreq" [hidden]='ngModelAdvanced.radio==1'>
+                                                <div class='mr-1 pt-3 mrt-4'>
+                                                  Limit to
+                                                </div>
+                                                <mat-form-field class="wd180 pt-1" [hidden]='ngModelAdvanced.radio==1'>
+                                                  <input matInput [(ngModel)]="ngModelAdvanced.inpt"
+                                                    id='limitedPricingInpt' name="limitedPricingInpt" maxlength="1024"
+                                                    minlength="4"
+                                                    [ngClass]="{ 'input-danger': !formValidated && ( isInvalidNumber(ngModelAdvanced.inpt) ||(ngModelAdvanced.radio===2 && (getNum(campaignDto.dailyUserFcap)>getNum(ngModelAdvanced.inpt))))}" />
+                                                </mat-form-field>
+                                              </div>
+
+                                            </div>
+                                          </mat-radio-button>
+                                        </mat-radio-group>
+                                        <mat-error class="error"
+                                          *ngIf="!formValidated && ngModelAdvanced.radio===2 && isInvalidNumber(ngModelAdvanced.inpt)">
+                                          {{cmpConst.VALIDATION_LIFETIME_MEDIA_BUDGET}}
+                                        </mat-error>
+                                        <mat-error class="error"
+                                          *ngIf="!formValidated && ngModelAdvanced.radio===2 && !isInvalidNumber(ngModelAdvanced.inpt) && (getNum(campaignDto.dailyUserFcap)>getNum(ngModelAdvanced.inpt))">
+                                          {{cmpConst.VALIDATION_LIFETIME_FCAP_GREATER}}
+                                        </mat-error>
+                                      </div>
+                                      <div class="clearfix mrb25"></div>
+                                    </div>
+                                  </div>
+                                  <!----------------------ADV-2 : lifetimefcap(ends)---------------------------------------------->
+
+                                  <!-- REVX-352: add input box and label for CPA target
+                                                                    1. If there are no CPA strategies, in the campaign, it would be optional to fill. And should be
+                                                                        mandatory if CPA strategies are to be created.
+                                                                    2. If campaign pricing is CPA, CPA Campaign Price = CPA Target
+                                                                        (CPA target field will be non editable in this case) -->
+
+
+                                  <div class='form-group mt-3'>
+                                    <div class="row mrl0">
+                                      <div class="col-3">
+                                        <div class="form-label d-flex flex-column">
+                                          <div>
+                                            {{ cmpConst.CPA_TARGET_LABEL }}
+                                            <i class="fa fa-info-circle" matTooltipPosition="above"
+                                              matTooltip="{{ cmpConst.CPA_TARGET_TOOLTIP }}"></i>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="col-8">
+                                        <div class='d-flex flex-row'>
+                                          <div>
+                                            <input #cpaTarget [(ngModel)]="assigner.cpaTarget" id="cpaTarget"
+                                              name="cpaTarget" maxlength="256" minlength="4"
+                                              [ngClass]="{ 'input-danger': !formValidated && !isValidCPATarget(assigner.cpaTarget)}"
+                                              class="form-control wd250" autocomplete="off" trim="blur" />
+                                          </div>
+                                        </div>
+                                        <div class="validation-failed"
+                                          *ngIf="!formValidated && !isValidCPATarget(assigner.cpaTarget)">
+                                          <i class="fa fa-warning"></i>
+                                          {{ cmpConst.VALIDATION_CPA_TARGET }}
+
+                                        </div>
+                                      </div>
+                                      <div class="clearfix"></div>
+                                    </div>
+                                  </div>
+
+                                  <!----------------------ADV-3 : ATTR RATIO------------------------------------------->
+                                  <div class='form-group mt-3'>
+                                    <div class="row mrl0">
+                                      <div class="col-md-8 col-lg-8">
+                                        <mat-form-field class="wd-full">
+                                          <input [(ngModel)]="assigner.attributionRatio" id="attrRatio" name="attrRatio"
+                                            maxlength="256" minlength="4"
+                                            [ngClass]="{ 'input-danger': !formValidated &&(isInvalidNumber(assigner.attributionRatio)||!isValidAttrRatio(assigner.attributionRatio))}"
+                                            matInput placeholder="{{cmpConst.ATTRIBUTION_RATIO_LABEL}}"
+                                            matTooltipPosition="above"
+                                            matTooltip="{{cmpConst.ATTRIBUTION_RATIO_TOOLTIP}}" autocomplete="off">
+                                          <span matSuffix class='suffix'>%</span>
+                                        </mat-form-field>
+                                        <mat-error class="error"
+                                          *ngIf="!formValidated && (isInvalidNumber(assigner.attributionRatio) || !isValidAttrRatio(assigner.attributionRatio))">
+                                          {{cmpConst.VALIDATION_ATTR_RATIO}}
+                                        </mat-error>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <mat-action-row class="mrr15">
+                    <button id='cmpCancel' mat-button [routerLink]="['/campaign']">Cancel</button>
+                    <button id='cmpSaveExit' [appDisableDemo]='appConst.DISABLE' mat-raised-button
+                      class='btn-secondary ml-3' appDisableRO (click)="save()">Save &
+                      Exit</button>
+                  </mat-action-row>
+                </mat-expansion-panel>
+
+              </div>
+
+
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</block-ui>

@@ -1,0 +1,111 @@
+<div id='modal-content' class='modal-content mh-100'>
+
+    <div id='modal-body' class="modal-body">
+        <!----------------------------------------------TABLE STARTS------------------------------------------------------------------------------------------->
+        <div id='list-header' class='mrt10'>
+            <div class="float-left">
+                <div class='list-title'>
+                    Select {{entity}}
+                </div>
+            </div>
+
+            <div class='float-right'>
+                <button mat-button class="mrl10" id="list-refresh-btn" title='Refresh' (click)='reload()' [disabled]='showProgressBar' matTooltip="Refresh" matTooltipPosition="above"><em class='fa fa-refresh'></em></button>
+            </div>
+            <div class="float-right mrr10">
+                <mat-form-field class="wd-full">
+                    <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                    <input matInput id="mmpList-search" (keyup.enter)="applySearchFilter()" (keyup)="formSearchString($event.target.value)" autocomplete="off" placeholder="Search" />
+                </mat-form-field>
+            </div>
+            <div class='clearfix'></div>
+
+        </div>
+
+
+        <div id='list-body'>
+            <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+            <div id='table-container'>
+                <div #tableContent id='table-content'>
+                    <mat-radio-group [(ngModel)]="selectedElement">
+
+                        <mat-table class="table-border" [dataSource]="listSource" matSort>
+                            <ng-container matColumnDef="selected">
+                                <mat-header-cell *matHeaderCellDef>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-radio-button [value]="element" (change)="showWarning=false">
+                                    </mat-radio-button>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef='active'>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <a class='pointer'>
+                                        <em class='fa fa-circle mrr3' [ngClass]="{'text-success':selectedStatus === true,'text-danger':selectedStatus === false, 'text-default':selectedStatus === null}"></em>
+                                    </a>
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <div>
+                                        <em class='fa fa-circle mc-status' [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></em>
+                                    </div>
+                                </mat-cell>
+
+                            </ng-container>
+
+                            <ng-container matColumnDef='id'>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{entity | titlecase}} ID
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef='name'>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>{{entity | titlecase}} Name
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+                            </ng-container>
+
+
+
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;"></mat-header-row>
+                            <mat-row *matRowDef="let row ;columns: displayedColumns;">
+                            </mat-row>
+
+                        </mat-table>
+                    </mat-radio-group>
+                    <div *ngIf='showDataUnavailableMsg' class='data-unavailable-msg'><em class='fa fa-warning'></em> {{dataUnavailableMsg}}
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+        <div id='list-footer'>
+            <mat-paginator [pageSize]="20" [pageSizeOptions]="[20,50,100,200,300,400]" showFirstLastButtons>
+            </mat-paginator>
+        </div>
+
+        <div *ngIf='showWarning' class="row mx-1 alert alert-danger" role="alert">
+            <div class="col-1">
+                <em class="fa fa-exclamation-triangle" aria-hidden="true"></em>
+            </div>
+            <div class="col-11">
+                Please select one of the {{entity | titlecase}} to continue.
+            </div>
+        </div>
+        <!----------------------------------------------TABLE ENDS--------------------------------------------------------------------------------------------->
+    </div>
+
+    <div id='modal-footer' class="modal-footer d-flex justify-content-start">
+        <button mat-button (click)="dismissModal()">Cancel</button>
+        <p class="text-secondary pt-3 mrl15">or</p>
+        <button type="button" mat-raised-button class='btn-secondary mrl15' (click)="done()">Done</button>
+    </div>
+
+</div>

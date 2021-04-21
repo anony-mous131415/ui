@@ -1,0 +1,148 @@
+<div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{config.title}} <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{config.hint}}"></em></h4>
+</div>
+<div mat-dialog-content class="my-2 d-flex flex-column modal-body col-12 scroll-content">
+
+    <!-- name -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2 col-lg-2 my-auto">
+                <div class="form-label my-auto float-right">
+                    {{ SCONST.BASIC_STR_NAME_LABEL }}<em class="fa fa-info-circle ml-1" matTooltipPosition="above" matTooltip="{{ SCONST.BASIC_STR_NAME_TIP }}"></em>
+                </div>
+            </div>
+            <div class="col-md-10 col-lg-10 pt-1 my-auto">
+                <div class="d-flex flex-row my-auto">
+                    <input id="strategy-name" class="form-control wd250 my-auto" [(ngModel)]="strDupDetails.strategyName" autocomplete="off" />
+                </div>
+                <div class="help-text d-flex flex-row flex-wrap mt-2" *ngIf="error['strategyName'].hasError">
+                    <em class="fa fa-exclamation-triangle my-auto"></em>
+                    <p class="m-0 my-auto">&nbsp;&nbsp;{{error['strategyName'].msg}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <!-- start date -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2 col-lg-2">
+                <div class="form-label my-auto float-right">
+                    {{ SCONST.BASIC_SCHEDULE_START_DATE_LABEL }}
+                    <em class="fa fa-info-circle ml-1" matTooltipPosition="above" matTooltip="{{ SCONST.BASIC_SCHEDULE_START_DATE_TIP }}"></em>
+                </div>
+            </div>
+
+            <div class="col-md-10 col-lg-10 d-flex flex-column">
+                <div class="wd250">
+                    <ejs-datetimepicker id="start-dtrp" [step]='1' [showClearButton]="false" [disabled]="startTimeImmediate" [(ngModel)]="strDupDetails.startTime" [min]="startTimeMin" [max]="startTimeMax" (change)="onStartTimeChange($event)" [allowEdit]="false">
+                    </ejs-datetimepicker>
+                </div>
+                <div>
+                    <mat-checkbox id="start-immediately" class='primary' (change)="onCheckboxChange($event, 1)" [checked]="startTimeImmediate">
+                        {{SCONST.BASIC_SCHEDULE_START_DATE_CHECKBOX_LABEL}}
+                    </mat-checkbox>
+                </div>
+                <div class="help-text d-flex flex-row flex-wrap mt-2" *ngIf="error['startTime'].hasError">
+                    <em class="fa fa-exclamation-triangle"></em>
+                    <p class="m-0 my-auto">&nbsp;&nbsp;{{error['startTime'].msg}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <!-- end date -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2 col-lg-2">
+                <div class="form-label my-auto float-right">
+                    {{ SCONST.BASIC_SCHEDULE_END_DATE_LABEL }}
+                    <em class="fa fa-info-circle ml-1" matTooltipPosition="above" matTooltip="{{ SCONST.BASIC_SCHEDULE_END_DATE_TIP }}"></em>
+                </div>
+            </div>
+
+            <div class="col-md-10 col-lg-10 d-flex flex-column">
+                <div class="wd250">
+                    <ejs-datetimepicker id="end-dtrp" [step]='1' [showClearButton]="false" [disabled]="endTimeNeverEnding" [(ngModel)]="strDupDetails.endTime" [min]="endTimeMin" [max]="endTimeMax" [allowEdit]="false">
+                    </ejs-datetimepicker>
+                </div>
+                <div>
+                    <mat-checkbox id="never-ending" class='primary' (change)="onCheckboxChange($event, -1)" [checked]="endTimeNeverEnding" [disabled]="isEndCheckBoxDisabled">
+                        {{SCONST.BASIC_SCHEDULE_END_DATE_CHECKBOX_LABEL}}
+                    </mat-checkbox>
+                </div>
+                <div class="help-text d-flex flex-row flex-wrap mt-2" *ngIf="error['endTime'].hasError">
+                    <em class="fa fa-exclamation-triangle"></em>
+                    <p class="m-0 my-auto">&nbsp;&nbsp;{{error['endTime'].msg}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <p><strong>{{SCONST.DUP_MODAL_TARGETING_DIVIDER_TITLE}}</strong></p>
+
+    <!-- delivery targeting -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2 col-lg-2">
+                <div class="form-label my-auto float-right">
+                    {{ SCONST.DUP_MODAL_DELIVERY_TARGET_TITLE }}
+                </div>
+            </div>
+
+            <div class="col-md-10 col-lg-10 d-flex flex-row flex-wrap">
+                <div *ngFor="let target of targetingOptions">
+                    <mat-checkbox [id]="target.id" class="primary mr-2" [(ngModel)]="strDupDetails[target.id]" [checked]="strDupDetails[target.id]">
+                        {{target.title}}
+                    </mat-checkbox>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <!-- inventory -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2 col-lg-2">
+                <div class="form-label my-auto float-right">
+                    {{ SCONST.DUP_MODAL_INVENTORY_TITLE }}
+                </div>
+            </div>
+
+            <div class="col-md-10 col-lg-10 d-flex flex-row flex-wrap">
+                <mat-checkbox id="cb-inventory" class="primary" [(ngModel)]="strDupDetails['inventoryTargeting']" [checked]="strDupDetails['inventoryTargeting']">
+                    {{SCONST.DUP_MODAL_INVENTORY_CHECKBOX_TITLE}}
+                </mat-checkbox>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <!-- creatives -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2 col-lg-2">
+                <div class="form-label my-auto float-right">
+                    {{ SCONST.DUP_MODAL_CREATIVES_TITLE }}
+                </div>
+            </div>
+
+            <div class="col-md-10 col-lg-10 d-flex flex-row flex-wrap">
+                <mat-checkbox id="cb-creative" class="primary" [(ngModel)]="strDupDetails['creativeAttached']" [checked]="strDupDetails['creativeAttached']">
+                    {{SCONST.DUP_MODAL_CREATIVES_CHECKBOX_TITLE}}
+                </mat-checkbox>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button mat-button class="mrr15 mrl15 pull-right " (click)="onCancelClick() ">Cancel</button>
+    <button mat-raised-button class='btn-primary' appDisableRO [appDisableDemo]='appConst.DISABLE' (click)="onSaveClick() ">Save</button>
+</div>

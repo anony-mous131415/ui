@@ -1,0 +1,75 @@
+.primary-label {
+  color: var(--primary-color) !important;
+  font-weight: bold;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--primary-color);
+  }
+}
+
+.ruleBody {
+    padding: 0 15px !important;
+}
+
+.drop3 {
+    .mat-form-field-appearance-legacy .mat-form-field-infix {
+    width: 350px;
+  }
+}
+
+.mat-spinner {
+  position: relative;
+  margin-left: 40%;
+  margin-right: 50%;
+  color: var(--primary-color);
+}
+
+//mat-spinner color
+.mat-progress-spinner.mat-warn circle,
+.mat-spinner.mat-warn circle {
+  stroke: var(--primary-color);
+}
+
+.myInput {
+  width: 100%;
+  height: 3em;
+  line-height: 3em;
+  border: none;
+  /* border: 1px solid var(--primary-color); */
+  border-bottom: 1px solid #ebebeb;
+  text-indent: 16px;
+}
+
+.noResultLabel {
+  color: #888;
+  margin-bottom: inherit;
+  height: 3em;
+  display: inline-block;
+  flex-grow: 1;
+  line-height: 3em;
+  font-size: inherit;
+  width: 100%;
+  text-indent: 16px;
+}
+
+.value-input {
+  text-indent: 10px;
+}
+
+.pointer {
+    height: 14px;
+    em {
+        font-size: 14px;
+        color: #da0101;
+    }
+}
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}

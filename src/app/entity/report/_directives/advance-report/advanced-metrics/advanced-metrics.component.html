@@ -1,0 +1,51 @@
+<div class="mrl25 mrt20">
+    <div class="d-flex flex-row mrl30">
+
+        <div class="flex-grow-1 d-flex flex-column">
+            <div *ngFor="let metric of metricUIList | slice:0 :7">
+                <span>
+          <mat-checkbox [value]="metric.value" [checked]=' isInBucket(metric.value)' (change)="updateBucket($event)"
+            [matTooltip]="metric.tooltip" matTooltipPosition="after">
+            <span class="text12">{{metric.label}}</span>
+                </mat-checkbox>
+                </span>
+            </div>
+        </div>
+
+        <div class="flex-grow-1 d-flex flex-column">
+            <div *ngFor="let metric of metricUIList | slice:7 :14">
+                <span>
+          <mat-checkbox [value]="metric.value" [checked]=' isInBucket(metric.value)' (change)="updateBucket($event)"
+            [matTooltip]="metric.tooltip" matTooltipPosition="after">
+            <span class="text12">{{metric.label}}</span>
+                </mat-checkbox>
+                </span>
+            </div>
+        </div>
+
+        <div class="flex-grow-1 d-flex flex-column">
+            <div *ngFor="let metric of metricUIList | slice:14 :21">
+                <span>
+          <mat-checkbox [value]="metric.value" [checked]='isInBucket(metric.value)' (change)="updateBucket($event)"
+            [matTooltip]="metric.tooltip" matTooltipPosition="after">
+            <span class="text12">{{metric.label}}</span>
+                </mat-checkbox>
+                </span>
+            </div>
+        </div>
+
+        <div *ngIf='metricUIList.length >21' class="flex-grow-1 d-flex flex-column">
+            <div *ngFor="let metric of metricUIList | slice:21">
+                <span>
+          <mat-checkbox [value]="metric.value" [checked]='isInBucket(metric.value)' (change)="updateBucket($event)"
+            [matTooltip]="metric.tooltip" matTooltipPosition="after">
+            <span class="text12">{{metric.label}}</span>
+                </mat-checkbox>
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>

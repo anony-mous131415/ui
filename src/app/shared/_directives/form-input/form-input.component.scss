@@ -1,0 +1,14 @@
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.form-txt {
+  color: #333333;
+  font-size: 12px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-weight: normal !important;
+  margin-top: 5px !important;
+}

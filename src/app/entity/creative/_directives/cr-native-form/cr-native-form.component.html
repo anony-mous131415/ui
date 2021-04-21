@@ -1,0 +1,124 @@
+<div id='page-content'>
+    <div id='form-container'>
+        <div class='form-body native-form-body'>
+            <div class=''>
+                <!----Title---->
+                <div class="form-group mrb20">
+                    <div class="row">
+                        <div class="col-md-8 col-lg-8">
+                            <mat-form-field class="wd-full">
+                                <textarea matInput placeholder="{{ crConst.NATIVE_TITLE }}" rows='3' id="native_title" maxlength="25" [ngClass]="{ 'input-danger': !formValidated && !native.title }" [(ngModel)]="native.title" autocomplete="off" (ngModelChange)="sendNativeAsset()" matTooltipPosition="above"
+                                    matTooltip="{{ crConst.NATIVE_TITLE_TOOLTIP }}">
+                                      </textarea>
+                            </mat-form-field>
+                            <small *ngIf='dcoMacros.length > 0' #macroListTrigger='matMenuTrigger' [matMenuTriggerFor]="titleMacroList" class='text-primary pointer text11'>Click here to choose and append Macros</small>
+                            <div class='clearfix'></div>
+                            <mat-error class="error" *ngIf="!formValidated && !native.title">{{ crConst.VALIDATION_NATIVE_TITLE }}
+                            </mat-error>
+                        </div>
+                        <div class="clearfix mrb15"></div>
+                    </div>
+                </div>
+
+                <mat-menu #titleMacroList="matMenu" yPosition="below">
+                    <ng-container *ngFor='let macro of dcoMacros'>
+                        <button mat-menu-item (click)='handleMacroSelect(1, macro.macroText)'>{{macro.name}}</button>
+                    </ng-container>
+                </mat-menu>
+
+                <!----BODY---->
+                <div class="form-group mrb20">
+                    <div class="row">
+                        <div class="col-md-8 col-lg-8">
+                            <mat-form-field class="wd-full">
+                                <textarea matInput placeholder="{{ crConst.NATIVE_BODY }}" rows='3' id="native-body" maxlength="90" [ngClass]="{ 'input-danger': !formValidated && !native.body }" [(ngModel)]="native.body" autocomplete="off" (ngModelChange)="sendNativeAsset()" matTooltipPosition="above"
+                                    matTooltip="{{ crConst.NATIVE_BODY_TOOLTIP }}">
+                                      </textarea>
+                            </mat-form-field>
+                            <small *ngIf='dcoMacros.length > 0' #macroListTrigger='matMenuTrigger' [matMenuTriggerFor]="bodyMacroList" class='text-primary pointer text11'>Click here to choose and append Macros</small>
+                            <div class='clearfix'></div>
+                            <mat-error class="error" *ngIf="!formValidated && !native.body">{{ crConst.VALIDATION_NATIVE_BODY }}
+                            </mat-error>
+                        </div>
+                        <div class="clearfix mrb15"></div>
+                    </div>
+                </div>
+
+                <mat-menu #bodyMacroList="matMenu" yPosition="below">
+                    <ng-container *ngFor='let macro of dcoMacros'>
+                        <button mat-menu-item (click)='handleMacroSelect(2, macro.macroText)'>{{macro.name}}</button>
+                    </ng-container>
+                </mat-menu>
+
+
+                <!------call to action----->
+                <div class="form-group mrb20">
+                    <div class="row">
+                        <div class="col-md-8 col-lg-8">
+                            <mat-form-field class='wd-full'>
+                                <mat-select [formControl]="listCtrl" [(ngModel)]="selectedCallToAction" (selectionChange)='onSelectedCallToAction()' placeholder="{{crConst.NATIVE_CALLTOACTION}}" matTooltipPosition="above" matTooltip="{{ crConst.NATIVE_CALLTOACTION_TOOLTIP }}">
+                                    <mat-option *ngFor='let act of callToActionList' [value]='act'>{{act.name}}
+                                    </mat-option>
+                                </mat-select>
+
+                            </mat-form-field>
+                            <div class="clearfix mrb15"></div>
+                            <mat-form-field class="wd-full" *ngIf='showCustomTextInput'>
+                                <input matInput id='custom-call-to-action' placeholder='Enter custom text here' [(ngModel)]="customCallToAction" (ngModelChange)="sendNativeAsset()" />
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="error" *ngIf="!formValidated && !customCallToAction">
+                            {{ crConst.VALIDATION_NATIVE_CALLTOACTION }}
+                        </mat-error>
+                        <div class="clearfix mrb15"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-label">
+                                {{ crConst.NATIVE_UPLOAD_ICON }}
+                                <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{ crConst.NATIVE_UPLOAD_ICON_TOOLTIP }}"></em>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-lg-8">
+
+                            <div *ngIf='native.iconurl' class='logo-cover'>
+                                <img src='{{native.iconurl}}' alt="native icon" />
+                                <small class='text-primary text11 pointer' (click)="removeIcon()"><em
+                                        class='fa fa-trash'></em>
+                                    Remove</small>
+                            </div>
+
+                            <!--REVX-974-->
+                            <!-- <app-generic-uploader *ngIf='!native.iconurl'
+                                (syncFileUploadResp)='syncFileUploadResp($event)' title="Click or drop the logo"
+                                allowedExtensions="jpg,png,jpeg" maxFileSizeInKB='102400'
+                                detailMessage='{{crConst.NATIVE_UPLOAD_ICON_TOOLTIP}}' width='wd300'
+                                apiPath="{{appConst.API_PATH.CREATIVE_FILE_UPLOAD}}">
+                            </app-generic-uploader> -->
+
+                            <!--REVX-974-->
+                            <div class="row" *ngIf='!native.iconurl'>
+                                <div class="m-2">
+                                    <button class='btn-primary my-auto' mat-raised-button (click)="openLogoModal()">
+                                        <span>Select Logo</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class='text-primary'>
+                                <span *ngIf="isUploading"><em class='fa fa-spinner fa-spin text14'></em>
+                                    Uploading</span>
+                            </div>
+                            <mat-error class="error" *ngIf='invalidIconMeassge'>
+                                {{ invalidIconMeassge }}
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

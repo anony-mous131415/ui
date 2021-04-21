@@ -1,0 +1,18 @@
+<div *ngIf="isUserLoggedIn">
+  <navbar></navbar>
+  <div class='page-container' id="home">
+    <div class='page-header'>
+      <div class='breadcrumbs-container'>
+        <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+      <div class='date-range-container'>
+        <app-date-range-picker></app-date-range-picker>
+      </div>
+      <div class='clearfix'></div>
+    </div>
+    <app-chart column="HOMEPAGE" entity="licensee"></app-chart>
+    <app-list listTitle='CAMPAIGNS' entity="campaign" dataUnavailableMsg="This Licensee doesn't have any Campaign."
+      (export)="export($event)" (import)="import($event)" showImportExport='true'></app-list>
+  </div>
+
+</div>

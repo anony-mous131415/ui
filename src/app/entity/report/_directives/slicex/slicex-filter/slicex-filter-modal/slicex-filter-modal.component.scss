@@ -1,0 +1,13 @@
+.pill {
+  border-radius: 10px !important;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+}

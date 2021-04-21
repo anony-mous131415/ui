@@ -1,0 +1,21 @@
+<div class="card bg-light text-dark border form-group mb-0">
+    <div class="card-body d-flex flex-row p-0">
+        <div class="left p-3 my-auto">
+            <em class="fa fa-3x {{icon}} primary-icon"></em>
+        </div>
+        <div class="middle py-2 px-3 flex-grow-1 border-right border-left my-auto">
+            <div class="d-flex flex-row my-auto">
+                <div *ngFor="let opt of options;">
+                    <mat-checkbox id="{{identifier}}-{{opt.id}}" class="mx-2" [checked]="opt.checked" [value]="opt.value" (change)="onCheckboxChange($event, opt)">
+                        <div class="my-auto">{{opt.name}}</div>
+                    </mat-checkbox>
+                    <div class="small text-secondary ml-4" *ngIf="showDesc">{{opt.desc}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="right my-auto" *ngIf="actionBtnLabel">
+            <button class="btn bt default" (click)="onClickBrowse()">{{actionBtnLabel}}</button>
+        </div>
+    </div>
+
+</div>

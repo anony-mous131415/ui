@@ -1,0 +1,129 @@
+<div class="card bg-light text-dark border form-group mb-0" id="targetGeo">
+    <div class="card-body d-flex flex-row p-0">
+        <div class="left p-3 my-auto">
+            <em class="fa fa-3x {{icon}} primary-icon"></em>
+        </div>
+        <div class="middle py-2 px-3 flex-grow-1 d-flex flex-row flex-wrap border-right border-left my-auto">
+            <!-- dependents - autocomplete -->
+            <div class="d-flex flex-row flex-wrap p-0 mb-2" [ngClass]="{'col-4': dependents && dependents.length === 1, 'col-12': !dependents || dependents.length === 2}" *ngIf="dependents">
+                <ng-container *ngTemplateOutlet="dependentView"></ng-container>
+            </div>
+            <!-- primary - autocomplete -->
+            <div class="d-flex p-0  w-100" [ngClass]="{'col-8 pl-2 mb-2 flex-column': dependents && dependents.length === 1, 'col-12 flex-row': !dependents|| dependents.length === 2}">
+                <span class="my-auto"><strong class="my-auto">{{title | uppercase}}</strong></span>
+                <input placeholder="Search {{title}}" id="{{identifier}}-auto-complete" class="w-100 form-control" type="text" matInput [formControl]="ctrl" autocomplete="off" [matAutocomplete]="primary" [ngClass]="{'ml-2': !dependents || dependents.length === 2}">
+                <mat-autocomplete #primary="matAutocomplete" matAutocompletePosition="below">
+                    <mat-option id="{{identifier}}-search-result-header" class="bg-light small" (click)="$event.stopPropagation()">
+                        <div id="{{entity}}-search-result-header-empty" (click)="$event.stopPropagation()" class="small" *ngIf="optionsLength === 0">
+                            No result
+                        </div>
+                        <div id="{{identifier}}-search-result-header-non-empty" (click)="$event.stopPropagation()" *ngIf="optionsLength > 0">
+                            <div class="d-flex flex-row col-12 p-0">
+                                <div class="my-auto small col-8 p-0 m-0">{{optionsLength}} Result(s)</div>
+                                <button id="{{identifier}}-search-result-header-target-all" class="btn btn-sm btn-link compare-success small col-2 p-0 border-right" (click)="addToTargetSelection(-1)">
+                  <strong>Target all</strong>
+                </button>
+                                <button id="{{identifier}}-search-result-header-block-all" class="btn btn-sm btn-link compare-danger small col-2 p-0 border-left" (click)="addToBlockSelection(-1)">
+                  <strong>Block all</strong>
+                </button>
+                            </div>
+                        </div>
+                    </mat-option>
+                    <mat-option id="{{identifier}}-{{option.id}}" class="small " *ngFor="let option of options">
+                        <div *ngIf="optionsLength > 0" (click)="$event.stopPropagation()">
+                            <div class="d-flex flex-row col-12 p-0">
+                                <div class="my-auto small text-wrap text-break col-8 p-0 m-0" (click)="$event.stopPropagation()" [innerHTML]="option.name">
+                                </div>
+                                <div class="col-2 p-0 text-center border-right">
+                                    <button id="{{identifier}}-search-result-target" class="btn btn-sm btn-link compare-success small" *ngIf="!option.targeted" (click)="$event.stopPropagation(); addToTargetSelection(option.id, option)">
+                    <strong>Target</strong>
+                  </button>
+                                    <button class="btn btn-sm bg-transparent small" *ngIf="option.targeted">
+                    <strong><em class="fa fa-check compare-success"></em></strong>
+                  </button>
+                                </div>
+                                <div class="col-2 p-0 text-center border-left">
+                                    <button id="{{identifier}}-search-result-block" class="btn btn-sm btn-link compare-danger small" *ngIf="!option.blocked" (click)="$event.stopPropagation(); addToBlockSelection(option.id, option)">
+                    <strong>Block</strong>
+                  </button>
+                                    <button class="btn btn-sm bg-transparent small" *ngIf="option.blocked">
+                    <strong><em class="fa fa-ban compare-danger"></em></strong>
+                  </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+        <div class="right my-auto">
+            <button id="{{identifier}}-action-btn" class="btn btn-default" (click)="onClickBrowse()">{{actionBtnLabel}}</button>
+        </div>
+    </div>
+    <div class="card-footer bg-white p-0">
+        <div class="d-flex flex-column col-12 p-1" *ngIf="targetList !== null && blockList !== null && (targetList.length > 0 || blockList.length > 0)">
+            <div *ngIf="targetList.length > 0" class="target-list mb-2">
+                <div class="my-auto d-flex flex-row">
+                    <button class="btn btn-sm btn-success rounded-right">TARGET</button>
+                    <p class="my-auto">&nbsp;{{targetListHeader}}</p>
+                </div>
+                <ul class="list-group">
+                    <li id="{{identifier}}-target-{{item.id}}" class="list-group-item d-flex flex-row" *ngFor="let item of targetList">
+                        <span class="flex-grow-1">{{item.name}}</span>
+                        <span><em id="{{identifier}}-target-{{item.id}}-remove" class="fa fa-times"
+                (click)="removeItemFromSelection(item, 1)"></em></span>
+                    </li>
+                </ul>
+            </div>
+            <div *ngIf="blockList.length > 0" class="block-list">
+                <div class="my-auto d-flex flex-row">
+                    <button class="btn btn-sm btn-danger rounded-right">BLOCK</button>
+                    <p class="my-auto">&nbsp;{{blockListHeader}}</p>
+                </div>
+                <ul class="list-group">
+                    <li id="{{identifier}}-block-{{item.id}}" class="list-group-item d-flex flex-row" *ngFor="let item of blockList">
+                        <span class="flex-grow-1">{{item.name}}</span>
+                        <span><em id="{{identifier}}-block-{{item.id}}-remove" class="fa fa-times"
+                (click)="removeItemFromSelection(item, -1)"></em></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div *ngIf="targetList === null || blockList === null || (targetList.length === 0 && blockList.length === 0)">
+            <div class="p-3 m-0">{{targetAlltext}}</div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #dependentView>
+    <div class="d-flex flex-row flex-fill" *ngFor="let dependent of dependents; let isFirst = first; let isLast = last;">
+        <div class="m-0 w-100 border-right" [ngClass]="{'pr-2': isFirst, 'pl-2': isLast}">
+            <div class="d-flex " [ngClass]="{'flex-column': dependents.length === 1, 'flex-row': dependents.length === 2}">
+                <span class="my-auto"><strong class="my-auto pr-2">{{dependent.title | uppercase}}</strong></span>
+                <input matInput placeholder="Search {{dependent.title}}" id="{{identifier}}-{{dependent.title}}-auto-complete" class="w-100 form-control" type="text" matInput autocomplete="off" [formControl]="dependent.formControl" [matAutocomplete]="secondary">
+                <mat-autocomplete #secondary="matAutocomplete" matAutocompletePosition="below">
+                    <mat-option id="{{identifier}}-{{dependent.title}}-search-result-header" class="bg-light small" (click)="$event.stopPropagation()">
+                        <div id="{{entity}}-{{dependent.title}}-search-result-header-empty" (click)="$event.stopPropagation()" class="small" *ngIf="dependent.optionsLength === 0">
+                            No result
+                        </div>
+                        <div id="{{identifier}}-{{dependent.title}}-search-result-header-non-empty" *ngIf="dependent.optionsLength > 0">
+                            <div class="d-flex flex-row col-12 p-0">
+                                <div class="my-auto flex-grow-1 small col-8 p-0 m-0">{{dependent.optionsLength}} Result(s)</div>
+                            </div>
+                        </div>
+                    </mat-option>
+                    <mat-option id="{{identifier}}-{{dependent.title}}-{{option.id}}" class="small " *ngFor="let option of dependent.options" [value]="option.name" (click)="setSelection(dependent.entity, option)">
+                        <div *ngIf="dependent.optionsLength > 0">
+                            <div class="d-flex flex-row flew-wrap col-12 p-0">
+                                <div class="my-auto flex-grow-1 small text-wrap text-break col-8 p-0 m-0">
+                                    {{option.name}}</div>
+                            </div>
+                        </div>
+                    </mat-option>
+                </mat-autocomplete>
+            </div>
+        </div>
+    </div>
+</ng-template>

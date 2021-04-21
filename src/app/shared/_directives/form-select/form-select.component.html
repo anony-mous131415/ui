@@ -1,0 +1,21 @@
+<div id = "{{id}}" class="form-group {{marginBottom}}">
+  <div class="col-md-8 col-lg-8">
+      <div [ngClass]="{'disableUI': disable =='true'}">
+          <mat-form-field [ngClass]="{ 'input-danger': validated == 'false' && !val }" class="wd-full">
+                <mat-select [formControl]="listCtrl" [(ngModel)]="value" (ngModelChange)='emitAdvRegion()' placeholder="{{label}}" matTooltipPosition="{{ tooltipPosition }}" matTooltip="{{ tooltip }}" #singleSelect>
+                  <mat-option>
+                      <ngx-mat-select-search [formControl]="listFilterCtrl" placeholderLabel="Search" noEntriesFoundLabel="No entries are found">
+                      </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let en of filteredLists | async" [value]="en">
+                      {{ en.name }}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+      <mat-error class="error" *ngIf="validated == 'false' && !val">
+          {{validationMsg}}
+      </mat-error>
+  </div>
+  <div class="clearfix"></div>
+</div>

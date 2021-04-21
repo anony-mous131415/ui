@@ -1,0 +1,22 @@
+$danger-color: #f44336;
+.modal-body {
+    height: max-content;
+    overflow-x: hidden;
+    padding: 0 !important;
+}
+
+.error-message {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: $danger-color;
+    font-size: 11px;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}

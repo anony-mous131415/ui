@@ -1,0 +1,35 @@
+.mat-flat-button.mat-accent i,
+.mat-flat-button.mat-accent em {
+    margin-right: 5px;
+    font-size: 11px;
+    line-height: 36px;
+}
+.mat-expansion-panel-header div.repAccor-titles {
+    color: #343a40!important;
+    font-size: 14px;
+    font-weight: 600;
+    width: 100%;
+    display: inline;
+    border-bottom: 1px solid #555;
+    line-height: 40px;
+    .mat-error.errDisp {
+        display: inline;
+        margin: 0 10px;
+        font: 400 12px Roboto, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    }
+}
+.repSteppers {
+    display: inline-table;
+    padding: 0 9px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 19px;
+    margin-top: 10px;
+    line-height: 27px !important;
+}
+.mat-expansion-panel { 
+    margin: 0 0;
+}

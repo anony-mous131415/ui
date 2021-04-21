@@ -1,0 +1,87 @@
+<navbar></navbar>
+<div class='page-container'>
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+    <app-adv-static-header *ngIf="advId" entityId="{{advId}}" activeTab="2"></app-adv-static-header>
+
+    <div id='page-content'>
+
+        <div class='page-title-cover'>
+            <div class='float-left'>
+                <div class='page-content-breadcrumbs'>
+                    <span class='parent' [routerLink]="['/advertiser/'+advId+'/pixel']">Conversion Tracker</span>
+                    <span class='navigator'><em class='fa fa-angle-right'></em></span>
+                    <span class='parent' [routerLink]="['/advertiser/'+advId+'/pixel/details/'+pixel.id]">{{pixel.name}}</span>
+                    <span class='navigator'><em class='fa fa-angle-right'></em></span>
+                    <span>Tracker Code</span>
+                </div>
+            </div>
+
+            <div class='clearfix'></div>
+        </div>
+
+        <div id='form-container'>
+            <div class='form-body'>
+                <div class='mrl20'>
+                    <app-form-radio id='trkCode_placement' tooltip='{{trkConst.TRACKER_PLACEMENT_LABEL}}' tooltipPosition="above" label='{{trkConst.TRACKER_PLACEMENT_LABEL}}' options='{{trkCodePlacements}}' [(ngModel)]='trkCodePlacementSelected'></app-form-radio>
+                </div>
+                <div [hidden]='trkCodePlacementSelected=="mobile"'>
+                    <div class='mrl20'>
+                        <app-form-radio id='trkCode_type' tooltip='{{trkConst.TRACKER_TYPE_LABEL}}' label='{{trkConst.TRACKER_TYPE_LABEL}}' options='{{trkCodeTypes}}' [(ngModel)]='trkCodeTypeSelected'>
+                        </app-form-radio>
+                    </div>
+
+                    <div class='row'>
+                        <div class='col-md-8 mrl20'>
+                            <div class='text-muted' [hidden]='trkCodeTypeSelected==="img"' [innerHTML]="trkConst.TRACKER_JS_ABOVE_HINT_MSG | safeHtml"></div>
+                            <div class='text-muted' [hidden]='trkCodeTypeSelected==="js"'>
+                                {{trkConst.TRACKER_IMG_ABOVE_HINT_MSG}}</div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-12 mrl5'>
+                            <!-- jssource -->
+                            <app-form-textarea [hidden]='trkCodeTypeSelected==="img"' [(ngModel)]="trkCode.jsSource" tooltipPosition="above" label="{{trkConst.TRACKER_CODE_JS_LABEL}}" tooltip="{{trkConst.TRACKER_CODE_JS_LABEL}}" maxLen="1024" minLen="4" id="smarttrkCodeJs" name="smarttrkCodeJs"
+                                width="wd700" height="ht250">
+                            </app-form-textarea>
+
+                            <!-- imgsource -->
+                            <app-form-textarea [hidden]='trkCodeTypeSelected==="js"' [(ngModel)]="trkCode.imgSource" tooltipPosition="above" label="{{trkConst.TRACKER_CODE_IMG_LABEL}}" tooltip="{{trkConst.TRACKER_CODE_IMG_LABEL}}" maxLen="1024" minLen="4" id="smarttrkCodeJs" name="smarttrkCodeJs"
+                                width="wd700" height="ht250">
+                            </app-form-textarea>
+
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-8 mrl20'>
+                            <div class='text-muted'>{{trkConst.TRACKER_BELOW_HINT_MSG}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class='' [hidden]='trkCodePlacementSelected=="desktop"'>
+                    <div class='row'>
+                        <div class='col-md-8 mrl20'>
+                            <div class='text-muted' [innerHTML]="trkConst.TRACKER_JS_ABOVE_HINT_MSG | safeHtml"></div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='col-md-12 mrl5'>
+                            <!-- appImgSource -->
+                            <app-form-textarea [(ngModel)]="trkCode.appImgSource" tooltipPosition="above" label="{{trkConst.TRACKER_CODE_IMG_LABEL}}" tooltip="{{trkConst.TRACKER_CODE_IMG_LABEL}}" maxLen="1024" minLen="4" id="smarttrkCodeJs" name="smarttrkCodeJs" width="wd600" height="ht200">
+                            </app-form-textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='form-footer'>
+                <button [appDisableDemo]='appConst.DISABLE' appDisableRO [routerLink]="['/advertiser/details/'+advId]" mat-raised-button class='btn-primary'>Done</button>
+                <button mat-button class='mrl15' [routerLink]="['/advertiser/'+advId+'/pixel/details/'+pixelId]">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

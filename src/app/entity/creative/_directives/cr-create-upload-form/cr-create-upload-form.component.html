@@ -1,0 +1,256 @@
+<block-ui>
+  <div class="form-body">
+    <!-- uploader section -->
+    <div>
+
+      <mat-card class="mb-3 bg-light" [hidden]="isMacroSelected">
+
+        <mat-progress-bar *ngIf="isUploading" mode="indeterminate"></mat-progress-bar>
+        <div class="col-12 mb-2 p-0 text-muted form-group" *ngIf='isDCO'><strong>Display</strong></div>
+        <div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
+
+          <div><em class='fa fa-cloud-upload'></em></div>
+
+          <div class='text-primary'>
+            <span *ngIf="isUploading"><em class='fa fa-spinner fa-spin text14'></em>
+              Uploading</span>
+          </div>
+
+          <div class=''>Click or drop any of the files below to upload</div>
+          <div class='text-fade text12'>{{allowedExtensions}}</div>
+          <input multiple hidden type="file" #fileInput (click)="$event.target.value='';"
+            (change)="uploadFile($event.target.files)">
+        </div>
+      </mat-card>
+      <div *ngIf="isTemplateFlow">
+        <span class='mrr10 editModal' (click)="openSupportedDimensionsModal()">Supported Dimensions</span>
+      </div>
+      <div class='mrt20 text-fade text-center mb-3' *ngIf='isDCO' [hidden]="isDocUploaded || isMacroSelected">
+        <em>----- or -----</em>
+      </div>
+
+      <mat-card class="bg-light" *ngIf='isDCO' [hidden]="isDocUploaded">
+        <div class="col-12 p-0 text-muted form-group" *ngIf='isDCO'><strong>Native</strong>
+          <!--REVX-244-->
+          <p *ngIf='isMacroSelected' (click)="removeDCOVariables()" class="my-1 d-block text12 macroLink">
+            RESET&nbsp;&nbsp; NATIVE
+          </p>
+        </div>
+        <div class="bg-light">
+          <div id='dynamic-variable-form'>
+            <div id='form-container bg-light'>
+              <div class='form-body'>
+                <div class='row form-group mrb20'>
+                  <div class="col-5">
+                    <div class="form-label">
+                      {{crConst.DV_LABEL}}
+                      <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{crConst.DV_LABEL}}"></em>
+                    </div>
+                  </div>
+                  <div class='col-7'>
+                    <div *ngIf='uploadedFileList.length == 0 && isDCO'>
+                      <mat-form-field class='header-btn wd250'>
+                        <mat-select [(value)]="dv.macroSelected" (selectionChange)="macroSelectionHandler()">
+                          <mat-option *ngFor="let a of dv.macrosOptions" [value]="a.id">
+                            {{a.title}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class='clearfix'></div>
+                </div>
+              </div>
+            </div>
+            <div class='dv-cover' *ngIf='DCOVariables && DCOVariables.macroText'>
+              <mat-card>
+                <div class='file-card text12'>
+                  <div class='row'>
+                    <div class="col-3">
+                      <div class='file-icon'>
+                        <div class='html-bg'>
+                          <em class='mrt20 text20 fa fa-file-code-o'></em>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-9">
+                      <div class='row'>
+                        <div class='col-3'>Variable:</div>
+                        <div class='col-9'></div>
+                      </div>
+                      <div class='row mrt5'>
+                        <div class='col-3'>Sample:</div>
+                        <div class='col-9 text-break text-wrap'>{{DCOVariables.samples[0]}}
+                        </div>
+                      </div>
+                      <div class='row mrt5 file-remove text-danger'>
+                        <div class='col-3'></div>
+                        <div class='col-9'>
+                          <!-- REVX-244 -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </mat-card>
+            </div>
+          </div>
+
+          <!--REVX-244 : error for DCO mat-select only-->
+          <div class='error-msg mrt10'>
+            <div class="alert alert-danger alert-dismissible text11" *ngIf='dv.errorMsg'>
+              {{dv.errorMsg}}
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+
+      <!-- Display section -->
+      <div class='mrt10'>
+        <!-- showing success message -->
+        <div class="alert alert-success alert-dismissible" *ngIf='uploadedFileList.length > 0'>
+          <span class="close" data-dismiss="alert">&times;</span>
+          <strong>{{uploadedFileList.length}}</strong> compatible file(s) uploaded successfully.
+        </div>
+
+        <!-- showing error message -->
+        <div class="alert alert-danger alert-dismissible" *ngIf='invalidFileList.length > 0'>
+          <span class="close" data-dismiss="alert">&times;</span>
+          <strong>{{invalidFileList.length}} incompatible file(s) not uploaded</strong>
+          <div *ngFor='let f of invalidFileList' class='text11 mrt5'>
+            {{f.name}} | {{f.errorMsg}}
+          </div>
+        </div>
+
+        <!-- showing error message -->
+        <div class="alert alert-danger alert-dismissible" *ngIf='formValidated==false && uploadedFileList.length == 0'>
+          <span>Please upload atleast 1 file to create creative</span>
+        </div>
+      </div>
+
+      <!-- showing uploaded files with error message along with that -->
+      <div class='row justify-content-center'>
+        <!-- ashwin edit - start -->
+        <!-- <br> -->
+        <div class="pad20 col-12 form-body pt-0" *ngIf="uploadedFileList && uploadedFileList.length > 0">
+          <mat-card class="bg-light ml-4 mr-4">
+            <div class="col-12 p-0 d-flex flex-column" *ngFor="let file of uploadedFileList;let i= index">
+              <mat-card class="d-flex flex-column p-2">
+                <div class="d-flex flex-row col-12 p-0">
+                  <div class="col-3 p-0 m-0">
+                    <span *ngIf='file.type == "image" || file.type == "nativeAd"'>
+                      <img [src]="file.location" class="w-100 h-100 img-thumbnail" alt="native Ad" />
+                    </span>
+                    <span *ngIf='file.type == "zippedHTML"'>
+                      <div class='html-bg d-flex flex-row justify-content-center w-100 h-100'>
+                        <em class='my-auto fa fa-2x fa-file-code-o'></em>
+                      </div>
+                    </span>
+                    <span *ngIf='file.videoAttribute'>
+                      <video id='video-icon' width="100%" controls class="w-100 h-100">
+                        <source [src]="file.location" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                      </video>
+                    </span>
+                  </div>
+                  <!-- displaying details -->
+                  <div class="col-8 form-group my-auto">
+                    <div class="d-flex flex-column w-100">
+                      <div class="form-label text-left text-break text-wrap mb-1" title='{{file.name}}'>
+                        <!-- {{ (file.name.length>15)? (file.name | slice:0:15)+'...':(file.name) }} -->
+                        <strong>{{ file.name }}</strong>
+                      </div>
+                      <div class='form-label text-muted d-flex flex-row'>
+                        <span
+                          *ngIf='crConst.ALLOWED_IMAGE_FILE_TYPES.indexOf(file.contentType) > -1 || crConst.ALLOWED_VIDEO_FILE_TYPES.indexOf(file.contentType) > -1'>
+                          {{file.width}}x{{file.height}}
+                        </span>
+                        <span class="mx-2"
+                          *ngIf="crConst.ALLOWED_IMAGE_FILE_TYPES.indexOf(file.contentType) > -1 || crConst.ALLOWED_VIDEO_FILE_TYPES.indexOf(file.contentType) > -1">|</span>
+                        <span>{{file.size}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-1 p-0 my-auto text-center cursor-pointer">
+                    <span (click)="removeUploadedFiles(i)"><em class="fa fa-lg fa-trash"></em></span>
+                  </div>
+                </div>
+                <!-- slots and macro -->
+                <div class="d-flex flex-column col-12 p-0" *ngIf='file.type == "zippedHTML" && isDCO'>
+                  <hr class="col-12 p-0">
+                  <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-6 p-0 pr-2">
+                      <!-- slots -->
+                      <div class="form-group d-flex flex-column m-0">
+                        <div class="form-label text-left">
+                          {{crConst.LABEL_DCO_NUM_SLOTS}}*
+                          <em class="fa fa-info-circle" matTooltipPosition="above"
+                            matTooltip="{{crConst.LABEL_DCO_NUM_SLOTS_TOOLTIP}}"></em>
+                        </div>
+                        <div class="w-100">
+                          <div class="d-flex flex-column">
+                            <input maxlength="256" minlength="4"
+                              [ngClass]="{ 'input-danger': !formValidated && !file.noOfSlots }" class="form-control"
+                              [(ngModel)]="file.noOfSlots" autocomplete="off" trim="blur" />
+                          </div>
+                          <div class="validation-failed" *ngIf="!formValidated && !file.noOfSlots">
+                            <em class="fa fa-warning"></em> {{crConst.VALIDATION_DCO_NUM_SLOTS}}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- slots end -->
+                    </div>
+                    <div class="col-6 p-0 pl-2">
+                      <!-- macro -->
+                      <div class="form-group d-flex flex-column m-0">
+                        <div class="form-label text-left">
+                          {{crConst.LABEL_DCO_MACRO_LIST}}*
+                          <em class="fa fa-info-circle" matTooltipPosition="above"
+                            matTooltip="{{crConst.LABEL_DCO_MACRO_LIST_TOOLTIP}}"></em>
+                        </div>
+                        <div class="w-100">
+                          <div class="d-flex flex-column">
+                            <textarea row='5' id="dcoMacroList" maxlength="90"
+                              [ngClass]="{ 'input-danger': !formValidated && !file.macroList }"
+                              class="form-control pull-left" [(ngModel)]="file.macroList"
+                              autocomplete="off"> </textarea>
+                            <span class="macroLink my-1 pull-left" #macroListTrigger='matMenuTrigger'
+                              [matMenuTriggerFor]="titleMacroList">Choose and append Macros</span>
+                          </div>
+                          <div class="validation-failed" *ngIf="!formValidated && !file.macroList">
+                            <em class="fa fa-warning"></em> {{crConst.VALIDATION_DCO_MACRO_LIST}}
+                          </div>
+                          <mat-menu #titleMacroList="matMenu" yPosition="below" class='customMenu' multiple>
+                            <ng-container *ngFor='let macro of dcoMacros'>
+                              <button mat-menu-item
+                                (click)='handleMacroSelect(file, macro.macroText)'>{{macro.name}}</button>
+                            </ng-container>
+                          </mat-menu>
+                        </div>
+                      </div>
+                      <!-- macro end -->
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+          </mat-card>
+        </div>
+        <!-- ashwin edit - end -->
+
+      </div>
+      <div class='clearfix'></div>
+    </div>
+
+    <div class='false-footer mrr15'>
+      <button mat-raised-button class='btn-primary pull-right mrl15'
+        [ngClass]="{'disableUI': uploadedFileList.length == 0 && !DCOVariables.id}"
+        (click)="onContinueClick()">Continue</button>
+      <button mat-button class='pull-right mrl15' (click)="onGoBackClick()">Go Back</button>
+      <div class='clearfix'></div>
+    </div>
+  </div>
+
+</block-ui>

@@ -1,0 +1,322 @@
+<div class="bg-white">
+    <div class="my-auto form-group  p-2 mb-2" *ngFor="let part of data">
+        <div class="form-subheader px-0 bg-gray d-flex flex-row">
+            <div class="my-auto pdl-10"><strong>{{part.header}}</strong></div>
+            <div class="btn btn-link primary btn-sm" *ngIf="part.showEdit" appDisableRO (click)="editPart(part)">
+                <p class="small my-auto">EDIT</p>
+            </div>
+        </div>
+        <div class="d-flex flex-row flex-wrap mt-3 mrl10 mrr10">
+            <div class="mb-3 p-0 col-12" *ngFor="let val of part.value">
+                <div [ngSwitch]=val.type>
+
+
+                    <!-- TEXT -->
+                    <div *ngSwitchCase="'text'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+
+                            <!--in non-bulk edit -->
+                            <div *ngIf="!isBulkEdit" class="pl-0 my-auto text-dark text-bold col-3">{{val.title}}</div>
+
+                            <!--in bulk edit -->
+                            <div *ngIf='isBulkEdit' class="pl-0 my-auto d-flex flex-row col-3 justify-content-between">
+                                <div class="text-dark text-bold">{{val.title}}</div>
+                                <mat-chip-list *ngIf='val.chipColor'>
+                                    <mat-chip class="bgGray" disableRipple>
+                                        {{val.chipText}}</mat-chip>
+                                </mat-chip-list>
+                            </div>
+
+                            <div class="pl-0 my-auto text-secondary text-fade"
+                                [ngClass]="{'col-9' : !isBulkEdit , 'col-7':isBulkEdit}">{{val.value}}</div>
+                        </div>
+                    </div>
+
+
+                    <!-- LINK -->
+                    <div *ngSwitchCase="'link'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+                            <div class="col-3 pl-0 text-dark text-bold">{{val.title}}</div>
+                            <div class="col-9 pl-0 text-secondary" *ngIf="val.value">
+                                <button class="btn btn-lg btn-link primary p-0 text13"
+                                    (click)="onPixelClick(val.value.id)">{{val.value.name}}</button>
+                            </div>
+                            <div class="col-9 pl-0 text-secondary" *ngIf="!val.value">No Pixel Attached</div>
+                        </div>
+                    </div>
+
+
+                    <!-- target-or-block -->
+                    <div *ngSwitchCase="'target-or-block'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+
+                            <!-- <div class="col-3 pl-0 text-dark text-bold">{{val.title}}</div> -->
+
+                            <!--in non-bulk edit -->
+                            <div *ngIf="!isBulkEdit" class="pl-0 my-auto text-dark text-bold col-3">{{val.title}}</div>
+
+                            <!--in bulk edit -->
+                            <div *ngIf='isBulkEdit' class="pl-0 my-auto d-flex flex-row col-3 justify-content-between">
+                                <div class="text-dark text-bold">{{val.title}}</div>
+                                <mat-chip-list *ngIf='val.chipColor'>
+                                    <mat-chip class="bgGray" disableRipple>
+                                        {{val.chipText}}</mat-chip>
+                                </mat-chip-list>
+                            </div>
+
+
+
+                            <div class="col-9 pl-0 text-secondary">
+                                <div *ngIf="val.value.isAll">
+                                    <div>{{val.value.allText}}</div>
+                                </div>
+                                <div *ngIf="!val.value.isAll" class="d-flex flex-column">
+                                    <div class="target-content d-flex flex-column col-12 p-0"
+                                        *ngIf="val.value.target && val.value.target.length > 0">
+                                        <div class="target-header m-0 my-auto d-flex flex-row flex-wrap">
+                                            <button class="btn btn-sm btn-success rounded-right my-auto">TARGET</button>
+                                            <div class="my-auto">&nbsp; {{getInCSVFormat(val.value.target)}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="block-content d-flex flex-column col-12 p-0"
+                                        *ngIf="val.value.block && val.value.block.length > 0">
+                                        <div class="block-header m-0 my-auto d-flex flex-row flex-wrap">
+                                            <button class="btn btn-sm btn-danger rounded-right my-auto">BLOCK</button>
+                                            <div class="my-auto">&nbsp;{{getInCSVFormat(val.value.block)}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- target-and-block -->
+                    <div *ngSwitchCase="'target-and-block'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+
+                            <!-- <div class="col-3 pl-0 text-dark text-bold">{{val.title}}</div> -->
+
+                            <!--in non-bulk edit -->
+                            <div *ngIf="!isBulkEdit" class="pl-0 my-auto text-dark text-bold col-3">{{val.title}}</div>
+
+                            <!--in bulk edit -->
+                            <div *ngIf='isBulkEdit' class="pl-0 my-auto d-flex flex-row col-3 justify-content-between">
+                                <div class="text-dark text-bold">{{val.title}}</div>
+                                <mat-chip-list *ngIf='val.chipColor'>
+                                    <mat-chip class="bgGray" disableRipple>
+                                        {{val.chipText}}</mat-chip>
+                                </mat-chip-list>
+                            </div>
+
+
+                            <div class="col-9 pl-0 text-secondary">
+                                <div *ngIf="val.value.isAll">
+                                    <div>{{val.value.allText}}</div>
+                                </div>
+                                <div *ngIf="!val.value.isAll" class="d-flex flex-column">
+                                    <div class="target-content d-flex flex-column col-12 p-0"
+                                        *ngIf="val.value.target  && val.value.target.length > 0">
+                                        <div class="target-header d-flex flex-row m-0 mb-2">
+                                            <button class="btn btn-sm btn-success rounded-right my-auto">TARGET</button>
+                                            <div class="my-auto">&nbsp;{{val.value.targetHeader}}</div>
+                                        </div>
+                                        <div class="target-list mb-2">
+                                            <div>{{getInCSVFormat(val.value.target)}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="block-content d-flex flex-column col-12 p-0"
+                                        *ngIf="val.value.block && val.value.block.length > 0">
+                                        <div class="block-header d-flex flex-row m-0 mb-2">
+                                            <button class="btn btn-sm btn-danger rounded-right my-auto">BLOCK</button>
+                                            <div class="my-auto">&nbsp;{{val.value.blockHeader}}</div>
+                                        </div>
+                                        <div class="block-list mb-2">
+                                            <div>{{getInCSVFormat(val.value.block)}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- daypart -->
+                    <div *ngSwitchCase="'daypart'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+                            <!-- <div class="col-3 pl-0 text-dark text-bold">{{val.title}}</div> -->
+
+                            <!--in non-bulk edit -->
+                            <div *ngIf="!isBulkEdit" class="pl-0 my-auto text-dark text-bold col-3">{{val.title}}</div>
+
+                            <!--in bulk edit -->
+                            <div *ngIf='isBulkEdit' class="pl-0 my-auto d-flex flex-row col-3 justify-content-between">
+                                <div class="text-dark text-bold">{{val.title}}</div>
+                                <mat-chip-list *ngIf='val.chipColor'>
+                                    <mat-chip class="bgGray" disableRipple>
+                                        {{val.chipText}}</mat-chip>
+                                </mat-chip-list>
+                            </div>
+
+                            <div class="col-9 pl-0 text-secondary">
+                                <div *ngIf="val.value.isAll">
+                                    <div class="my-auto">All days</div>
+                                    <div class="my-auto">All hours</div>
+                                </div>
+                                <div *ngIf="!val.value.isAll" class="d-flex flex-row flex-wrap col-12 p-0">
+                                    <div class="col-4 p-0 d-flex flex-column" *ngFor="let part of val.value.parts">
+                                        <div class="mb-2">{{part.name}}</div>
+                                        <div *ngIf="part.hours.isAllDay" class="mb-2">
+                                            <div class="my-auto">All day</div>
+                                        </div>
+                                        <div *ngIf="!part.hours.isAllDay" class="mb-2">
+                                            <div class="d-flex flex-row flex-wrap">
+                                                <p class="my-auto">Morning:</p>
+                                                <p class="my-auto">{{getHourSplit(part.hours.morning)}}</p>
+                                            </div>
+                                            <div class="d-flex flex-row flex-wrap">
+                                                <p class="my-auto">Office Hours:</p>
+                                                <p class="my-auto">{{getHourSplit(part.hours.officeHours)}}</p>
+                                            </div>
+                                            <div class="d-flex flex-row flex-wrap">
+                                                <p class="my-auto">Evening:</p>
+                                                <p class="my-auto">{{getHourSplit(part.hours.evening)}}</p>
+                                            </div>
+                                            <div class="d-flex flex-row flex-wrap">
+                                                <p class="my-auto">Night:</p>
+                                                <p class="my-auto">{{getHourSplit(part.hours.night)}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- creative -->
+                    <div *ngSwitchCase="'creative'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+
+                            <!--msg when no creatives are attached-->
+                            <div class="col-12" *ngIf="!isBulkEdit && (!val.value || val.value.length === 0)">
+                                <div class="alert alert-danger text-center">
+                                    <em class="fa fa-exclamation-circle text-danger"></em> &nbsp;This strategy has no
+                                    active creatives attached to it.
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-column">
+
+                                <!--in bulk edit -->
+                                <div *ngIf='isBulkEdit' class="pl-0">
+                                    <!-- <div class="text-dark text-bold">{{val.title}}</div> -->
+                                    <mat-chip-list *ngIf='val.chipColor'>
+                                        <mat-chip class="bgGray" disableRipple>
+                                            {{val.chipText}}</mat-chip>
+                                    </mat-chip-list>
+                                </div>
+
+                                <!--list of creatives-->
+                                <div *ngIf="val.value && val.value.length > 0"
+                                    class="col-12 p-0 d-flex flex-row flex-wrap">
+
+                                    <div class="card bg-white p-1 m-1 border" *ngFor="let creative of val.value">
+                                        <div style="height: 200px;"
+                                            class="bg-gray d-flex flex-column creative-display-content"
+                                            [ngSwitch]="creative.type">
+                                            <div class="my-auto" *ngSwitchCase="'nativeAd'">
+                                                <img [ngClass]="{'ht200' : creative.size && creative.size.height>200 , 'wd200' : creative.size && creative.size.width>200}"
+                                                    class="w-100 h-100 bg-gray border text-dark"
+                                                    src="{{CREATIVE_IMAGE_API}}{{creative.urlPath}}" alt="Native Ad">
+                                            </div>
+                                            <div class="my-auto" *ngSwitchCase="'zippedHTML'">
+                                                <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                    <em
+                                                        class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                    <em
+                                                        class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                </span>
+                                            </div>
+                                            <div class="my-auto" *ngSwitchCase="'templateHTML'">
+                                                <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                    <em
+                                                        class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                    <em
+                                                        class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                </span>
+                                            </div>
+                                            <div class="my-auto" *ngSwitchCase="'html'">
+                                                <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                    <em
+                                                        class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                    <em
+                                                        class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                </span>
+                                            </div>
+                                            <div class="my-auto" *ngSwitchCase="'video'">
+                                                <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                    <em
+                                                        class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                    <em
+                                                        class="fa fa-video-camera fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                </span>
+                                            </div>
+                                            <div class="my-auto" *ngSwitchCase="'nativeVideo'">
+                                                <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                    <em
+                                                        class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                    <em
+                                                        class="fa fa-video-camera fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                </span>
+                                            </div>
+                                            <div class="my-auto" *ngSwitchCase="'image'">
+                                                <img [ngClass]="{'ht200' : creative.size && creative.size.height>200 , 'wd200' : creative.size && creative.size.width>200}"
+                                                    class="w-100 bg-gray border text-dark"
+                                                    src="{{CREATIVE_IMAGE_API}}{{creative.urlPath}}" alt="Image">
+                                            </div>
+                                        </div>
+                                        <div class="card-body text-dark d-flex flex-column p-0 py-2 wd200">
+                                            <div id="creative-active-name" class="card-title d-flex flex-row m-0 mb-2">
+                                                <span class="my-auto">
+                                                    <em class="fa fa-circle"
+                                                        [ngClass]="{'text-success': creative.active, 'text-danger': !creative.active}"></em>
+                                                </span>
+                                                <p [matTooltip]="creative.name" matTooltipPosition="above"
+                                                    class="px-2 my-auto text-underline"
+                                                    (click)="goToCreativeDetailsPage(creative)">
+                                                    {{(creative.name.length > 27)? creative.name.substring(0,24)+'...' :creative.name}}
+                                                </p>
+                                            </div>
+                                            <div id="creative-id-size" class="d-flex flex-row">
+                                                <p class="my-auto"> ID: {{creative.id}}</p>
+                                                <p class="px-3 my-auto">|</p>
+                                                <p class="my-auto">{{creative.size.width}} x {{creative.size.height}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- status -->
+                    <div *ngSwitchCase="'status'">
+                        <div [id]="val.id" class="d-flex flex-row col-12 p-0">
+                            <div class="col-12">
+                                <label class="switch">
+                                    <input type="checkbox" [(ngModel)]="val.value">
+                                    <div class="slider d-flex m-0 my-auto"
+                                        [ngClass]="{'justify-content-start text-white': val.value, 'justify-content-end text-secondary': !val.value }">
+                                        <strong class="my-auto px-2">{{val.value ? 'ACTIVE': 'INACTIVE'}}</strong>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

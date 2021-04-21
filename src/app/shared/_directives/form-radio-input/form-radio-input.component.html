@@ -1,0 +1,35 @@
+<div class="form-group">
+  <div class="row">
+      <div class="col-md-2 col-lg-2">
+          <div class="form-label">
+              {{ label }}
+              <em class="fa fa-info-circle" matTooltipPosition="{{ tooltipPosition }}" matTooltip="{{ tooltip }}"></em>
+          </div>
+      </div>
+      <div class="col">
+          <div *ngFor='let o of options'>
+              <div>
+                  <mat-radio-group id='{{id}}' [(ngModel)]="radio_btn" (change)="radioEventFunc($event)">
+                      <mat-radio-button *ngIf='!o.input' [value]="o.id" [ngClass]='[radio_btn==o.id?"":"text-secondary"]'>
+                          {{o.value}}
+                      </mat-radio-button>
+                      <mat-radio-button *ngIf='o.input' [value]="o.id" [ngClass]='[radio_btn==o.id?"":"text-secondary"]'>
+                          <div class="d-flex flex-row">
+                              <div class='mr-1'>{{o.value}}
+                              </div>
+                              <div><input [(ngModel)]="value" id="{{ id }}" name="{{ name }}" [hidden]='radio_btn===1' maxlength="1024" minlength="4" [ngClass]="{ 'input-danger': validated === 'false' && isInvalidNumber(value)}" class="form-control wd60"
+                                  />
+                              </div>
+
+                          </div>
+                          <mat-error class="error" *ngIf="validated == 'false' && isInvalidNumber(value)">
+                              {{validationMsg}}
+                          </mat-error>
+                      </mat-radio-button>
+                  </mat-radio-group>
+              </div>
+          </div>
+      </div>
+      <div class="clearfix"></div>
+  </div>
+</div>

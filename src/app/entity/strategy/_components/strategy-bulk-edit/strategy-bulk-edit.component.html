@@ -1,0 +1,111 @@
+<navbar></navbar>
+<div class='page-container strategy-form-container' [ngClass]="{'expCursor':mode}">
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+    <div id='page-content'>
+
+        <div class='row justify-content-center'>
+            <div class="col-xs-12 col-md-10 col-lg-8">
+                <div id="form-container">
+                    <div class="form-header sticky-top z10">
+                        <span style="text-transform: none !important;">Bulk Edit Strategies</span>
+                        <button id="strategy-cancel" class="pull-right" mat-button (click)="onCancel()">Cancel</button>
+                    </div>
+                    <div class="">
+
+                        <!--1 basic details-->
+                        <mat-accordion #accordion="matAccordion" id="strategy-form">
+                            <mat-expansion-panel hideToggle [expanded]="selStepperIndex===0"
+                                (opened)="panelClick(0 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">1</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_BASIC }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-basic [mode]="mode" [isBulkEdit]='true'>
+                                </app-strategy-edit-basic>
+                            </mat-expansion-panel>
+
+                            <!--2 inventory-->
+                            <mat-expansion-panel hideToggle [expanded]="selStepperIndex===1"
+                                (opened)="panelClick(1 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">2</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_INVENTORY }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-inventory [mode]="mode" [isBulkEdit]='true'>
+                                </app-strategy-edit-inventory>
+                            </mat-expansion-panel>
+
+                            <!--3 targeting-->
+                            <mat-expansion-panel [expanded]="selStepperIndex===2" hideToggle
+                                (opened)="panelClick(2 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">3</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_TARGETING }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-targeting [mode]="mode" [isBulkEdit]='true'
+                                    [openFromCampaignDetails]='openFromCampaignDetails'>
+                                </app-strategy-edit-targeting>
+                            </mat-expansion-panel>
+
+                            <!--4 budget-->
+                            <mat-expansion-panel [expanded]="selStepperIndex===3" hideToggle
+                                (opened)="panelClick(3 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">4</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_BUDGET }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-budget [mode]="mode" [isBulkEdit]='true'
+                                    [openFromCampaignDetails]='openFromCampaignDetails'></app-strategy-edit-budget>
+                            </mat-expansion-panel>
+
+
+                            <!--5 creatives-->
+                            <div [hidden]='!openFromCampaignDetails'>
+                                <mat-expansion-panel [expanded]="selStepperIndex===4" hideToggle
+                                    (opened)="panelClick(4 , $event)">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div class="strsteppers">5</div>
+                                            <div class="accor-titles">{{ SCONST.STEP_TITLE_CREATIVES }}</div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <app-strategy-edit-creatives [mode]="mode" [isBulkEdit]='true' [advId]='advId'>
+                                    </app-strategy-edit-creatives>
+                                </mat-expansion-panel>
+                            </div>
+
+                            <mat-expansion-panel [expanded]="selStepperIndex===5" hideToggle
+                                (opened)="panelClick(5 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">{{ openFromCampaignDetails ? 6 : 5 }}</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_REVIEW }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-review [mode]="mode" [isBulkEdit]='true'
+                                    [openFromCampaignDetails]='openFromCampaignDetails'>
+                                </app-strategy-edit-review>
+                            </mat-expansion-panel>
+
+                        </mat-accordion>
+                        <div class='clearfix mrb15'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

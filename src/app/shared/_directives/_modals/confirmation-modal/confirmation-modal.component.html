@@ -1,0 +1,21 @@
+<app-common-modal>
+  <div mdbModal #basicModal="mdbModal" class="" data-keyboard="false" [config]="{keyboard: false}"
+    data-backdrop="static" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+      <h4 class="modal-title">{{ config.title }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+        <em class='fa fa-times'></em>
+      </button>
+    </div>
+    <div class="modal-body text-wrap text-break" [innerHTML]="config.message">
+    </div>
+    <div class="modal-footer">
+      <button id="accept_btn" type="button" mat-raised-button class="btn-primary mrl10 float-left"
+        (click)="accept()">{{ config.btnOkText ? config.btnOkText : 'Confirm' }}</button>
+      <button id="decline_btn" type="button" mat-button class="float-right mrl15"
+        (click)="decline()" *ngIf="config.showOnlyOk!==true">{{ config.btnCancelText ? config.btnCancelText : 'Cancel' }}</button>
+      
+      <div class='clearfix'></div>
+    </div>
+  </div>
+</app-common-modal>

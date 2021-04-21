@@ -1,0 +1,81 @@
+<div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{title}}</h4>
+</div>
+
+<div mat-dialog-content class="modal-body p-0">
+    <div class='my-container'>
+        <div class='row'>
+
+            <div class='col-4'>
+                <h5>{{heading[0]}}</h5>
+                <div *ngIf='!l1_disp.isArray'>
+                    <div *ngIf='l1_disp.type === advancedConst.UI_TYPE.INCLUDE'>
+                        <p>All Selected</p>
+                    </div>
+                    <div *ngIf='l1_disp.type === advancedConst.UI_TYPE.EXCLUDE'>
+                        <p>None Selected</p>
+                    </div>
+                </div>
+
+                <div *ngIf='l1_disp.isArray' class='selection-body'>
+                    <p *ngFor='let obj of l1_disp.arrayOfObjects'>
+                        <em class='fa fa-square'></em>
+                        <span class=''>&nbsp;{{l1_disp.type}} : <em class='fa fa-circle mc-status'
+                [ngClass]="{'text-success':obj.active === true,'text-danger':obj.active === false}"></em>
+              {{obj.name}}</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class='col-4' *ngIf='heading[1]'>
+                <h5>{{heading[1]}}</h5>
+                <div *ngIf='!l2_disp.isArray'>
+                    <div *ngIf='l2_disp.type === advancedConst.UI_TYPE.INCLUDE'>
+                        <p>All Selected</p>
+                    </div>
+                    <div *ngIf='l2_disp.type === advancedConst.UI_TYPE.EXCLUDE'>
+                        <p>None Selected</p>
+                    </div>
+                </div>
+
+                <div *ngIf='l2_disp.isArray' class='selection-body'>
+                    <p *ngFor='let obj of l2_disp.arrayOfObjects'>
+                        <em class='fa fa-square'></em>
+                        <span class=''>&nbsp;{{l2_disp.type}} : <em class='fa fa-circle mc-status'
+                [ngClass]="{'text-success':obj.active === true,'text-danger':obj.active === false}"></em>{{obj.name}}</span>
+                    </p>
+                </div>
+            </div>
+
+
+            <div class='col-4' *ngIf='heading[2]'>
+                <h5>{{heading[2]}}</h5>
+                <div *ngIf='!l3_disp.isArray'>
+                    <div *ngIf='l3_disp.type === advancedConst.UI_TYPE.INCLUDE'>
+                        <p>All Selected</p>
+                    </div>
+                    <div *ngIf='l3_disp.type === advancedConst.UI_TYPE.EXCLUDE'>
+                        <p>None Selected</p>
+                    </div>
+                </div>
+
+                <div *ngIf='l3_disp.isArray' class='selection-body'>
+                    <p *ngFor='let obj of l3_disp.arrayOfObjects'>
+                        <em class='fa fa-square'></em>
+                        <span class=''>&nbsp;{{l3_disp.type}} : <em class='fa fa-circle mc-status'
+                [ngClass]="{'text-success':obj.active === true,'text-danger':obj.active === false}"></em>{{obj.name}}</span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class='modal-footer pr-1'>
+    <span class='pull-right'>
+    <button mat-raised-button class='btn-primary' (click)="done()">Ok</button>
+  </span>
+    <span class='clearfix'></span>
+</div>

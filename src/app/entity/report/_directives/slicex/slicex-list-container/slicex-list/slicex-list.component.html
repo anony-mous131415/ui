@@ -1,0 +1,75 @@
+<div>
+    <div class="card small" *ngIf="listData">
+        <div class="card-header d-flex flex-column px-0 pt-2" [ngClass]="{'pb-0': !loading && listData && listData.listData.length > 0, 'pb-2' : !(!loading && listData && listData.listData.length > 0)}">
+            <div class="m-0 my-auto d-flex flex-row px-2">
+                <h6 class="m-0 my-auto flex-grow-1 text-font-resposive"><strong>{{listData.displayName}}</strong></h6>
+                <button id="listcontainer-{{listData.entity}}-expandcollapse" class="btn btn-sm bg-transparent" [disabled]="loading" (click)="expandCollapseEntity(listData.entity)">
+          <em class='fa fa-chevron-down primary my-auto view-icon' title='Expand/ Collapse'></em></button>
+                <button id="listcontainer-{{listData.entity}}-showgrid" class="btn btn-sm bg-transparent" [disabled]="loading" (click)="showGridDetails(listData.entity)"><em class='fa fa-window-maximize primary view-icon'
+            title='Details'></em></button>
+            </div>
+            <div class="m-0 my-auto d-flex flex-row py-1 px-2" *ngIf="!loading && listData && listData.listData.length > 0">
+                <div class=" col-8 p-0 my-auto text-bold">
+                    Name
+                </div>
+                <div class="col-4 p-0 my-auto d-flex flex-row flex-wrap justify-content-end">
+                    <div class="col-12 w-100 text-right" *ngIf="!isCompareEnabled">
+                        <div class="text-right text-bold">Value</div>
+                    </div>
+                    <div class="d-flex flex-row w-100 text-bold" *ngIf="isCompareEnabled">
+                        <div class="col-6 m-0 p-0 text-left border-right">Value</div>
+                        <div class="col-6 m-0 p-0 text-right">%Change</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0 border-top" [ngClass]="{'loading': loading}" id="entity-list-container">
+            <p *ngIf="loading" class="my-2 w-100 text-center">Loading...</p>
+
+            <ul class="list-group selectable" *ngIf="!loading && listData">
+                <span *ngIf="listData.listData && listData.listData.length > 0">
+          <li class="list-group-item bg-light col-12 py-1 px-1 d-flex flex-row justify-content-between selectable"
+            *ngFor="let listItem of listData.listData" id="listcontainer-{{listData.entity}}-{{listItem.id}}">
+            <div class="row ml-1 p-0 my-auto pr-2">
+              <mat-checkbox class="p-0 unselectable"
+                (change)="checkboxToggle($event, listData.entity, listItem.id, listItem.name, listItem)"
+                matTooltip="{{listItem.name}}" matTooltipPosition="above" [(ngModel)]="listItem.checked">
+              </mat-checkbox>
+            </div>
+            <div class="d-inline-block row ml-1 p-0 my-auto pr-2 text-truncate selectable"
+              [ngClass]="{'col-7': isCompareEnabled, 'col-9': !isCompareEnabled}" matTooltip="{{listItem.name}}"
+              matTooltipPosition="above">
+              {{listItem.name}}
+            </div>
+
+            <div class=" p-0 my-auto text-right d-flex flex-row flex-wrap justify-content-end"
+              [ngClass]="{'col-4': isCompareEnabled, 'col-2': !isCompareEnabled}">
+              <div *ngIf="!isCompareEnabled">
+                <div class="col-12 p-0 w-100 selectable" matTooltip="{{listItem.valueRaw}}" matTooltipPosition="above">
+                  <strong>{{listItem.value}}</strong></div>
+              </div>
+              <div class="d-flex flex-row w-100" *ngIf="isCompareEnabled">
+                <p class="col-6 m-0 p-0 border-right text-left selectable" matTooltip="{{listItem.valueRaw}}"
+                  matTooltipPosition="above"><strong>{{listItem.value}}</strong></p>
+                <div class="col-6 m-0 p-0 selectable" [ngClass]="{'compare-danger': listItem.changeFactor === -1,
+        'compare-success': listItem.changeFactor === 1}"><strong>{{listItem.valueCompare}}&nbsp;<em class="unselectable fa "
+                      [ngClass]="{
+          'fa-caret-up': listItem.changeFactor === 1,
+          'fa-caret-down': listItem.changeFactor === -1
+        }"></em></strong></div>
+              </div>
+            </div>
+          </li>
+        </span>
+                <span *ngIf="isActiveEntity && listData.listData && listData.listData.length <= 0">
+          <li class="list-group-item bg-light col-12 py-1 px-1 d-flex flex-row justify-content-between">
+            No data to display
+          </li>
+        </span>
+            </ul>
+        </div>
+    </div>
+    <div class="card small" *ngIf="!loading && !listData">
+        <p class="my-2 w-100 text-center">No data to display</p>
+    </div>
+</div>

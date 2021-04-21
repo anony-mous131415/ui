@@ -1,0 +1,9 @@
+.modal-dialog {
+    max-width: 95% !important;
+}
+.custom-size {
+    margin: 0 auto;
+    #table-content {
+        max-height: 50vh;
+    }
+}

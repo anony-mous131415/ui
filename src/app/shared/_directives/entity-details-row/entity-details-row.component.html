@@ -1,0 +1,7 @@
+<div class='row {{marginBottom}}'>
+  <div id='rowTitle' class='col-md-5 text-bold'>{{rowTitle}}</div>
+  <div id='rowValue' class='col-md-7 text-fade'><em [hidden]="!prefixIcon" class='fa {{prefixIcon}} mrr5'
+      [ngClass]="[isGreenPrefixIcon==='true' ? 'fafaGreen' : 'fafaNoColor']"></em> &nbsp;{{rowValue}}
+    <em class='fa {{suffixIcon}}'></em></div>
+  <div class='clearfix'></div>
+</div>

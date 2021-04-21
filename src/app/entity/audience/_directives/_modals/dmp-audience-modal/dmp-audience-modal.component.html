@@ -1,0 +1,147 @@
+<div id='modal-content' class='modal-content mh-100'>
+
+    <div id='modal-body' class="modal-body">
+        <div class='row'>
+            <div class="col-7">
+                <!----------------------------------------------TABLE STARTS------------------------------------------------------------------------------------------->
+                <div id='list-header' class='mrt10'>
+                    <div class="float-left">
+                        <div class='list-title'>
+                            Select DMP Audience
+                        </div>
+                    </div>
+
+                    <div class='float-right'>
+                        <button mat-button id="list-refresh-btn" (click)="reload()" matTooltip="Refresh" matTooltipPosition="above" [disabled]='showProgressBar'>
+              <em class="fa fa-refresh"></em>
+            </button>
+                    </div>
+
+                    <div class="float-right mrr10">
+                        <!--search box-->
+                        <div class="input-group">
+                            <input matInput id='cd-filter' (keyup)="applySearchFilter($event.target.value)" class="form-control form-control-sm" placeholder="Search" autocomplete="off" />
+                            <span class='icon-inside'>
+                <em class="fa fa-search" aria-hidden="true"></em>
+              </span>
+                        </div>
+
+                    </div>
+                    <div class='clearfix'></div>
+
+                </div>
+
+                <div id='list-body'>
+                    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+                    <div id='table-container'>
+                        <div #tableContent id='table-content'>
+                            <mat-radio-group [(ngModel)]="selectedElement">
+                                <mat-table class="table-border table-scroll" [dataSource]="listSource" matSort matSortActive="name">
+
+                                    <!--radio button-->
+                                    <ng-container matColumnDef="selected">
+                                        <mat-header-cell *matHeaderCellDef>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            <mat-radio-button [disabled]='element.isSynced' [value]="element" [checked]=" selectedElement && selectedElement.sid === element.sid" (change)="showWarning=false">
+                                            </mat-radio-button>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!--name-->
+                                    <ng-container matColumnDef='sname'>
+                                        <mat-header-cell *matHeaderCellDef mat-sort-header>DMP Name
+                                        </mat-header-cell>
+                                        <mat-cell [ngClass]="{'syncedRow':row.isSynced }" *matCellDef="let row">
+                                            {{row.sname}}</mat-cell>
+                                    </ng-container>
+
+                                    <!--sync-->
+                                    <ng-container matColumnDef='sync'>
+                                        <mat-header-cell *matHeaderCellDef>Sync Status
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row">
+                                            <span [ngClass]="{'syncedRow' : row.isSynced}">{{row.isSynced ? 'already synced' : 'available'}}</span>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;"></mat-header-row>
+                                    <mat-row *matRowDef="let row ;columns: displayedColumns;" (click)='elementClicked(row)'>
+                                    </mat-row>
+
+                                </mat-table>
+                            </mat-radio-group>
+
+                            <div *ngIf='showDataUnavailableMsg' class='data-unavailable-msg'><em class='fa fa-warning'></em> {{dataUnavailableMsg}}
+                            </div>
+
+                            <div *ngIf='showAdvNotSelectedMsg' class='data-unavailable-msg'><em class='fa fa-warning'></em> {{advNotSelectedMsg}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id='list-footer'>
+                    <mat-paginator id='dmp-paginator' [length]="listLen" [pageSize]="20" [pageSizeOptions]="[20,50,100,200,300,400]" showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+            </div>
+
+            <!-----------------------------My selection------------------------------------->
+            <div class='col-6'>
+
+                <mat-card class="tp-card h-100">
+                    <mat-card-content>
+                        <div class='d-flex flex-row'>
+                            <div class='flex-grow-1'>
+                                <h6 class=''>My Selections</h6>
+                            </div>
+                            <button class="btn btn-sm btn-link primary" id='clearAll' [disabled]="showProgressBar" (click)="clearAllClick()">Clear All</button>
+                        </div>
+
+
+                        <div class="d-flex flex-column">
+                            <div *ngIf='selectedElement' class="mt-3">
+                                <span class="font-weight-bold">Segment Id :</span> {{selectedElement.sid}}
+                            </div>
+                            <div *ngIf='selectedElement' class="mt-3">
+                                <span class="font-weight-bold">Segment Name :</span> {{selectedElement.sname}}
+                            </div>
+                            <div *ngIf='selectedElement' class="mt-3">
+                                <span class="font-weight-bold">Segment Description :</span> {{selectedElement.sdescription}}
+                            </div>
+                            <div *ngIf='selectedElement' class="mt-3">
+                                <span class="font-weight-bold">Segment Count :</span> {{selectedElement.scount}}
+                            </div>
+                            <div *ngIf='selectedElement' class="mt-3">
+                                <span class="font-weight-bold">Segment Type :</span> {{selectedElement.stype===1 ? audConst.DMP_TYPE.ONE : audConst.DMP_TYPE.TWO}}
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+</div>
+
+<div class='modal-footer'>
+
+    <div class="d-flex flex-row w-100">
+        <div class='flex-grow-1 pull-left mrr10'>
+            <div *ngIf='showWarning' class="error-message pull-left">
+                <em class="fa fa-warning" aria-hidden="true"></em> Please select one of the DMP Audience Segment to continue.
+            </div>
+        </div>
+
+        <div class='pull-right'>
+            <button id='associateStrCancle' [disabled]='showProgressBar' mat-button class='mrr15' (click)="cancel()">Cancel</button>
+            <button id='saveStrategies' mat-raised-button class='btn-primary mrr15' [disabled]='showProgressBar' appDisableRO (click)="done()">Done</button>
+        </div>
+
+    </div>
+    <div class='clearfix'></div>
+
+</div>

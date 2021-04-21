@@ -1,0 +1,102 @@
+<div id='modal-content' class='modal-content mh-100'>
+    <div id='modal-header' class="modal-header">
+        <h4 class="modal-title">Set Rule</h4>
+        <button [disabled]='!rulesMList.length' type="button" class="close" aria-label="Close" (click)="dismissModal()" title='close'>
+      <em class='fa fa-times'></em>
+    </button>
+    </div>
+
+    <div id='modal-body' class="modal-body ruleBody">
+
+        <p class="h6">Conditions</p>
+        <p><small>Each rule can have multiple conditions within them. The rule will be considered as matched
+        only when <strong><u>all the conditions</u></strong> within a rule are satisfied.</small></p>
+
+        <form [formGroup]="form" (submit)="processForm( form )">
+
+            <mat-spinner *ngIf='!rulesMList.length' color='warn'></mat-spinner>
+
+            <div formArrayName="rules">
+
+                <div *ngFor='let Rule of getRules().controls ; let i =index'>
+
+                    <div *ngFor='let md of rulesMList'>
+
+                        <div [formGroupName]="i" class="d-flex flex-row">
+
+                            <!--filter-->
+                            <div class="rule-border mb-2">
+                                <mat-form-field>
+                                    <mat-select (selectionChange)="ruleSelectorHandler(i)" formControlName="filter" disableOptionCentering>
+
+                                        <input class="myInput" #myInput focused="'true'" type="text" (keyup)="search($event , i , 0)" autocomplete="off" placeholder="search">
+
+                                        <mat-option *ngFor="let rule of arr[i]" [value]="rule.id">
+                                            {{rule.displayName}} ({{rule.fbxName}})
+                                        </mat-option>
+
+                                        <label class='noResultLabel' *ngIf="!arr[i].length">No results found
+                    </label>
+
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!--operator-->
+                            <div class="rule-border ml-3 mb-2">
+                                <mat-form-field>
+                                    <mat-select formControlName="operator" disableOptionCentering>
+
+                                        <mat-option id='ruleDropDown1' *ngFor="let ro of getRuleOperators(i)" [value]="ro.id">
+                                            {{ro.displayName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!--value-->
+                            <div *ngIf='!isRuleValues(i)' class="rule-border ml-3 mb-2 w-75">
+                                <mat-form-field class="wd-full">
+                                    <input matInput id="ruleTxt" formControlName="val" autocomplete="off" />
+                                </mat-form-field>
+                            </div>
+
+                            <div *ngIf='isRuleValues(i)' class="rule-border ml-3 mb-2 drop3">
+                                <mat-form-field class='w-100 h-100'>
+                                    <mat-select formControlName="val" disableOptionCentering>
+                                        <mat-option id='ruleDropDown2' *ngFor="let rv of getRuleValues(i)" [value]="rv.value">
+                                            {{rv.displayValue}}&nbsp;({{rv.value}})
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- delete button -->
+                            <a class="ml-2 mt-3 pointer" (click)="removeRule(Rule,i)" matTooltipPosition="above" matTooltip="Remove Rule">
+                                <em class='fa fa-minus-circle'></em>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label *ngIf='rulesMList.length' class="primary-label" (click)="addRule()">+ Add Condition</label>
+
+            <div *ngIf='!formValidated' class="row mx-1 alert alert-danger" role="alert">
+                <div class="col-1">
+                    <em class="fa fa-exclamation-triangle" aria-hidden="true"></em>
+                </div>
+                <div class="col-11">
+                    {{errMsg}}
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div id='modal-footer' class="modal-footer d-flex justify-content-end">
+        <button id='ruleCancel' [disabled]='!rulesMList.length' type="submit" class="mrr15" mat-button (click)='dismissModal()'>Cancel</button>
+        <button id='ruleDone' [disabled]='!rulesMList.length' type="submit" class="btn-primary" mat-raised-button (click)='done()'>Done</button>
+    </div>
+</div>

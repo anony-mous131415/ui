@@ -1,0 +1,16 @@
+<div mat-dialog-content class="modal-body">
+  <app-cd-list advertiserId='{{advertiserId}}' showSelectOption=true useAsDirective=true
+    (syncSelectedClickDestination)="syncSelectedClickDestination($event)" (noCdFound)='noCdFound($event)'>
+  </app-cd-list>
+</div>
+<div class="modal-footer pr-1">
+  <div *ngIf='showErrorMessage' class="error-message pull-left">
+    <em class="fa fa-warning" aria-hidden="true"></em> Please select one of the click destination to continue.
+  </div>
+
+  <div class='pull-right'>
+    <button mat-button class="mrr15" (click)="cancel()">Cancel</button>
+    <button mat-raised-button class="btn-primary" [disabled]='disableDone' (click)="onSelectClick()">Done</button>
+  </div>
+  <div class='clearfix'></div>
+</div>

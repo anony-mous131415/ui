@@ -1,0 +1,351 @@
+[
+    {
+        "id": "basic",
+        "header": "BASICS",
+        "showEdit": true,
+        "value": [
+            {
+                "type": "text",
+                "id": "channel",
+                "title": "Channel",
+                "value": "Display",
+                "showInBulkEdit": false,
+                "showInAll": true
+            },
+            {
+                "type": "text",
+                "id": "startDate",
+                "title": "Start Date",
+                "value": "10 Sep 2020 5:16 PM",
+                "showInBulkEdit": true,
+                "showInAll": true
+            },
+            {
+                "type": "text",
+                "id": "endDate",
+                "title": "End Date",
+                "value": "Never Ending",
+                "showInBulkEdit": true,
+                "showInAll": true
+            },
+            {
+                "type": "text",
+                "id": "dailyFCap",
+                "title": "Frequency Cap",
+                "value": "Show ad no more than 999 times per user in 24 hours",
+                "showInBulkEdit": false,
+                "showInAll": true
+            },
+            {
+                "type": "link",
+                "id": "trackingPixel",
+                "title": "Tracking Pixel",
+                "value": {
+                    "id": 10829,
+                    "name": "Flipkart_MobileApp_Conv pixel do  not use"
+                },
+                "showInBulkEdit": false,
+                "showInAll": true
+            }
+        ]
+    },
+    {
+        "id": "budget",
+        "header": "BUDGET & BIDDING",
+        "showEdit": true,
+        "value": [
+            {
+                "type": "text",
+                "id": "pricingType",
+                "title": "Pricing Type / Goal",
+                "value": "CPA 10 INR"
+            },
+            {
+                "type": "text",
+                "id": "mediaBudget",
+                "title": "Lifetime Media Budget",
+                "value": "Limit to 89 INR"
+            },
+            {
+                "type": "text",
+                "id": "pacing",
+                "title": "Pacing",
+                "value": "Daily asap (asap during day) 12 INR"
+            },
+            {
+                "type": "text",
+                "id": "bidValue",
+                "title": "Bid Value",
+                "value": "100% of predicted value"
+            },
+            {
+                "type": "text",
+                "id": "bidMin",
+                "title": "Min Bid",
+                "value": 1
+            },
+            {
+                "type": "text",
+                "id": "bidMax",
+                "title": "Max Bid",
+                "value": 3
+            }
+        ]
+    },
+    {
+        "id": "targeting",
+        "header": "DELIVERY TARGETING",
+        "showEdit": true,
+        "value": [
+            {
+                "showInSkad": true,
+                "type": "target-and-block",
+                "id": "country",
+                "title": "Country",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any",
+                    "targetHeader": "Any of the below countries",
+                    "blockHeader": "Any of the below countries"
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "target-and-block",
+                "id": "state",
+                "title": "State",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any",
+                    "targetHeader": "Any of the below states",
+                    "blockHeader": "Any of the below states"
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "target-and-block",
+                "id": "city",
+                "title": "City",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any",
+                    "targetHeader": "Any of the below cities",
+                    "blockHeader": "Any of the below cities"
+                }
+            },
+            {
+                "showInSkad": false,
+                "type": "target-and-block",
+                "id": "audience",
+                "title": "Audience",
+                "value": {
+                    "target": [
+                        {
+                            "id": 2029260,
+                            "name": "2Gud web Cart R1",
+                            "type": "app"
+                        }
+                    ],
+                    "block": [],
+                    "isAll": false,
+                    "allText": "Any",
+                    "targetHeader": "Any of the below audience(s)",
+                    "blockHeader": "Any of the below audience(s)"
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "target-and-block",
+                "id": "dealCategory",
+                "title": "Advance Targeting",
+                "value": {
+                    "target": [
+                        {
+                            "id": 13,
+                            "name": "Beauty"
+                        },
+                        {
+                            "id": 3,
+                            "name": "Hardcore Gaming"
+                        }
+                    ],
+                    "block": [],
+                    "isAll": false,
+                    "allText": "Any",
+                    "targetHeader": "Any of the below deal categories",
+                    "blockHeader": ""
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "daypart",
+                "id": "daypart",
+                "title": "Daypart",
+                "value": {
+                    "isAll": false,
+                    "parts": [
+                        {
+                            "name": "Monday",
+                            "hours": {
+                                "isAllDay": true
+                            }
+                        },
+                        {
+                            "name": "Tuesday",
+                            "hours": {
+                                "isAllDay": true
+                            }
+                        },
+                        {
+                            "name": "Wednesday",
+                            "hours": {
+                                "isAllDay": true
+                            }
+                        },
+                        {
+                            "name": "Thursday",
+                            "hours": {
+                                "isAllDay": true
+                            }
+                        },
+                        {
+                            "name": "Friday",
+                            "hours": {
+                                "isAllDay": true
+                            }
+                        },
+                        {
+                            "name": "Saturday",
+                            "hours": {
+                                "isAllDay": true
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "creativePlacement",
+                "title": "Creative Placement",
+                "value": "Desktop, Mobile Web, Mobile Applications"
+            },
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "connectionType",
+                "title": "Connection Type",
+                "value": "Wifi, 3G, 5G, 2G, 4G"
+            },
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "mobileOS",
+                "title": "Mobile Operating System",
+                "value": "Any"
+            },
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "deviceType",
+                "title": "Device Type",
+                "value": "Tablet,Smartphone"
+            }
+        ]
+    },
+    {
+        "id": "inventory",
+        "header": "INVENTORY",
+        "showEdit": true,
+        "value": [
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "appStoreCertification",
+                "title": "App Store Certification",
+                "value": "All Apps"
+            },
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "appRatings",
+                "title": "App Ratings",
+                "value": "NA"
+            },
+            {
+                "showInSkad": true,
+                "type": "target-or-block",
+                "id": "inventorySources",
+                "title": "Inventory Sources",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any"
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "text",
+                "id": "",
+                "title": "Auction Type",
+                "value": "First Price , Second Price"
+            },
+            {
+                "showInSkad": false,
+                "type": "target-or-block",
+                "id": "androidAppCategories",
+                "title": "Android App Categories",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any"
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "target-or-block",
+                "id": "iOSAppCategories",
+                "title": "iOS App Categories",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any"
+                }
+            },
+            {
+                "showInSkad": true,
+                "type": "target-or-block",
+                "id": "apps",
+                "title": "Apps",
+                "value": {
+                    "target": [],
+                    "block": [],
+                    "isAll": true,
+                    "allText": "Any"
+                }
+            }
+        ]
+    },
+    {
+        "id": "creative",
+        "header": "CREATIVE",
+        "showEdit": true,
+        "value": [
+            {
+                "type": "creative",
+                "id": "creatives",
+                "title": "Creatives",
+                "value": null
+            }
+        ]
+    }
+]

@@ -1,0 +1,42 @@
+$modal-border-color: #b8b8b8;
+
+.modal-body {
+    height: calc(100% - 80px);
+    overflow-x: hidden;
+}
+
+.table-scroll {
+    overflow-y: auto;
+    height: fit-content;
+    // min-height: 300px;
+    max-height: 400px;
+}
+
+.modal-spacing {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.border-footer {
+    border-top: 1px solid $modal-border-color;
+}
+
+.border-header {
+    border-bottom: 1px solid $modal-border-color;
+}
+
+.mat-column-id {
+    flex: 0 0 15%;
+}
+
+.mat-column-name {
+    flex: 0 0 30%;
+}
+
+.mat-column-message {
+    flex: 0 0 55%;
+}
+
+.divider {
+    border-right: 1px solid #333;
+}

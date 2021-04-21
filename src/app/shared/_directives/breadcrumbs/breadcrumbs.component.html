@@ -1,0 +1,9 @@
+<div class="b-crumbs">
+  <mdb-breadcrumb customClass="black-text purple lighten-4">
+    <mdb-breadcrumb-item *ngFor='let bc of bcList;let i = index'>
+      <em *ngIf="i>0" class="mr-1 mrt3 fa fa-angle-right"></em>
+      <span class='bc-title'>{{bc.title}}&nbsp;</span>
+      <a routerLink="{{bc.link}}" class='bc-name'>{{bc.name}}</a>
+    </mdb-breadcrumb-item>
+  </mdb-breadcrumb>
+</div>

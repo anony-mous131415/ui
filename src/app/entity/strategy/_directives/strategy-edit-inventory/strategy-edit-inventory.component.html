@@ -1,0 +1,201 @@
+<div>
+    <div class="form-body py-2  mrl40" *ngIf="strategyDTO || isBulkEdit">
+
+        <!-- Brand Safety -->
+        <div [hidden]='isBulkEdit'>
+            <div class="form-subheader border-0 small px-0 mb-2">
+                <div class="pdl-10 text-secondary"><strong>{{SCONST.INVENTORY_SUBHEADER_BRAND_SAFETY}}</strong></div>
+            </div>
+
+            <div class="card bg-light text-dark mb-3 form-group">
+                <div class="card-body d-flex flex-row p-0">
+                    <div class="left p-3 my-auto">
+                        <em class="fa fa-shield fa-3x primary-icon"></em>
+                    </div>
+                    <div class="right py-2 px-3 flex-grow-1 d-flex flex-column border-left">
+                        <div class="mb-2 d-flex flex-row flex-wrap">
+                            <div class="my-auto">{{SCONST.INVENTORY_BRAND_SAFETY_LINE1_LABEL}} &nbsp; </div>
+                            <mat-slide-toggle id="published-app-toggle" [(ngModel)]="targetOnlyPublishedApps"
+                                class='primary'>
+                                {{targetOnlyPublishedApps? 'On' : 'Off'}}
+                            </mat-slide-toggle>
+                        </div>
+                        <div class="my-auto">
+                            <span class="my-auto">{{SCONST.INVENTORY_BRAND_SAFETY_LINE2_LABEL_LEFT}}</span> &nbsp;
+                            <mat-form-field class="w-25">
+                                <mat-select id="app-rating" [(value)]="selAppRating">
+                                    <mat-option id="{{item.id}}" *ngFor="let item of appRatingList" [value]="item.name">
+                                        {{ item.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span class="my-auto">&nbsp; {{SCONST.INVENTORY_BRAND_SAFETY_LINE2_LABEL_RIGHT}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Sources -->
+        <div>
+
+
+
+            <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 text-secondary align-self-center">
+                    <strong>{{SCONST.INVENTORY_SUBHEADER_INVENTORY_SOURCES}}&nbsp; <em class="fa fa-info-circle"
+                            matTooltipPosition="above"
+                            matTooltip="{{SCONST.INVENTORY_SUBHEADER_INVENTORY_SOURCES_HINT}}"></em> </strong>
+                </div>
+                <!-- REVX-371 : strategy bulk edit -->
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of inventory.allowedBulkEditOpts'
+                        [(ngModel)]="inventory.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===inventory.selectedBulkEditOpt"
+                            class="bc-title" disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+
+            </div>
+
+            <div *ngIf='isBulkEdit'>
+                {{inventory.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.INVENTORY_SRC : inventory.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''   }}
+            </div>
+
+            <div class="mb-3" [hidden]="isToBeHidden(0)">
+                <app-strategy-target-all identifier="inventory-source" entity="AGGREGATOR" icon="fa-archive"
+                    actionBtnLabel="Browse" [targetOptions]="trgtOptInventorySources"
+                    [targetAlltext]="SCONST.INVENTORY_SOURCES_TARGET_ALL_TEXT"
+                    [selectionList]="selectionList['inventory-source']"
+                    (actionBtnClick)="actionInventorySources($event)" (targetOptionChange)="targetOptionChanged($event)"
+                    (selectionRemoved)="onSelectionRemoved($event)">
+                </app-strategy-target-all>
+                <mat-error class="error" *ngIf="error['inventory'].hasError">
+                    {{error['inventory'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <!-- REVX-127 : auction type ui-->
+        <div>
+            <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 text-secondary align-self-center">
+                    <strong>{{SCONST.TARGETING_SUBHEADER_AUCTION_TYPE}}</strong></div>
+
+                <!-- REVX-371 : strategy bulk edit -->
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of auction.allowedBulkEditOpts'
+                        [(ngModel)]="auction.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===auction.selectedBulkEditOpt"
+                            class="bc-title" disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+
+            </div>
+
+            <div *ngIf='isBulkEdit'>
+                {{auction.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''   }}
+
+            </div>
+
+            <div class="mb-3" [hidden]="isToBeHidden(1)">
+                <app-strategy-target identifier="auction-type" icon="fa-gavel" [options]="auctionTypes"
+                    (selectionChange)="onAuctionSelectionChange($event)">
+                </app-strategy-target>
+                <mat-error class="error" *ngIf="error['auctionType'].hasError">
+                    {{error['auctionType'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <!-- //REVX-724 : skad-ui changes -->
+        <!-- Android App Categories -->
+        <div [hidden]='isBulkEdit || hideAndroidAppCategories()'>
+            <div class="form-subheader border-0 small px-0 mb-2">
+                <div class="pdl-10 text-secondary">
+                    <strong>{{SCONST.INVENTORY_SUBHEADER_ANDROID_APP_CATEGORIES}}</strong></div>
+            </div>
+            <div class="mb-3">
+                <app-strategy-target-all identifier="android-app-category" entity="APP_CATEGORY" icon="fa-android"
+                    actionBtnLabel="Browse" [targetOptions]="trgtOptAndroidAppCategory"
+                    [targetAlltext]="SCONST.ANDROID_APP_CATEGORY_TARGET_ALL_TEXT"
+                    [selectionList]="selectionList['android-app-category']"
+                    (actionBtnClick)="actionAndroidAppCategory($event)"
+                    (targetOptionChange)="targetOptionChanged($event)" (selectionRemoved)="onSelectionRemoved($event)">
+                </app-strategy-target-all>
+                <mat-error class="error" *ngIf="error['android'].hasError">
+                    {{error['android'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <!-- iOS App Categories -->
+        <div [hidden]='isBulkEdit'>
+            <div class="form-subheader border-0 small px-0 mb-2">
+                <div class="pdl-10 text-secondary"><strong>{{SCONST.INVENTORY_SUBHEADER_IOS_APP_CATEGORIES}}</strong>
+                </div>
+            </div>
+            <div class="mb-3">
+                <app-strategy-target-all identifier="ios-app-category" entity="APP_CATEGORY" icon="fa-apple"
+                    actionBtnLabel="Browse" [targetOptions]="trgtOptIosAppCategory"
+                    [targetAlltext]="SCONST.IOS_APP_CATEGORY_TARGET_ALL_TEXT"
+                    [selectionList]="selectionList['ios-app-category']" (actionBtnClick)="actionIOSAppCategory($event)"
+                    (targetOptionChange)="targetOptionChanged($event)" (selectionRemoved)="onSelectionRemoved($event)">
+                </app-strategy-target-all>
+                <mat-error class="error" *ngIf="error['ios'].hasError">
+                    {{error['ios'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <!-- Apps -->
+        <div>
+            <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 text-secondary align-self-center">
+                    <strong>{{SCONST.INVENTORY_SUBHEADER_APPS}}</strong></div>
+
+                <!-- REVX-371 : strategy bulk edit -->
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of apps.allowedBulkEditOpts'
+                        [(ngModel)]="apps.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===apps.selectedBulkEditOpt" class="bc-title"
+                            disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+
+            </div>
+
+
+            <div *ngIf='isBulkEdit'>
+                {{apps.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.APPS : apps.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''   }}
+            </div>
+
+            <div class="mb-3" [hidden]="isToBeHidden(2)">
+                <app-strategy-target-all identifier="app" entity="SITE" icon="fa-th" actionBtnLabel="Browse"
+                    [targetOptions]="baseTargetOptionsForApp" [targetAlltext]="SCONST.APP_TARGET_ALL_TEXT"
+                    showAlways="true" [selectionList]="selectionList['app']" (actionBtnClick)="actionApps($event)"
+                    (targetOptionChange)="targetOptionChanged($event)" (selectionRemoved)="onSelectionRemoved($event)">
+                </app-strategy-target-all>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="false-footer">
+        <button id="inventory-save" mat-raised-button class="btn-primary  pull-right" *ngIf="mode === MODE.EDIT"
+            (click)="onReviewAndSave()">Review &
+            Save</button>
+        <button id="inventory-next" mat-raised-button class="btn-secondary pull-right mr-2"
+            (click)="goToNextStep()">Next</button>
+        <button id="inventory-back" mat-button class="pull-right mr-2" (click)="goToPrevStep()">Back</button>
+    </div>
+</div>

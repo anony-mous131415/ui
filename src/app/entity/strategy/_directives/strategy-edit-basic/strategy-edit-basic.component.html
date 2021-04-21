@@ -1,0 +1,283 @@
+<div>
+    <mat-progress-bar *ngIf="requestInProgress" mode="indeterminate"></mat-progress-bar>
+    <div class="clearfix mrb15"></div>
+    <div class="form-body py-2" *ngIf="strategyDTO">
+
+        <!-- Basic : adv/cmp selection -->
+        <!--revx-371 bulk edit-->
+        <div [hidden]='isBulkEdit'>
+
+            <!--advertiser selection-->
+            <div class="form-group mb-3 mrl30">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-3 my-auto">
+                        <div class="form-label my-auto">
+                            {{ SCONST.BASIC_ADVERTISER_LABEL }}
+                        </div>
+                    </div>
+                    <div class="col-9 my-auto p-0">
+                        <div class="d-flex flex-row">
+                            <span id="show-advertiser" *ngIf="mode === MODE.EDIT" class="mrr10 editModal"
+                                (click)="navigateToAdvPage()">{{selAdvertiser?.name}}</span>
+
+                            <div *ngIf='mode === MODE.CREATE' class="d-flex flex-row col-12">
+                                <button *ngIf="!selAdvertiser" class='btn-primary' mat-raised-button id="sel-advertiser"
+                                    (click)="openEntitySelectionModal('ADVERTISER')">
+                                    <em class='fa fa-file-image-o'></em>
+                                    <span>{{SCONST.BTN_ADVERTISER}}</span>
+                                </button>
+                                <span *ngIf="selAdvertiser" class="mrr10 editModal" id="sel-advertiser-edit"
+                                    (click)="openEntitySelectionModal('ADVERTISER')">{{SCONST.BTN_ADVERTISER_EDIT}}</span>
+                                <div class='form-txt my-auto'>{{selAdvertiser?.name}}</div>
+                            </div>
+                        </div>
+                        <mat-error class="error mt-2 mrl15" *ngIf="error && error['advertiser'].hasError">
+                            {{error['advertiser'].msg}}</mat-error>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <!--campaign selection-->
+            <div class="form-group mb-3 mrl30">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-3 my-auto">
+                        <div class="form-label my-auto">
+                            {{ SCONST.BASIC_CAMPAIGN_LABEL }}<em class="fa fa-info-circle mrl5"
+                                matTooltipPosition="above" matTooltip="{{ SCONST.BASIC_CAMPAIGN_TIP }}"></em>
+                        </div>
+                    </div>
+                    <div class="col-9 my-auto p-0">
+                        <div class="d-flex flex-row">
+                            <span id="show-campaign" *ngIf="mode === MODE.EDIT" class="mrr10 editModal"
+                                (click)="navigateToCmpgnPage()">{{selCampaign?.name}}</span>
+
+                            <div *ngIf='mode === MODE.CREATE' class="d-flex flex-row col-12">
+                                <button *ngIf="!selCampaign" [disabled]="!selAdvertiser" class='btn-primary'
+                                    mat-raised-button id="sel-campaign" (click)="openEntitySelectionModal('CAMPAIGN')">
+                                    <em class='fa fa-file-image-o'></em>
+                                    <span>{{SCONST.BTN_CAMPAIGN}}</span>
+                                </button>
+                                <span *ngIf="selCampaign" class="mrr10 editModal" id="sel-campaign-edit"
+                                    (click)="openEntitySelectionModal('CAMPAIGN')">{{SCONST.BTN_ADVERTISER_EDIT}}</span>
+                                <div class='form-txt my-auto'>{{selCampaign?.name}}</div>
+                            </div>
+                        </div>
+                        <mat-error class="error mt-2 mrl15" *ngIf="error && error['campaign'].hasError">
+                            {{error['campaign'].msg}}</mat-error>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <!-- name -->
+        <div [hidden]='isBulkEdit' class="form-group mb-3 mrl30">
+            <div class="d-flex flex-row col-12 p-0">
+                <div [ngClass]="{'col-md-8' : !isBulkEdit ,  'col-lg-8': !isBulkEdit , 'col-12':isBulkEdit}">
+
+                    <!--revx-371 bulk edit-->
+                    <!-- <div *ngIf='isBulkEdit'>
+                        <div class="d-flex justify-content-between">
+                            <div class="pdl-10  align-self-center">
+                                <p>{{ nameOptions.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.NAME : ''  }}
+                                </p>
+                            </div>
+                            <div class="pull-right">
+                                <mat-button-toggle-group *ngFor='let o of nameOptions.allowedBulkEditOpts'
+                                    [(ngModel)]="nameOptions.selectedBulkEditOpt" aria-label="Font Style">
+                                    <mat-button-toggle [value]="o.id" [checked]="o.id===nameOptions.selectedBulkEditOpt"
+                                        class="bc-title" disableRipple>
+                                        {{o.name}}
+                                    </mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+
+                        </div>
+                    </div> -->
+
+                    <!--name input box-->
+                    <!-- <ng-container *ngIf='!isToBeHidden(0)'> -->
+                    <mat-form-field class="wd-full">
+                        <input id='strategy-name' [(ngModel)]="strBasicDetails.strategyName" matInput
+                            placeholder="{{SCONST.BASIC_STR_NAME_LABEL}}" matTooltipPosition="above"
+                            matTooltip="{{SCONST.BASIC_STR_NAME_TIP}}">
+                    </mat-form-field>
+                    <mat-error class="error" *ngIf="error['name'].hasError">
+                        {{error['name'].msg}}
+                    </mat-error>
+                    <!-- </ng-container> -->
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+
+        <!-- Schedule -->
+        <div class="form-subheader border-0 small mb-3 mrl40 d-flex justify-content-between"
+            [ngClass]="{'px-0': !isBulkEdit}">
+            <div class="pdl-10 text-secondary align-self-center"><strong>{{SCONST.BASIC_SUBHEADER_SCHEDULE}}</strong>
+            </div>
+
+
+            <!--revx-371 bulk edit-->
+            <div *ngIf='isBulkEdit' class="pull-right">
+                <mat-button-toggle-group *ngFor='let o of scheduleOptions.allowedBulkEditOpts'
+                    [(ngModel)]="scheduleOptions.selectedBulkEditOpt">
+                    <mat-button-toggle [value]="o.id" [checked]="o.id===scheduleOptions.selectedBulkEditOpt"
+                        class="bc-title" disableRipple>
+                        {{o.name}}
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+        </div>
+
+        <!--revx-371 bulk edit : info msg-->
+        <div *ngIf='isBulkEdit' class='my-2 mx-3'>
+            {{ scheduleOptions.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.SCHEDULE : ''  }}
+        </div>
+
+        <!--start time-->
+        <div [hidden]='isBulkEdit' class="form-group mb-3 mrl30">
+            <div class="d-flex flex-row col-12 p-0">
+                <div class="col-3 my-2">
+                    <div class="form-label my-auto">
+                        {{ SCONST.BASIC_SCHEDULE_START_DATE_LABEL }}
+                        <em class="fa fa-info-circle" matTooltipPosition="above"
+                            matTooltip="{{ SCONST.BASIC_SCHEDULE_START_DATE_TIP }}"></em>
+                    </div>
+                </div>
+
+                <div class="col-9 d-flex flex-column">
+                    <div class="wd250">
+                        <ejs-datetimepicker id="start-dtrp" [showClearButton]="false" [step]='1'
+                            [disabled]="mode === MODE.EDIT || startTimeImmediate"
+                            [(ngModel)]="strBasicDetails.startTime" [min]="startTimeMin" [max]="startTimeMax"
+                            (change)="onStartTimeChange($event)" [allowEdit]="false">
+                        </ejs-datetimepicker>
+                    </div>
+                    <div>
+                        <mat-checkbox id="start-immediately" class='primary' (change)="onCheckboxChange($event, 1)"
+                            [checked]="startTimeImmediate" [disabled]="isStartCheckBoxDisabled">
+                            {{SCONST.BASIC_SCHEDULE_START_DATE_CHECKBOX_LABEL}}
+                        </mat-checkbox>
+                    </div>
+                    <div class="help-text d-flex flex-row flex-wrap mt-2" *ngIf="error && error['startTime'].hasError">
+                        <em class="fa fa-exclamation-triangle"></em>
+                        <div class="m-0 my-auto">&nbsp;&nbsp;{{error['startTime'].msg}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <!--end time-->
+        <div [hidden]='isToBeHidden(1)' class="form-group mb-3 mrl30">
+            <div class="d-flex flex-row col-12 p-0">
+                <div class="col-3 my-2">
+                    <div class="form-label my-auto">
+                        {{ SCONST.BASIC_SCHEDULE_END_DATE_LABEL }}
+                        <em class="fa fa-info-circle" matTooltipPosition="above"
+                            matTooltip="{{ SCONST.BASIC_SCHEDULE_END_DATE_TIP }}"></em>
+                    </div>
+                </div>
+
+                <div class="col-9 d-flex flex-column">
+                    <div class="wd250">
+                        <ejs-datetimepicker id="end-dtrp" [step]='1' [showClearButton]="false"
+                            [disabled]="endTimeNeverEnding" [(ngModel)]="strBasicDetails.endTime" [min]="endTimeMin"
+                            [max]="endTimeMax" [allowEdit]="false">
+                        </ejs-datetimepicker>
+                    </div>
+                    <div>
+                        <mat-checkbox id="never-ending" class='primary' (change)="onCheckboxChange($event, -1)"
+                            [checked]="endTimeNeverEnding" [disabled]="isEndCheckBoxDisabled">
+                            {{SCONST.BASIC_SCHEDULE_END_DATE_CHECKBOX_LABEL}}
+                        </mat-checkbox>
+                    </div>
+                    <div class="help-text d-flex flex-row flex-wrap mt-2" *ngIf="error && error['endTime'].hasError">
+                        <em class="fa fa-exclamation-triangle"></em>
+                        <div class="m-0 my-auto">&nbsp;&nbsp;{{error['endTime'].msg}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <!-- Other Settings -->
+        <div [hidden]='isBulkEdit'>
+            <div class="form-subheader border-0 small px-0 mb-3 mrl40">
+                <div class="pdl-10 text-secondary "><strong>{{SCONST.BASIC_SUBHEADER_OTHER}}</strong></div>
+            </div>
+            <div class="form-group mb-3 mrl30">
+                <div class="d-flex flex-row col-12">
+                    <div class="col-3 pl-0">
+                        <div class="form-label my-auto">
+                            {{ SCONST.BASIC_DAILY_FREQ_CAP_LABEL }}
+                            <em class="fa fa-info-circle" matTooltipPosition="above"
+                                matTooltip="{{ SCONST.BASIC_DAILY_FREQ_CAP_TIP }}"></em>
+                        </div>
+                    </div>
+                    <div class="col-9 d-flex flex-column">
+                        <div>
+                            <mat-radio-group [(ngModel)]="strBasicDetails.dailyFCap" class="d-flex flex-column">
+
+                                <mat-radio-button id="campaign-fcap" class="mb-2 d-flex flex-row flex-wrap"
+                                    [value]="true">
+                                    <div class="my-auto">Use Campaign FCap Setting - Show Ad no more than
+                                        <strong>{{campaignFCap}}</strong> times per user in one day</div>
+                                </mat-radio-button>
+                                <mat-radio-button id="override-fcap" class="mb-2" [value]="false">
+                                    <div class="d-flex flex-row">
+                                        <div class="mr-1 my-auto">Show ad no more than
+                                        </div>
+
+                                        <mat-form-field class="wd80 mt-1" *ngIf="!strBasicDetails.dailyFCap">
+                                            <input matInput type="number" id="strategy-fcap-value"
+                                                [(ngModel)]="strBasicDetails.dailyFCapValue" maxlength="1024"
+                                                minlength="4" />
+                                        </mat-form-field>
+                                        <div *ngIf="!strBasicDetails.dailyFCap" class="mx-1 my-auto"> times per user in
+                                        </div>
+
+                                        <mat-form-field class="wd80 mt-1" *ngIf="!strBasicDetails.dailyFCap">
+                                            <input matInput type="number" id="strategy-fcap-freq"
+                                                [(ngModel)]="strBasicDetails.fcapInterval" maxlength="1024"
+                                                minlength="4" />
+                                        </mat-form-field>
+                                        <div *ngIf="!strBasicDetails.dailyFCap" class="ml-1 my-auto">hours
+                                        </div>
+
+
+
+                                    </div>
+                                </mat-radio-button>
+                            </mat-radio-group>
+                            <div class="help-text d-flex flex-row flex-wrap mt-2"
+                                *ngIf="error && error['fCap'].hasError">
+                                <em class="fa fa-exclamation-triangle"></em>
+                                <div class="m-0 my-auto">&nbsp;&nbsp;{{error['fCap'].msg}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="false-footer">
+        <button id="basic-save" mat-raised-button class="pull-right btn-primary" [disabled]="requestInProgress"
+            *ngIf="mode === MODE.EDIT" (click)="onReviewAndSave()">Review &
+            Save</button>
+        <button id="basic-next" mat-raised-button class="pull-right btn-secondary mr-2" [disabled]="requestInProgress"
+            (click)="goToNextStep()">Next</button>
+    </div>
+
+
+</div>

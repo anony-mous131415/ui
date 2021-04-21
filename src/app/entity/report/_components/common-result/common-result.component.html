@@ -1,0 +1,66 @@
+<navbar *ngIf="!isReportModal"></navbar>
+<block-ui>
+  <div class="page-container mrt15" id="convResult">
+    <div class='page-header' *ngIf="!isReportModal">
+      <div class='breadcrumbs-container'>
+          <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+      <div class='clearfix'></div>
+    </div>
+    <div id="all-details">
+      <div class="page-title-cover bg-transparent mb-2">
+        <div class="d-flex flex-row flex-wrap col-12 p-0 justify-content-between">
+          <div class="p-0 d-flex flex-row w-100">
+            <div class='title pull-left text-capitalize'>
+              <p>{{reportType | lowercase}} <span *ngIf="reportType===appConst.REPORTS.VIDEO">creatives</span> report result</p>
+              <p [hidden]='reportType===appConst.REPORTS.ADVANCED||reportType===appConst.REPORTS.VIDEO' class='text14 underline text-capitalize'
+                (click)='hideColumn()'>
+                <i class="fa icon-primary" [ngClass]="{'fa-eye': isAdvHidden()  , 'fa-low-vision' : !isAdvHidden()}"
+                  aria-hidden="true"></i> {{isAdvHidden()===true ? 'Show-':'Hide-' }}Columns&nbsp;&nbsp;(Advertiser,
+                Campaign, Strategy)</p>
+
+                        </div>
+                        <div class='my-auto ml-auto'>
+                            <a id='export' mat-button [appDisableDemo]='appConst.DISABLE' class='mrr10' (click)="exportReport()" matTooltip="Export Report" matTooltipPosition="above"><em class="fa fa-download"></em></a>
+                            <button id='cancel-report' mat-button (click)="goBack()" *ngIf="!isReportModal">Go back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="list-body">
+                <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+                <div id="table-container">
+                    <div id="table-content">
+                        <mat-table class="table-border" [dataSource]="dataSource" matSortDirection="desc" matSort matSortStart="desc" matSortDisableClear="true" (matSortChange)="sortChange($event)" matSortActive="">
+
+                            <ng-container *ngFor="let col of getColumns();" [matColumnDef]="col.id">
+                                <mat-header-cell class="text-center" *matHeaderCellDef mat-sort-header arrowPosition="after">
+                                    <div matTooltipPosition="above" matTooltip="{{ col.title | uppercase}}">
+                                        {{ col.title | uppercase}}
+                                    </div>
+                                </mat-header-cell>
+
+                                <mat-cell matTooltipPosition="above" matTooltip="{{col.cell(row)}}" *matCellDef="let row">
+                                    <div class="d-inline-block text-truncate">
+                                        {{ col.cell(row) }}
+                                    </div>
+                                </mat-cell>
+
+                            </ng-container>
+
+                            <mat-header-row class="d-flex flex-row" *matHeaderRowDef="columnsToDisplay; sticky: true"></mat-header-row>
+                            <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>
+                        </mat-table>
+                        <div *ngIf='showDataUnavailableMsg' class='data-unavailable-msg p-2'><em class='fa fa-warning'></em> {{dataUnavailableMsg}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="list-footer fixed-bottom adv-report">
+                <mat-paginator class="justify-content-center" [length]="totalRows" [pageSize]="50" [pageSizeOptions]="getPageSize()" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</block-ui>

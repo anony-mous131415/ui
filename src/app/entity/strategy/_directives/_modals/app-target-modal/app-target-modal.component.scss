@@ -1,0 +1,49 @@
+.textarea {
+  width: 100% !important;
+  // height: 250px !important;
+  resize: none !important;
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.mat-radio-label {
+  margin: 0px !important;
+}
+
+#fileLoader {
+  display: none;
+}
+
+.btn-revx {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  // text-transform: uppercase !important;
+  font-size: 13px !important;
+  font-weight: bold;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+}
+
+
+.customProgBar{
+
+  width: 98% !important;
+  align-self: center;
+
+}
+
+.modal-bodyy {
+  height: calc(100% - 220px);//100% - x : x is the widht of header + footer
+  overflow-x: hidden;
+}

@@ -1,0 +1,37 @@
+<div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{SCONST.CPA_TARGET_TITLE}}</h4>
+</div>
+<div mat-dialog-content class="my-2 d-flex flex-column modal-body col-12 scroll-content">
+
+    <p><strong>{{SCONST.CPA_TARGET_MESSAGE}}</strong></p>
+
+    <!-- delivery targeting -->
+    <div class="form-group">
+
+
+
+
+        <mat-radio-group [(ngModel)]="copyBidPrice" class="d-flex flex-column" (change)="onOptionChange($event)">
+            <mat-radio-button id="copy-true" class="mb-2 d-flex flex-row flex-wrap" [value]="true">
+                <div class="my-auto">Yes</div>
+            </mat-radio-button>
+            <mat-radio-button id="copy-false" class="mb-2" [value]="false">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="mr-1 my-auto col-3 p-0">No
+                    </div>
+                    <div class="d-flex flex-row" *ngIf="!copyBidPrice">
+                        <p class="my-auto">{{SCONST.CPA_TARGET_NO_TEXT}}&nbsp;&nbsp;</p><input type="number" id="bidprice" [(ngModel)]="copyBidPriceValue" maxlength="1024" minlength="4" class="form-control-xs wd-rem-7" />
+                    </div>
+                </div>
+            </mat-radio-button>
+        </mat-radio-group>
+        <div class="clearfix"></div>
+        <div *ngIf="showValidationMsg" class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button> {{SCONST.CPA_TARGET_ERROR_MESSAGE}}
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-revx pull-right" (click)="onSaveClick()">Save</button>
+</div>

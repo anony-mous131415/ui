@@ -1,0 +1,51 @@
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff !important;
+}
+
+.advertiser-smarttag {
+    #form-container .form-footer {
+        text-align: right;
+    }
+    textarea {
+        min-height: 250px !important;
+    }
+}
+
+.mrb0 {
+    margin-bottom: 0px !important;
+}
+
+.mrb10 {
+    margin-bottom: 10px !important;
+}
+
+.mrl-15 {
+    margin-left: -15px;
+}
+
+.warning_msg_alert {
+    border-color: #ffd6d6;
+    background: #fff2ef;
+    color: #ba5c5a;
+    font-size: 12px;
+}
+
+.warning_msg_alert .alert-warning {
+    background-color: #fcf8e3 !important;
+    border-color: #faf2cc !important;
+    color: #8a6d3b !important;
+}
+
+.mrl20 {
+    margin-left: 20px !important;
+}
+
+.mrr20 {
+    margin-right: 20px !important;
+}

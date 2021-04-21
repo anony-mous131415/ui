@@ -1,0 +1,31 @@
+<navbar></navbar>
+<block-ui>
+  <div class="page-container videoReport">
+    <div class='page-header'>
+      <div class='breadcrumbs-container'>
+        <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+      <div class='clearfix'></div>
+    </div>
+    <div id='page-content'>
+      <div class='row justify-content-center'>
+        <div class='col-xs-12 col-md-10 col-lg-8'>
+          <div id='form-container'>
+            <div class='form-header sticky-top z10'>
+              <span class=''>Video Creatives Report</span>
+
+            </div>
+            <app-report-builder [config]="configJson" *ngIf="configJson"></app-report-builder>
+            <div class="p-3 d-flex w-100">
+              <div class="ml-auto d-flex">
+                <button id='cancelReport' mat-button [routerLink]="['/home']">Cancel</button>
+                <button id='runReport' mat-raised-button class="btn-primary ml-3" [disabled]="!isRequestValid" (click)="onClickRunReport()">Run Report</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</block-ui>

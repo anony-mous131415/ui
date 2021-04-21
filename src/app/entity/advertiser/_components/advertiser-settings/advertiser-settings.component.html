@@ -1,0 +1,90 @@
+<block-ui>
+  <div id='page-content'>
+
+    <!-- BASIC SETTINGS CONTAINER -->
+    <mat-expansion-panel hideToggle expanded="true" disabled="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="strsteppers">1</div>
+          <div class="accor-titles">Basic settings</div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="col-12 p-0">
+        <div id='form-container'>
+          <!-- <div class='form-subheader'>
+                        <div class=''>Settings</div>
+                    </div> -->
+          <div class='row mrl15'>
+            <div class='col-md-7 col-lg-7'>
+              <div class='form-body'>
+                <app-form-input [(ngModel)]="advSettings.feedKey" label="{{advConst.FEED_KEY_LABEL}}" id="advName"
+                  name="advName" width='wd250' tooltipPosition="above" tooltip='{{advConst.FEED_KEY_TOOLTIP}}'>
+                </app-form-input>
+
+                <app-form-input [(ngModel)]="advSettings.skuAllowedChars" label="{{advConst.SKU_ALLOWED_CHAR_LABEL}}"
+                  id="advSKU" name="advSKU" width='wd250' tooltipPosition="above"
+                  tooltip='{{advConst.SKU_ALLOWED_CHAR_TOOLTIP}}'>
+                </app-form-input>
+
+                <app-form-select [(ngModel)]="advSettings.mmp" entity="MMP" label="{{advConst.MMP_LABEL}}*" id="mmp"
+                  name="mmp" width="wd250" tooltipPosition="above" tooltip='{{advConst.MMP_TOOLTIP}}'>
+                </app-form-select>
+
+                <app-form-status [(ngModel)]="advSettings.liftTestActive" label="{{advConst.LIFT_TEST_LABEL}}"
+                  id="liftTestActive" tooltipPosition="above" tooltip='{{advConst.LIFT_TEST_TOOLTIP}}'
+                  buttonLabel="{{advSettings.liftTestActive == true?'Active':'Inactive'}}" disable=true>
+                </app-form-status>
+                <div class="clearfix mrb15"></div>
+
+                <app-form-status [(ngModel)]="advSettings.eventFilterAllowed" label="{{advConst.EVENT_FILTER_LABEL}}"
+                  id="eventFilterAllowed" buttonLabel="{{advSettings.eventFilterAllowed == true?'Active':'Inactive'}}">
+                </app-form-status>
+                <div class="clearfix mrb10"></div>
+
+                <app-form-select [(ngModel)]="advSettings.transactionCurrency" entity="CURRENCY"
+                  label="{{advConst.TRN_CURRENCY_LABEL}}" name="advTransactionCurrency">
+                </app-form-select>
+
+              </div>
+            </div>
+            <div class='clearfix'></div>
+          </div>
+        </div>
+      </div>
+
+    </mat-expansion-panel>
+
+    <!-- REVX-450: CREATIVE TEMPLATE SETTINGS CONTAINER -->
+    <mat-expansion-panel hideToggle expanded="true" [disabled]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="strsteppers">2</div>
+          <div class="accor-titles">Creative template settings</div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <!-- REVX-450: Advertiser logo section -->
+      <app-image-grid key="LOGO_LINK" [advId]="advId" [type]="uploadConst.LOGO" title="Logos" showTitle="true"
+        [imgList]="null">
+      </app-image-grid>
+
+      <!-- REVX-450: Fallback image section -->
+      <app-image-grid key="FALLBACK_IMG_LINK" [advId]="advId" [type]="uploadConst.FALLBACK" title="Fallback images"
+        showTitle="true" [imgList]="null"></app-image-grid>
+
+      <!-- REVX-450: Overlay image section -->
+      <app-image-grid key="OVERLAY_IMG_LINK" [advId]="advId" [type]="uploadConst.OVERLAY" title="Overlay images"
+        showTitle="true" [imgList]="null"></app-image-grid>
+    </mat-expansion-panel>
+
+
+    <div class='form-footer mx-3 p-3' align='end'>
+      <button id='advStngCancel' mat-button [routerLink]="['/advertiser/details/' + advId]"
+        class="mrl15">Cancel</button>
+      <button id='advStngSaveExit' mat-raised-button class='btn-primary ml-3' appDisableRO (click)="save()"
+        [appDisableDemo]='appConst.DISABLE'>Save &
+        Exit</button>
+    </div>
+  </div>
+</block-ui>

@@ -1,0 +1,31 @@
+$danger-color: #f44336;
+
+.modal-body {
+    height: calc(100% - 130px);
+    // overflow-x: scroll;
+    overflow-x: hidden;
+}
+
+.my-container {
+    padding: 10px 16px;
+}
+
+.help-text {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: $danger-color;
+    font-size: 11px;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}
+
+.mrb0 {
+    margin-bottom: 0px !important;
+}

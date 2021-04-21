@@ -1,0 +1,203 @@
+{
+    "totalNoOfRecords": 4,
+    "data": [
+      {
+        "id": null,
+        "name": "Pritesh_6804_nullxnull_b594faef.zip",
+        "modifiedTime": null,
+        "modifiedBy": null,
+        "active": true,
+        "creationTime": 1578315488,
+        "createdBy": 1835,
+        "size": {
+          "height": null,
+          "width": null
+        },
+        "content": "<html>    <head>    <title>Nykaa</title><link href=\"https://fonts.googleapis.com/css?family=Roboto\" rel=\"stylesheet\">    <style type=\"text/css\">    *    {        margin: 0px;        padding: 0px;        font-family: 'Open Sans';    }    a     {        text-decoration: none;    }    .hidden     {        display: none;    }    .adareadco img     {        border: none;    }    .adareadco     {        background-color: white;        float: left;        overflow: hidden;        position: relative;        -webkit-text-size-adjust: none;        -ms-text-size-adjust: none;        -moz-text-size-adjust: none;        text-size-adjust: none;        -webkit-font-smoothing: antialiased;    }            .discountdco>span     {        font-size: 15px;        font-weight: bold;    }    .addetailsdco     {        float: left;        height: 100%;        margin-left: 0;        position: absolute;        width: 100%;    }    .adareadco .pDetailsdco     {        height: 100%;        margin: 0;        text-align: center;        width: 100%;    }    .titleclickdiv     {        display: inline-block;        left: 0;        opacity: 0.1;        position: absolute;        top: 0;    }    #titleclickdiv_0     {        left: 0px;        z-index: 99999;    }    #titleclickdiv_1     {        top: 0px;        position: absolute;        z-index: 99999;    }    .addetailsbox     {        height: 100%;        position: relative;        width: 100%;    }    .overlayclass     {        position: absolute;        top: 0;        z-index: 16;        left: 0;        z-index: 99999;    }.templatelogo img {    width: auto;    position: absolute;    left: 0;    right: 0;    top: 0;    margin: auto;    bottom: 0;}        .templatelogo {            background-position: center center;            background-repeat: no-repeat;            z-index: 0;            height: 48px;            left: 0;            position: absolute;            top: 0;            width: 100%;            background-size: inherit;            border-bottom: 1px solid;        }        a.discountdco {            top: 86.3%;            font-size: 12px;            font-weight: bold;            position: absolute;            right: 12%;            width: 22%;            color: #df4723;            z-index: 0;            border-radius: 5px;        }        .pImagedco {            background-color: #fff;            background-position: center center;            background-repeat: no-repeat;            background-size: cover;            height: 67%;            overflow: hidden;            left: 0;            position: absolute;            top: 50px;            width: 100%;        }.titledivdco {            font-size: 11.25pt;            max-height: 51px;            overflow: hidden;            position: absolute;            right: 0px;            text-align: center;            top: 79%;            font-weight: bold;            width: 100%;        }        .priceDivdco {            font-size: 18px;            font-weight: bold;            position: absolute;            right: 0;            text-align: center;            top: 85.5%;            font-weight: bold;            width: 100%;        }        .ctadco {            border-radius: 1px;            bottom: 4px;            font-size: 17px;            font-weight: 700;            padding: 4px 0px;            position: absolute;            right: 0;            margin: auto;            left: 0;            vertical-align: middle;            width: 97%;            text-transform: uppercase;        }.pImagedco{    background-size: contain;}.orgprice {    position: absolute;    right: 0;    width: 33%;    top: 86%;    font-size: 15px;    text-decoration: line-through;    left: 0;    text-align: right;}.templatelogo img {    max-height: 44px;}*{font-family: 'Roboto', sans-serif;}   .adareadco{ border: 1px solid #ea2879 !important;}.templatelogo{border-bottom: 1px solid #ea2879 !important;    background-color: #ea2879;}    </style>    <script type=\"text/javascript\">        window.addEventListener(\"load\", function()     {        window.tracking_url = \"|CLICK|NOENCODING|\";        window.item_list = |DYNAMIC|NOENCODING|;        var home_url = \"https://play.google.com/store/apps/details?id=com.fsn.nykaa&hl=en_US\";        window.isiOS = navigator.userAgent.match('iPad') || navigator.userAgent.match('iPhone') || navigator.userAgent.match('iPod');        window.isAndroid = navigator.userAgent.match('Android');        if(isAndroid)         {            var storelink = \"https://play.google.com/store/apps/details?id=com.fsn.nykaa&hl=en_US\";            window.mmplink = \"|CLICK_URL|\";        } else         if(isiOS)         {            var storelink = \"https://itunes.apple.com/in/app/nykaa-makeup-beauty-shopping/id1022363908?mt=8\";            window.mmplink = \"|CLICK_URL|\";        } else         {            var storelink = home_url;            window.mmplink =home_url;        }        window.finallink=\"\";        var i=0;        if(mmplink.indexOf('__PAGE_LINK__')>-1)        {            if(mmplink.indexOf('__PAGE_LINK__')==0){                finallink=mmplink.replace(/__PAGE_LINK__/g,item_list[i].__PAGE_LINK__);            }else{                finallink=mmplink.replace(/__PAGE_LINK__/g,encodeURIComponent(item_list[i].__PAGE_LINK__));            }        }        if(mmplink.indexOf('__ID__')>-1)        {            finallink=mmplink.replace(/__ID__/g,item_list[i].__ID__);        }        if(mmplink.indexOf('__PAGE_LINK__')>-1 && mmplink.indexOf('__ID__')>-1)        {            finallinkcomb=mmplink.replace(/__PAGE_LINK__/g,encodeURIComponent(item_list[i].__PAGE_LINK__));            finallink=finallinkcomb.replace(/__ID__/g,item_list[i].__ID__);        }        if(finallink==\"\"){            finallink=mmplink;        }          var defaultlink = tracking_url + encodeURIComponent(storelink);        window.static = {width: \"320\",height:\"480\", currencyformat: \"&#x20B9;  \",ctatext: \"Shop Now\",discountcolor: \"#ff0072\", discountbg: \"transparent\",ctacolor: \"#fff\",ctabg: \"#ff0072 \",titlecolor: \"#333333\",pricecolor: \"#000\",logo:\"https://cdn.atomex.net/static/creatives/Nykaa/llogo.png\",default:\"https://cdn.atomex.net/static/creatives/Nykaa/320x480.jpg\",                 overlayIsEnabled:true,                overlayDuration:'2000',                num_overlay:\"11\",overlay:\"https://cdn.atomex.net/static/creatives/Nykaa/overlay/320x480.jpg\",}        document.getElementsByClassName(\"titleclickdiv\")[0].style.width = static.width + \"px\";        document.getElementsByClassName(\"titleclickdiv\")[0].style.height = static.height + \"px\";        document.getElementsByClassName(\"adareadco\")[0].style.height = static.height - 2 + \"px\";        document.getElementsByClassName(\"adareadco\")[0].style.width = static.width - 2 + \"px\";        if (item_list == \"\")         {            document.getElementsByClassName(\"revxadd\")[0].style.backgroundImage = \"url('\"+static.default+\"')\";            document.getElementsByClassName(\"titleclickdiv\")[0].href = defaultlink;            document.getElementsByClassName(\"addetailsbox\")[0].style.display = \"none\";        }else         {                            if (isiOS || isAndroid)                    document.getElementsByClassName(\"titleclickdiv\")[0].href = tracking_url + encodeURIComponent(finallink);                else                    document.getElementsByClassName(\"titleclickdiv\")[0].href = tracking_url + encodeURIComponent(storelink);            window.discount = discountcal(item_list[0].__SALE_PRICE__,item_list[0].__ORIGINAL_PRICE__);            if(static.height<=50)            {                document.getElementsByClassName(\"pImagedco\")[0].style.backgroundImage = \"url('\" + item_list[0].__DEFAULT_IMAGE__ + \"')\";            }else            {                document.getElementsByClassName(\"pImagedco\")[0].style.backgroundImage = \"url('\" + item_list[0].__LARGE_DEFAULT_IMAGE__ + \"')\";            }            document.getElementsByClassName(\"priceDivdco\")[0].style.color=static.pricecolor;            if (discount > 1)             {                var temp=discount.toString();                temp =   \"<span> \"+ temp +\"%<small> off</small> </span>\";                document.getElementsByClassName(\"percenttext\")[0].innerHTML=temp;                document.getElementsByClassName(\"percenttext\")[0].style.color=static.discountcolor;                document.getElementsByClassName(\"percenttext\")[0].style.backgroundColor=static.discountbg;                document.getElementsByClassName(\"percenttext\")[0].style.border =static.discountbor;                 document.getElementsByClassName(\"orgprice\")[0].innerHTML =static.currencyformat+\" \" + currency_format(item_list[0].__ORIGINAL_PRICE__);            } else             {                document.getElementsByClassName(\"percenttext\")[0].style.display=\"none\";            }            document.getElementsByClassName(\"titledivdco\")[0].innerHTML = titleFilter(item_list[0].__TITLE__,30);            document.getElementsByClassName(\"priceDivdco\")[0].innerHTML = static.currencyformat+\" \" + currency_format(item_list[0].__SALE_PRICE__);            document.getElementsByClassName(\"ctadco\")[0].innerHTML = static.ctatext;            document.getElementsByClassName(\"ctadco\")[0].style.backgroundColor = static.ctabg;            document.getElementsByClassName(\"ctadco\")[0].style.color = static.ctacolor;            document.getElementsByClassName(\"templatelogo\")[0].getElementsByTagName('img')[0].src = static.logo;        }    });    function titleFilter(title,length)    {        if (title.length > length)         {            var cutat = title.lastIndexOf(' ', length);            if (cutat != -1)             {                return title.substring(0, cutat) + ' ..';            } else             {                return title.substring(0, length) + \" ..\";            }        } else         {            return title;        }    }    function discountcal(salePrice,origPrice)    {        return parseInt(100.0 * (1 - salePrice/ origPrice));    }    function currency_format(amount)     {        var val = amount.toString().split(\".\")[0];        var decimal = amount.toString().split(\".\")[1];        var lastThree = val.substring(val.length - 3);        var otherNumbers = val.substring(0, val.length - 3);        if (otherNumbers != '')            lastThree = ',' + lastThree;        var res = otherNumbers.replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\") + lastThree;        return res;     }window.addEventListener('load', function (){    if(item_list === \"\") {}else    {       if (static.overlayIsEnabled)       {            odiv=document.getElementsByClassName(\"overlayclass\")[0];            odiv.style.width=static.width-2 +\"px\";            odiv.style.height=static.height-2 +\"px\";            var sid=setInterval(function(){                odiv.style.backgroundImage=\"url(\" +static.overlay +\")\";                if (odiv.style.visibility==\"visible\"){odiv.style.visibility=\"hidden\";}                 else {odiv.style.visibility=\"visible\";odiv.style.zIndex=\"99999\";}                 if (static.num_overlay==0)                 {                    clearTimeout(sid);                 }                static.num_overlay=static.num_overlay-1; },static.overlayDuration);        }    }});</script>    </head>    <body>    <div id=\"adareadco\" class=\"adareadco\" style=\"border: 1px solid black;\">        <div id=\"addetailsdco\" class=\"addetailsdco\">            <div id=\"pDetailsdco_0\" class=\"pDetailsdco pDetailsdco_0\">                <div class=\"addetailsbox addetailsbox_0\">                    <a target=\"_blank\" class=\"discountdco\" id=\"discountdco0\">                        <div class=\"percenttext\"></div>                        <span></span>                    </a>                    <div id=\"pImagedco_0\" class=\"pImagedco pdiv_0\"></div>                    <div class=\"priceDivdco\" ></div>                    <div class=\"orgprice\" ></div>                    <div class=\"titledivdco\" ></div>                    <div class=\"ctadco\" id=\"ctadco0\"></div>                    <div id=\"templatelogo\" class=\"templatelogo\">                        <div class=\"overlayclass\"></div>                        <img src=''/>                    </div>                </div>                <div class=\"revxadd Default\" style=\"    width: 100%;    height: 100%;    position: absolute;    top: 0;\"></div>                <a class=\"titleclickdiv\" id=\"titleclickdiv_0\" href=\"\" target=\"_blank\"></a>            </div>        </div>    </body>    </html>",
+        "clickDestination": null,
+        "type": "html",
+        "advertiser": {
+          "id": 6804,
+          "name": "Flipkart_App"
+        },
+        "previewUrl": "http://origin.atomex.net/6804/nullxnull/Pritesh_6804_nullxnull_b594faef.zip",
+        "urlPath": null,
+        "iconPath": null,
+        "videoAttribute": null,
+        "nativeAsset": null,
+        "errorMsg": "No default image file found inside zip",
+        "videoUIpojo": null,
+        "videoUploadType": null,
+        "vastCreative": null,
+        "thirdPartyImpressionTrackerList": null,
+        "dcoAttributes": null,
+        "dco": true,
+        "native": false
+      },
+      {
+        "id": null,
+        "name": "Pritesh_6804_480x320_57cd9eae.jpg",
+        "modifiedTime": null,
+        "modifiedBy": null,
+        "active": true,
+        "creationTime": 1578315488,
+        "createdBy": 1835,
+        "size": {
+          "height": 480,
+          "width": 320
+        },
+        "content": null,
+        "clickDestination": null,
+        "type": "image",
+        "advertiser": {
+          "id": 6804,
+          "name": "Flipkart_App"
+        },
+        "previewUrl": "http://origin.atomex.net/6804/480x320/Pritesh_6804_480x320_57cd9eae.jpg",
+        "urlPath": null,
+        "iconPath": null,
+        "videoAttribute": null,
+        "nativeAsset": null,
+        "errorMsg": null,
+        "videoUIpojo": null,
+        "videoUploadType": null,
+        "vastCreative": null,
+        "thirdPartyImpressionTrackerList": null,
+        "dcoAttributes": null,
+        "dco": true,
+        "native": true
+      },
+      {
+        "id": null,
+        "name": "Pritesh_6804_480x320_48841d50.mp4",
+        "modifiedTime": null,
+        "modifiedBy": null,
+        "active": true,
+        "creationTime": 1578315488,
+        "createdBy": 1835,
+        "size": {
+          "height": 480,
+          "width": 320
+        },
+        "content": null,
+        "clickDestination": null,
+        "type": "image",
+        "advertiser": {
+          "id": 6804,
+          "name": "Flipkart_App"
+        },
+        "previewUrl": "http://origin.atomex.net/6804/480x320/Pritesh_6804_480x320_48841d50.mp4",
+        "urlPath": null,
+        "iconPath": null,
+        "videoAttribute": null,
+        "nativeAsset": null,
+        "errorMsg": "video has invalid bitrate. More than the limit",
+        "videoUIpojo": null,
+        "videoUploadType": null,
+        "vastCreative": null,
+        "thirdPartyImpressionTrackerList": null,
+        "dcoAttributes": null,
+        "dco": true,
+        "native": true
+      },
+      {
+        "id": null,
+        "name": "Pritesh_6804_480x320_57cd9eae.jpg",
+        "modifiedTime": null,
+        "modifiedBy": null,
+        "active": true,
+        "creationTime": 1578315488,
+        "createdBy": 1835,
+        "size": {
+          "height": 480,
+          "width": 320
+        },
+        "content": null,
+        "clickDestination": null,
+        "type": "image",
+        "advertiser": {
+          "id": 6804,
+          "name": "Flipkart_App"
+        },
+        "previewUrl": "http://origin.atomex.net/6804/480x320/Pritesh_6804_480x320_57cd9eae.jpg",
+        "urlPath": null,
+        "iconPath": null,
+        "videoAttribute": null,
+        "nativeAsset": null,
+        "errorMsg": null,
+        "videoUIpojo": null,
+        "videoUploadType": null,
+        "vastCreative": null,
+        "thirdPartyImpressionTrackerList": null,
+        "dcoAttributes": null,
+        "dco": true,
+        "native": true
+      },
+      {
+        "id": null,
+        "name": "Pritesh_6804_480x320_57cd9eae.jpg",
+        "modifiedTime": null,
+        "modifiedBy": null,
+        "active": true,
+        "creationTime": 1578315488,
+        "createdBy": 1835,
+        "size": {
+          "height": 480,
+          "width": 320
+        },
+        "content": null,
+        "clickDestination": null,
+        "type": "video",
+        "advertiser": {
+          "id": 6804,
+          "name": "Flipkart_App"
+        },
+        "previewUrl": "http://origin.atomex.net/6804/480x320/Pritesh_6804_480x320_57cd9eae.jpg",
+        "urlPath": null,
+        "iconPath": null,
+        "videoAttribute": null,
+        "nativeAsset": null,
+        "errorMsg": null,
+        "videoUIpojo": null,
+        "videoUploadType": null,
+        "vastCreative": null,
+        "thirdPartyImpressionTrackerList": null,
+        "dcoAttributes": null,
+        "dco": true,
+        "native": true
+      },
+      {
+        "id": null,
+        "name": "Pritesh_6804_50x300_d39d9bab.zip",
+        "modifiedTime": null,
+        "modifiedBy": null,
+        "active": true,
+        "creationTime": 1578315488,
+        "createdBy": 1835,
+        "size": {
+          "height": 50,
+          "width": 300
+        },
+        "content": "<!DOCTYPE html><html><head> <title></title><link href=\"https://fonts.googleapis.com/css?family=Roboto\" rel=\"stylesheet\">  <style type=\"text/css\">    *    {        margin: 0px;        padding: 0px;        font-family: 'Open Sans';    }    a     {        text-decoration: none;    }    .hidden     {        display: none;    }    .adareadco img     {        border: none;    }    .adareadco     {        background-color: white;        float: left;        overflow: hidden;        position: relative;        -webkit-text-size-adjust: none;        -ms-text-size-adjust: none;        -moz-text-size-adjust: none;        text-size-adjust: none;        -webkit-font-smoothing: antialiased;    }            .discountdco>span     {        font-size: 15px;        font-weight: bold;    }    .addetailsdco     {        float: left;        height: 100%;        margin-left: 0;        position: absolute;        width: 100%;    }    .adareadco .pDetailsdco     {        height: 100%;        margin: 0;        text-align: center;        width: 100%;    }    .titleclickdiv     {        display: inline-block;        left: 0;        opacity: 0.1;        position: absolute;        top: 0;    }    #titleclickdiv_0     {        left: 0px;        z-index: 99999;    }    #titleclickdiv_1     {        top: 0px;        position: absolute;        z-index: 99999;    }    .addetailsbox     {        height: 100%;        position: relative;        width: 100%;    }    .overlayclass     {        position: absolute;        top: 0;        z-index: 16;        left: 0;        z-index: 99999;    }    .templatelogo     {        background-position: center center;        background-repeat: no-repeat;        z-index: 0;        height: 48px;        left: 0;        position: absolute;        top: 0;        width: 40px;        background-size: 35px;    }            a.discountdco     {        top: 26px;        font-size: 12px;        font-weight: bold;        position: absolute;        right: 93px;        width: 47px;        z-index: 9999;        border-radius: 5px;    }    .pImagedco     {        background-color: #fff;        background-position: center center;        background-repeat: no-repeat;        background-size: contain;        height: 48px;        overflow: hidden;        left: 42px;        position: absolute;        top: 0px;        width: 50px;    }    .titledivdco     {         width: 70%;         position: absolute;         right: 0;         font-size: 13px;         top: 0;         font-weight: bold;    }    .ctadco     {         width: 23%;         position: absolute;         right: 4px;         font-size: 13px;         padding: 2px 4px;         top: 22px;    }    .priceDivdco     {        position: absolute;        top: 25px;        width: 78px;        left: 96px;        font-weight: bold;        font-size: 14px;    }    .orgprice{display:none}*{  font-family: Roboto, Arial, sans-serif;}</style> <script type=\"text/javascript\">        window.addEventListener(\"load\", function()     {        window.tracking_url = \"|CLICK|NOENCODING|\";        window.item_list = |DYNAMIC|NOENCODING|;        // window.item_list=        // [{        //     \"__LARGE_DEFAULT_IMAGE__\": \"http://myntra.myntassets.com/images/style/properties/Nike-Sahara-Team-India-Fanwear-Round-Neck-Jersey_2d27392cc7d7730e8fee0755fd41d30c_images.jpg\",        //     \"__DEFAULT_IMAGE__\": \"http://myntra.myntassets.com/images/style/properties/Nike-Sahara-Team-India-Fanwear-Round-Neck-Jersey_2d27392cc7d7730e8fee0755fd41d30c_images.jpg\",        //     \"__SALE_PRICE__\": \"895\",        //     \"__ORIGINAL_PRICE__\": \"945\",        //     \"__TITLE__\": \"Nike Sahara Team India Fanwear Round Neck Jersey\",        //     \"__ID__\" : \"1163\",        //     \"__PAGE_LINK__\":\"rtets1\"        // }];        var home_url = \"https://play.google.com/store/apps/details?id=com.myntra.android&hl=en\";        var isiOS = navigator.userAgent.match('iPad') || navigator.userAgent.match('iPhone') || navigator.userAgent.match('iPod');        var isAndroid = navigator.userAgent.match('Android');        if(isAndroid)         {            var storelink = \"https://play.google.com/store/apps/details?id=com.myntra.android&hl=en\";            var mmplink = \"|CLICK_URL|\";        } else         if(isiOS)         {            var storelink = \"https://itunes.apple.com/in/app/myntra-fashion-shopping-app/id907394059?mt=8\";            var mmplink = \"|CLICK_URL|\";        } else         {            var storelink = home_url;            var mmplink =home_url;        }        var finallink=\"\";        var i=0;        if(mmplink.indexOf('__PAGE_LINK__')>-1)        {        var finallink=mmplink.replace(/__PAGE_LINK__/g,item_list[i].__PAGE_LINK__);        }        if(mmplink.indexOf('__ID__')>-1)        {        var finallink=mmplink.replace(/__ID__/g,item_list[i].__ID__);        }        if(mmplink.indexOf('__PAGE_LINK__')>-1 && mmplink.indexOf('__ID__')>-1)        {        var finallinkcomb=mmplink.replace(/__PAGE_LINK__/g,item_list[i].__PAGE_LINK__);        var finallink=finallinkcomb.replace(/__ID__/g,item_list[i].__ID__);        }        if(finallink==\"\"){            finallink=mmplink;        }          var defaultlink = tracking_url + encodeURIComponent(storelink);        window.static =         {                            width: \"300\",            height: \"50\",            currencyformat: \"&#x20B9;  \",            ctatext: \"BUY NOW\",            discountcolor: \"#ee5f73\",             discountbg: \"#fff\",            ctacolor: \"#fff\",            ctabg: \"#20BD99\",            titlecolor: \"#ffffff\",            pricecolor: \"#000\",            logo: \"images/logo.jpg\",            overlayIsEnabled: false,            overlay: \"images/default.jpg\",            logo: \"images/logo.png\",        }        document.getElementsByClassName(\"titleclickdiv\")[0].style.width = static.width + \"px\";        document.getElementsByClassName(\"titleclickdiv\")[0].style.height = static.height + \"px\";        document.getElementsByClassName(\"adareadco\")[0].style.height = static.height - 2 + \"px\";        document.getElementsByClassName(\"adareadco\")[0].style.width = static.width - 2 + \"px\";        if (item_list == \"\")         {            document.getElementsByClassName(\"revxadd\")[0].style.backgroundImage = \"url(images/default.jpg)\";            document.getElementsByClassName(\"titleclickdiv\")[0].href = defaultlink;            document.getElementsByClassName(\"addetailsbox\")[0].style.display = \"none\";        }else         {                            if (isiOS || isAndroid)                    document.getElementsByClassName(\"titleclickdiv\")[0].href = tracking_url + encodeURIComponent(finallink);                else                    document.getElementsByClassName(\"titleclickdiv\")[0].href = tracking_url + encodeURIComponent(storelink);            document.getElementsByClassName(\"pImagedco\")[0].style.backgroundImage = \"url('\" + item_list[0].defaultimage + \"')\";            var temp_title = item_list[0].__TITLE__.toString();            window.discount = parseInt(100.0 * (1 - item_list[0].__SALE_PRICE__ / item_list[0].__ORIGINAL_PRICE__));            if(static.height<=50)            {                document.getElementsByClassName(\"pImagedco\")[0].style.backgroundImage = \"url('\" + item_list[0].__DEFAULT_IMAGE__ + \"')\";            }else            {                document.getElementsByClassName(\"pImagedco\")[0].style.backgroundImage = \"url('\" + item_list[0].__LARGE_DEFAULT_IMAGE__ + \"')\";            }            var temp_title = item_list[0].__TITLE__.toString();            var discount = parseInt(100.0 * (1 - item_list[0].__SALE_PRICE__ / item_list[0].__ORIGINAL_PRICE__));            document.getElementsByClassName(\"priceDivdco\")[0].style.color=static.pricecolor;            if ((discount > 1) && (item_list[0].__SALE_PRICE__ !== item_list[0].__ORIGINAL_PRICE__))             {                var strlen = 30;                var temp=discount.toString();                temp =   \"<span> \"+ temp +\"%<small> off</small> </span>\";                document.getElementsByClassName(\"percenttext\")[0].innerHTML=temp;                document.getElementsByClassName(\"percenttext\")[0].style.color=static.discountcolor;                document.getElementsByClassName(\"percenttext\")[0].style.backgroundColor=static.discountbg;                document.getElementsByClassName(\"percenttext\")[0].style.border =static.discountbor;                 document.getElementsByClassName(\"orgprice\")[0].innerHTML =static.currencyformat + currency_format(Math.floor(item_list[0].__ORIGINAL_PRICE__));            } else             {                var strlen = 30;            }            if (temp_title.length > strlen)             {                var cutat = item_list[0].__TITLE__.lastIndexOf(' ', strlen);                if (cutat != -1)                 {                    temp_title = item_list[0].__TITLE__.substring(0, cutat) + ' ..';                } else                 {                    temp_title = item_list[0].__TITLE__.substring(0, strlen) + \" ..\";                }            } else             {                temp_title = item_list[0].__TITLE__;            }            document.getElementsByClassName(\"titledivdco\")[0].innerHTML = temp_title;            document.getElementsByClassName(\"priceDivdco\")[0].innerHTML = static.currencyformat + currency_format(Math.floor(item_list[0].__SALE_PRICE__));            document.getElementsByClassName(\"ctadco\")[0].innerHTML = static.ctatext;            document.getElementsByClassName(\"ctadco\")[0].style.backgroundColor = static.ctabg;            document.getElementsByClassName(\"ctadco\")[0].style.color = static.ctacolor;            document.getElementsByClassName(\"templatelogo\")[0].style.backgroundImage = \"url('\" + static.logo + \"')\";            var discount = parseInt(100.0 * (1 - item_list[0].__SALE_PRICE__ / item_list[0].__ORIGINAL_PRICE__));        }    });function currency_format(amount) {    var val = amount.toString().split(\".\")[0];    var decimal = amount.toString().split(\".\")[1];    var lastThree = val.substring(val.length - 3);    var otherNumbers = val.substring(0, val.length - 3);    if (otherNumbers != '')        lastThree = ',' + lastThree;    var res = otherNumbers.replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\") + lastThree;    if (typeof(decimal) == \"undefined\")     {        return res;    } else     {        return res + \".\" + decimal;    }}window.addEventListener(\"load\",function(){    if (discount <= 0)    {        document.getElementsByClassName(\"priceDivdco\")[0].style.width=\"40%\";        document.getElementsByClassName(\"priceDivdco\")[0].style.top=\"44%\";        document.getElementsByClassName(\"priceDivdco\")[0].style.fontSize=\"16px\";    }});</script></head><body>        <div id=\"adareadco\" class=\"adareadco\" style=\"border: 1px solid black;\">        <div id=\"addetailsdco\" class=\"addetailsdco\">            <div id=\"pDetailsdco_0\" class=\"pDetailsdco pDetailsdco_0\">                <div class=\"addetailsbox addetailsbox_0\">                    <a target=\"_blank\" class=\"discountdco\" id=\"discountdco0\">                        <div class=\"percenttext\"></div>                        <span></span>                    </a>                    <div id=\"pImagedco_0\" class=\"pImagedco pdiv_0\"></div>                    <div class=\"priceDivdco\" ></div>                    <div class=\"orgprice\" ></div>                    <div class=\"titledivdco\" ></div>                    <div class=\"ctadco\" id=\"ctadco0\"></div>                    <div id=\"templatelogo\" class=\"templatelogo\">                        <div class=\"overlayclass\"></div>                    </div>                </div>                <div class=\"revxadd Default\" style=\"    width: 100%;    height: 100%;    position: absolute;    top: 0;\"></div>                <a class=\"titleclickdiv\" id=\"titleclickdiv_0\" href=\"\" target=\"_blank\"></a>            </div>        </div>    </div></body></html>",
+        "clickDestination": null,
+        "type": "html",
+        "advertiser": {
+          "id": 6804,
+          "name": "Flipkart_App"
+        },
+        "previewUrl": "http://origin.atomex.net/6804/50x300/Pritesh_6804_50x300_d39d9bab.zip",
+        "urlPath": null,
+        "iconPath": null,
+        "videoAttribute": null,
+        "nativeAsset": null,
+        "errorMsg": null,
+        "videoUIpojo": null,
+        "videoUploadType": null,
+        "vastCreative": null,
+        "thirdPartyImpressionTrackerList": null,
+        "dcoAttributes": null,
+        "dco": true,
+        "native": false
+      }
+    ]
+  }

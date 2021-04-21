@@ -1,0 +1,173 @@
+<div mat-dialog-title class="modal-header border-header px-3 pb-3 d-flex justify-content-between">
+
+    <div class="flex-grow-2 my-auto">
+        <div class="d-flex">
+            <h4 class="my-auto">{{(selectedPane===PANE_REQ)? 'Request' : 'Response'  }} : &nbsp;</h4>
+            <button mat-button class="mrr15 mrl15" (click)="togglePane()">
+                {{(selectedPane===PANE_REQ)? 'View response' : 'View request'  }}</button>
+
+        </div>
+    </div>
+
+    <div class="">
+        <i class="fa fa-times pointer" (click)="closeModal()" aria-hidden="true"></i>
+    </div>
+
+
+
+</div>
+
+
+<div mat-dialog-content class="modal-body col-12">
+    <app-slider [activePane]="selectedPane===PANE_RES ? 'left' : 'right'">
+
+        <!--response side-->
+        <div leftPane class="table-scroll">
+            <div class="d-flex flex-column px-3 h-100">
+
+
+                <div class="d-flex flex-row px-2 h-100">
+
+                    <div class="d-flex flex-row col-12 p-0">
+
+                        <!--validated section-->
+
+                        <ng-container *ngIf="getArrayLen(1) > 0">
+                            <div id="valid" class="d-flex flex-column col-6 p-0 mr-1"
+                                [ngClass]="{ 'col-6' : getArrayLen(0) > 0 , 'divider': getArrayLen(0) > 0 ,  'col-12' :  getArrayLen(0) === 0 }">
+
+                                <!--heading-->
+                                <!-- <div class="text-success bg-light p-2 border border-dark text13"> -->
+                                <div class="d-flex flex-column">
+                                    <div class="text-danger p-2 text13" *ngIf='getArrayLen(0) === 0'>
+                                        <strong>0 Strategy failed to update.</strong>
+                                    </div>
+                                    <div class="text-success p-2 text13">
+                                        <strong>{{config.response.passed.length}} Strategy updated.</strong>
+                                    </div>
+                                </div>
+
+                                <!--table for passed-->
+                                <mat-table [dataSource]="passedDataSource" class="table-border table-scroll px-3">
+
+                                    <!-- id Column -->
+                                    <ng-container matColumnDef="id">
+                                        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            {{element && element.id ? element.id : '--'}}
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- name Column -->
+                                    <ng-container matColumnDef="name">
+                                        <mat-header-cell *matHeaderCellDef> NAME </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            <div matTooltipPosition='above' matTooltip="{{element.name}}"
+                                                matTooltipClass="auditModalTooltip">
+                                                {{ (!element || !element.name)? '--':(element.name.length > 25) ? (element.name | slice:0:25)+'...' : (element.name)}}
+                                            </div>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="passedColumns;sticky: true"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: passedColumns;"></mat-row>
+                                </mat-table>
+                            </div>
+
+                        </ng-container>
+
+
+                        <!--failed section-->
+                        <ng-container *ngIf="getArrayLen(0) > 0">
+                            <div id="invalid" class="d-flex flex-column col-12 p-0"
+                                [ngClass]="{ 'col-6' : getArrayLen(1) > 0 , 'col-12' :  getArrayLen(1) === 0 }">
+
+                                <!--heading-->
+                                <!-- <div class="text-danger bg-light p-2 border border-dark text13"> -->
+                                <div class="d-flex flex-column">
+                                    <div class="text-success p-2 text13" *ngIf='getArrayLen(1) === 0'>
+                                        <strong>0 Strategy updated.</strong>
+                                    </div>
+                                    <div class="text-danger p-2 text13">
+                                        <strong>{{config.response.failed.length }} Strategy failed to update.</strong>
+                                    </div>
+                                </div>
+
+                                <!--table for failed-->
+                                <mat-table [dataSource]="failedDataSource" class="table-border table-scroll px-3">
+
+                                    <!-- id Column -->
+                                    <ng-container matColumnDef="id">
+                                        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            {{element && element.id ? element.id : '--'}}
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- name Column -->
+                                    <ng-container matColumnDef="name">
+                                        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            <div matTooltipPosition='above' matTooltip="{{element.name}}"
+                                                matTooltipClass="auditModalTooltip">
+                                                <!-- {{(element.name.length > 25) ? (element.name | slice:0:25)+'...' : (element.name)}} -->
+                                                {{ (!element || !element.name)? '--':(element.name.length > 25) ? (element.name | slice:0:25)+'...' : (element.name)}}
+
+                                            </div>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <!-- message Column -->
+                                    <ng-container matColumnDef="message">
+                                        <mat-header-cell *matHeaderCellDef> Reason </mat-header-cell>
+                                        <mat-cell *matCellDef="let element">
+                                            <div matTooltipPosition='above' matTooltip="{{element.message}}"
+                                                matTooltipClass="auditModalTooltip">
+                                                <!-- {{ (!element || !element.message)? '--':(element.message.length > 30) ? (element.message | slice:0:30)+'...' : (element.message)}} -->
+                                                {{ (!element || !element.message)? '--': element.message}}
+
+                                            </div>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="failedColumns;sticky: true"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: failedColumns;"></mat-row>
+                                </mat-table>
+                            </div>
+                        </ng-container>
+
+
+                        <ng-container *ngIf="getArrayLen(0) === 0 && getArrayLen(1)===0">
+                            <div class='my-4 mx-auto text-fade text-center no-data align-self-center text15'>
+                                <em class='fa fa-warning'></em> No data available currently.</div>
+                        </ng-container>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div rightPane class="table-scroll px-3 h-100">
+            <!-- request SIDE -->
+            <app-strategy-summary [isBulkEdit]='true' [data]="config.request"></app-strategy-summary>
+        </div>
+
+
+    </app-slider>
+
+
+</div>
+
+
+<div mat-dialog-actions class="px-3 d-flex border-footer modal-footer">
+
+
+    <div class="my-auto">
+        <!-- <button mat-raised-button class="btn-primary my-auto" (click)="closeModal()">Ok</button> -->
+        <button mat-button class="my-auto" (click)="closeModal()">Close</button>
+
+    </div>
+</div>

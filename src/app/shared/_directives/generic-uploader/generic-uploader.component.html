@@ -1,0 +1,20 @@
+<div class='uploader-box'>
+  <div id='generic_uploader' class="uploadFormContainer {{width}} {{height}} d-flex flex-row" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
+      <div class="pull-left icon-section">
+          <em class='fa fa-cloud-upload'></em>
+      </div>
+      <div class="pull-left detail-section">
+          <div class='text-primary'>{{title}}</div>
+          <div class='text-fade'>{{detailMessage}}</div>
+      </div>
+      <div class='clearfix'></div>
+      <input multiple=false hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+  </div>
+  <div class='text-primary'>
+      <span *ngIf="isUploading"><em class='fa fa-spinner fa-spin text14'></em>
+          Uploading</span>
+  </div>
+  <mat-error class="error" *ngFor="let file of invalidFileList">
+      {{ file.errorMsg }}
+  </mat-error>
+</div>

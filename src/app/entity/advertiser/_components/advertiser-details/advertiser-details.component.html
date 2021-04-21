@@ -1,0 +1,75 @@
+<app-chart column="{{column}}" entityId="{{entityId}}" entity="advertiser"></app-chart>
+
+<div class='entity-details' *ngIf="advPojo.id">
+  <div class='row'>
+    <div class='col-md-6'>
+      <ng-container>
+        <app-entity-details-row rowTitle="{{advConst.COLUMN_STATUS}}" [rowValue]="advPojo.active?'Active':'Inactive'"
+          [prefixIcon]="advPojo.active?'fa-circle text-success':'fa-circle text-danger'" marginBottom="mrb15">
+        </app-entity-details-row>
+      </ng-container>
+
+      <app-entity-details-row rowTitle="{{advConst.COLUMN_DOMAIN}}" rowValue="{{advPojo.domain}}" marginBottom="mrb15">
+      </app-entity-details-row>
+      <app-entity-details-row *ngIf="advPojo.androidPhoneBundle" rowTitle="{{advConst.COLUMN_ANDROID_PKG_NAME}}"
+        rowValue="{{advPojo.androidPhoneBundle}}" marginBottom="mrb15"></app-entity-details-row>
+
+      <app-entity-details-row *ngIf="advPojo.androidDeclareUrl" rowTitle="{{advConst.ANDROID_DECLARED_URL_LABEL}}"
+        rowValue="{{advPojo.androidDeclareUrl}}" marginBottom="mrb15"></app-entity-details-row>
+
+            <app-entity-details-row rowTitle="{{advConst.COLUMN_ADDRESS}}" rowValue="{{advPojo.contactAddress}}" marginBottom="mrb15">
+            </app-entity-details-row>
+            <app-entity-details-row rowTitle="{{advConst.COLUMN_CURRENCY}}" rowValue="{{advPojo.currency.name}}" marginBottom="mrb15">
+            </app-entity-details-row>
+
+
+             <!--REVX-724 skad campaign details-->
+          <div *ngIf='skadCampaignExist' class='row mrb15'>
+            <div class='col-md-5 text-bold'>{{advConst.SKAD_LABEL}}</div>
+            <div class='col-md-7 text-fade gotoLink' [routerLink]="['/campaign/details/' + this.skadCampaign.id]">
+              {{skadCampaign.name}}
+            </div>
+          </div>
+
+        </div>
+        <div class='col-md-6'>
+            <app-entity-details-row rowTitle="{{advConst.COLUMN_ID}}" rowValue="{{advPojo.id}}" marginBottom="mrb15">
+            </app-entity-details-row>
+            <app-entity-details-row rowTitle="{{advConst.COLUMN_CATEGORY}}" rowValue="{{advPojo.category.name}}" marginBottom="mrb15">
+            </app-entity-details-row>
+
+      <app-entity-details-row *ngIf="advPojo.webDeclareUrl" rowTitle="{{advConst.WEB_DECLARED_URL_LABEL}}"
+        rowValue="{{advPojo.webDeclareUrl}}" marginBottom="mrb15"></app-entity-details-row>
+
+      <app-entity-details-row *ngIf="advPojo.iosPhoneBundle" rowTitle="{{advConst.COLUMN_IOS_APP_ID}}"
+        rowValue="{{advPojo.iosPhoneBundle}}" marginBottom="mrb15">
+      </app-entity-details-row>
+      <app-entity-details-row *ngIf="advPojo.iosDeclareUrl" rowTitle="{{advConst.IOS_DECLARED_URL_LABEL}}"
+        rowValue="{{advPojo.iosDeclareUrl}}" marginBottom="mrb15"></app-entity-details-row>
+      <app-entity-details-row rowTitle="{{advConst.COLUMN_CREATED_DATE}}" rowValue="{{dateCreated}}"
+        marginBottom="mrb15">
+      </app-entity-details-row>
+      <app-entity-details-row rowTitle="{{advConst.COLUMN_REGION}}" rowValue="{{advPojo.region.name}}"
+        marginBottom="mrb15">
+      </app-entity-details-row>
+    </div>
+  </div>
+  <!-- REVX-450: Show the default advertiser logo -->
+  <div class="row col-6" *ngIf="advPojo.defaultLogoDetails">
+    <div class="logo-cover w-100">
+      <div class="col-12 d-flex flex-row p-0">
+        <div class="col-5 p-0 my-auto text-left">
+          <div class="text-bold">Advertiser Logo</div>
+        </div>
+        <div class="col-7 px-3 text-left my-auto">
+          <img alt="logo" class="logo-sm" [src]="advPojo.defaultLogoDetails.settingsValue">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="brdrBtm" class="clearfix"></div>
+<app-list listTitle='CAMPAIGNS' entity="campaign" column="{{column}}" entityId="{{entityId}}"
+  dataUnavailableMsg="This Advertiser doesn't have any Campaign." (export)="export($event)" (import)="import($event)"
+  showImportExport='true'>
+</app-list>

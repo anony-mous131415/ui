@@ -1,0 +1,106 @@
+<div id='page-content' class="advertiser-smarttag">
+  <div id='form-container'>
+    <!-- <div class='form-header'>
+              <span class=''>Smart Tag</span>
+          </div> -->
+    <!-- <div class="warning_msg_alert mrl20 mrr20 mrt15">
+            <ngb-alert *ngIf="!closed" (close)="closed=true" type="warning">Smart tag is the code snippet, which when advertiser puts on their website or app, allows us to collect user data for retargeting campaigns</ngb-alert>
+        </div> -->
+    <!-------------------------------------------first sub-header----------------------------------------------------------->
+    <div class='row' class="mrl30">
+
+      <div class='col-md-8'>
+        <div class='form-body'>
+
+          <!---------------------------Advertise Id------------------------------------------------->
+          <div *ngIf='!advId' class=''>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-3">
+                  <div class="form-label">
+                    Advertiser
+                  </div>
+                </div>
+                <div class="col-8 pt-1">
+                  <div class='d-flex flex-row'>
+                    <div *ngIf='bmForAdvertiser' class='form-txt'>
+                      {{bmForAdvertiser.name}}</div>
+                    <div *ngIf='bmForAdvertiser'><span class='ml-3 editModal'
+                        (click)="openModal('ADVERTISER')">Edit</span>
+                    </div>
+                    <div *ngIf='!bmForAdvertiser'>
+                      <button id="advSelectBtn" [ngClass]="{ 'btn-danger': !formValidated && !bmForAdvertiser}"
+                        class='btn btn-primary btn-default' (click)='openModal("ADVERTISER")'>
+                        <em class='fa fa-file-image-o'></em>
+                        <span>Select</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+
+          <div class=''>
+            <app-form-radio id='tag_placement' tooltip='{{tagConst.TAG_PLACEMENT_TOOLTIP}}' tooltipPosition="above"
+              label='{{tagConst.TAG_PLACEMENT_LABEL}}' options='{{tagPlacements}}' [(ngModel)]='tagPlacementSelected'>
+            </app-form-radio>
+          </div>
+          <div class='' [hidden]='tagPlacementSelected=="mobile"'>
+            <app-form-radio id='tag_type' tooltip='{{tagConst.TAG_TYPE_LABEL}}' label='{{tagConst.TAG_TYPE_LABEL}}'
+              options='{{tagTypes}}' [(ngModel)]='tagTypeSelected'>
+            </app-form-radio>
+
+            <div class='row'>
+              <div class='col-md-8'>
+                <div class='text-muted'>{{tagConst.HELP_MSG_ABOVE}}</div>
+              </div>
+            </div>
+            <div class="clearfix mrb10"></div>
+            <div class='mrl-15'>
+              <!-- jssource -->
+              <app-form-textarea [hidden]='tagTypeSelected==="img"' [(ngModel)]="tag.jsSource" tooltipPosition="above"
+                label="{{tagConst.SMART_TAG_JS_LABEL}}" tooltip="{{tagConst.SMART_TAG_JS_TOOLTIP}}" maxLen="1024"
+                minLen="4" id="smartTagJs" name="smartTagJs" width="wd700" height="ht250" marginBottom="mrb0">
+              </app-form-textarea>
+
+              <!-- imgsource -->
+              <app-form-textarea [hidden]='tagTypeSelected==="js"' [(ngModel)]="tag.imgSource" tooltipPosition="above"
+                label="{{tagConst.SMART_TAG_IMG_LABEL}}" tooltip="{{tagConst.SMART_TAG_IMG_LABEL}}" maxLen="1024"
+                minLen="4" id="smartTagJs" name="smartTagJs" width="wd700" marginBottom="mrb0">
+              </app-form-textarea>
+            </div>
+            <div class="clearfix mrb10"></div>
+            <div class='row'>
+              <div class='col-md-8'>
+                <div class='text-muted'>{{tagConst.HELP_MSG_BELOW}}</div>
+              </div>
+            </div>
+          </div>
+          <div class='' [hidden]='tagPlacementSelected=="desktop"'>
+            <!-- appImgSource -->
+            <app-form-textarea [(ngModel)]="tag.appImgSource" tooltipPosition="above"
+              label="{{tagConst.SMART_TAG_IMG_LABEL}}" tooltip="{{tagConst.SMART_TAG_IMG_LABEL}}" maxLen="1024"
+              minLen="4" id="smartTagJs" name="smartTagJs" width="wd600" height="ht200">
+            </app-form-textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class='form-footer mrl15'>
+
+      <button *ngIf='advId' [appDisableDemo]='appConst.DISABLE' [routerLink]="['/advertiser/details/'+advId]"
+        mat-raised-button class='btn-primary mrl15'>Done</button>
+
+      <ng-container *ngIf='bmForAdvertiser'>
+        <button *ngIf='!advId' [appDisableDemo]='appConst.DISABLE'
+          [routerLink]="['/advertiser/details/'+bmForAdvertiser.id]" mat-raised-button
+          class='btn-primary mrl15'>Done</button>
+      </ng-container>
+
+      <button class="mrl15" *ngIf='!advId' [routerLink]="['/audience/create']" mat-button>Cancel</button>
+    </div>
+  </div>
+</div>

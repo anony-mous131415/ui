@@ -1,0 +1,64 @@
+<div class="form-group mb-0" id="modalSource">
+  <div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{config.title}}</h4>
+  </div>
+  <div mat-dialog-content class="d-flex flex-column modal-body col-12">
+    <mat-progress-bar *ngIf="isUploading" mode="indeterminate"></mat-progress-bar>
+    <div class="alert alert-danger alert-dismissible mx-3" *ngIf="errMessages && errMessages.length > 0">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <p *ngFor="let msg of errMessages">
+        {{msg}}
+      </p>
+    </div>
+
+    <!-- upload section -->
+    <div class="uploadfilecontainer w-100" (click)="fileInput.click()" appDragDrop (onFileDropped)="uploadFile($event)">
+
+      <div><em class='fa fa-cloud-upload fa-lg'></em></div>
+
+      <div class='text-primary'>
+        <span *ngIf="isUploading"><em class='fa fa-spinner fa-lg fa-spin text14'></em>
+          Uploading</span>
+      </div>
+
+      <div class=''>Click or drop any of the files below to upload</div>
+      <div class='text-fade text12'><span class="text-bold">Supported formats: </span>{{config.extensions.join(', ')}}
+      </div>
+      <div class='text-fade text12'><span class="text-bold">Supported dimensions: </span>{{getConfigDimensions()}}</div>
+      <div class='text-fade text12'><span class="text-bold">Maximum upload file size: </span>{{getConfigMaxFileSize()}}
+      </div>
+      <input [multiple]="config.allowMultipleUploads" hidden type="file" #fileInput (click)="$event.target.value='';"
+        (change)="uploadFile($event.target.files)">
+    </div>
+
+    <!-- preview section -->
+    <div *ngIf="uploadedFiles && uploadedFiles.length > 0" class="mt-3">
+      <mat-divider></mat-divider>
+      <h5 class="mt-3">Preview</h5>
+      <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+        <!-- <div [ngClass]="{'img-container': showTitle}"> -->
+        <div class="img-container w-100">
+          <div class="row mx-3 pt-2">
+            <div class="column" *ngFor="let item of [1,2,3,4]">
+              <div id="image.id" class="card text-white mb-2" *ngFor="let image of getImageList(item); let i = index">
+                <img class="card-img" [src]="image.url" style="width:100%" [alt]="image.name">
+                <div class="card-img-overlay d-flex text-right p-2">
+                  <div class="card-title w-100">
+                    <h5><span class="badge bg-primary" (click)="onDeleteUploadedImage(image)"><em
+                          class="fa fa-trash fa-2x text-white"></em></span></h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button mat-button class="mrr15 mrl15" (click)="onCancelClick()">Cancel</button>
+    <button mat-button class="btn-primary text-white" (click)="onSaveClick()" [disabled]="uploadedFiles.length===0">Save</button>
+  </div>
+</div>

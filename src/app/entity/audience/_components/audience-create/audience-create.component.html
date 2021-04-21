@@ -1,0 +1,464 @@
+<navbar></navbar>
+<block-ui>
+  <div class='page-container'>
+    <div class='page-header'>
+      <div class='breadcrumbs-container'>
+        <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+
+      <div class='clearfix'></div>
+    </div>
+
+    <div id='page-content'>
+
+      <div class='row justify-content-center'>
+        <div class='col-xs-12 col-md-10 col-lg-8'>
+          <div id='form-container'>
+            <div class='form-header sticky-top z10'>
+              <span class=''>{{audId ? "Edit Audience" : "Add Audience"}}</span>
+            </div>
+            <mat-accordion id='campaign-form' [multi]="true">
+
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile-basic'>
+                    <div class="audsteppers">1</div>
+                    <div class="accor-titles">{{audConst.BASIC_SETTINGS}}</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                  <!--ui for details-->
+                  <div class='pad20-side'>
+                    <div id='page-content'>
+                      <div id='form-container'>
+                        <div class='form-body'>
+                          <div class='col-12 mrl15'>
+                            <!---------------------------Bd-1 : Advertiser------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row">
+                                <div class="col-3">
+                                  <div class="form-label mrl15">
+                                    {{ audConst.ADVERTISER_LABEL }}
+                                  </div>
+                                </div>
+                                <div class="col-8">
+                                  <div class='d-flex flex-row'>
+                                    <div *ngIf='audienceDto.advertiser && !audId' class='mrt5 mrr10'><span
+                                        class='editModal clr-primary' (click)="openAdvModal()">Edit</span>
+                                    </div>
+                                    <div *ngIf='audienceDto.advertiser' class='textNormal'>
+                                      {{audienceDto.advertiser.name}}</div>
+
+                                    <div *ngIf='!audienceDto.advertiser && !audId'>
+                                      <button id='advSelect'
+                                        [ngClass]="{ 'btn-danger': !formValidated && !audienceDto.advertiser}"
+                                        class='btn-primary' mat-raised-button (click)='openAdvModal()'>
+                                        <em class='fa fa-file-image-o'></em>
+                                        <span>{{audConst.BTN_ADVERTISER}}</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <mat-error class="error" *ngIf="!formValidated && !audienceDto.advertiser">
+                                    {{audConst.VALIDATION_REQUIRED}}
+                                  </mat-error>
+                                </div>
+                              </div>
+                              <div class="clearfix mrb15"></div>
+                            </div>
+                            <!----------------------------Bd-2 : source name button--------------------------------------------------->
+                            <div class="form-group">
+                              <div class="row">
+                                <div class="col-3">
+                                  <div class="form-label pt-3 mrl15">
+                                    {{ audConst.SOURCE_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ audConst.SOURCE_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+
+                                <!--source btn-->
+                                <div class="col-8 pt-1">
+                                  <div class='d-flex flex-row'>
+                                    <div *ngIf='!assigner.audienceSrc && !audId'>
+                                      <button id='advSrcSelect'
+                                        [ngClass]="{ 'btn-danger': !formValidated && !assigner.audienceSrc}"
+                                        class='btn-primary' mat-raised-button (click)='openObjectiveModal()'>
+                                        <em class='fa fa-file-image-o'></em>
+                                        <span>{{audConst.BTN_SOURCE}}</span>
+                                      </button>
+                                    </div>
+
+                                    <!--Website-->
+                                    <ng-container *ngIf="assigner.audienceSrc===audConst.OBJECTIVE.WEBSITE">
+                                      <div *ngIf='!audId && !dupAudId' class="mrr10  pt-3">
+                                        <span class='editModal clr-primary' (click)="openObjectiveModal()">Edit</span>
+                                      </div>
+                                      <em class="fa fa-laptop cstm-icon" aria-hidden="true"></em>
+                                      <div class="col d-flex flex-column">
+                                        <div class='d-flex flex-row'>
+                                          <div class='src-txt  pt-3'> Website</div>
+                                        </div>
+                                        <div class='src-subtxt'>Please make sure that <a class='a-primary'
+                                            [href]="getUrl()">Web Smart
+                                            Tag</a> has been placed on all the pages on your desktop website or
+                                          mobile-optimized site.
+                                        </div>
+                                      </div>
+                                    </ng-container>
+
+                                    <!--Mobile-->
+                                    <ng-container *ngIf="assigner.audienceSrc===audConst.OBJECTIVE.MOBILE">
+                                      <div *ngIf='!audId && !dupAudId' class="mrr10 pt-3">
+                                        <span class='editModal clr-primary' (click)="openObjectiveModal()">Edit</span>
+                                      </div>
+                                      <em class="fa fa-mobile cstm-icon" aria-hidden="true"></em>
+                                      <div class="col d-flex flex-column">
+                                        <div class='d-flex flex-row'>
+                                          <div class='src-txt  pt-3'> Mobile App</div>
+
+                                        </div>
+                                      </div>
+                                    </ng-container>
+
+                                    <!--DMP-->
+                                    <ng-container *ngIf="assigner.audienceSrc===audConst.OBJECTIVE.DMP">
+                                      <div *ngIf='!audId' class="mrr10 pt-3">
+                                        <span class='editModal clr-primary' (click)="openObjectiveModal()">Edit</span>
+                                      </div>
+                                      <em class="fa fa-users cstm-icon" aria-hidden="true"></em>
+                                      <div class="col d-flex flex-column">
+                                        <div class='d-flex flex-row'>
+                                          <div class='src-txt pt-3'>Affle DMP</div>
+                                        </div>
+                                      </div>
+                                    </ng-container>
+
+                                  </div>
+                                  <mat-error class="error" *ngIf="!formValidated && !assigner.audienceSrc">
+                                    {{audConst.VALIDATION_REQUIRED}}
+                                  </mat-error>
+                                </div>
+                              </div>
+                              <div class="clearfix"></div>
+                            </div>
+
+
+                            <!---------------------------Bd-3 : audience name(ng model)--------------------------------------------------->
+                            <app-form-input label="{{audConst.NAME_LABEL}}" [(ngModel)]='audienceDto.name' maxLen="100"
+                              minLen="4" id="audName" name="audName" validated="{{formValidated}}"
+                              [validationMsg]='assigner.audienceSrc===audConst.OBJECTIVE.DMP ? audConst.VALIDATION_DMP_MISSING : audConst.VALIDATION_NAME_REQUIRED'
+                              width="wd250" [disable]='assigner.audienceSrc===audConst.OBJECTIVE.DMP ? "true":"false"'>
+                            </app-form-input>
+
+                            <!---------------------------Bd-4 : Description(add ngModel , validation NOT REQ)--------------------------------------------->
+                            <app-form-textarea label="{{audConst.DESC_LABEL}}" [(ngModel)]='audienceDto.description'
+                              maxLen="1024" minLen="2" id="audDesc" name="audDesc" width="wd250"
+                              [disable]='assigner.audienceSrc===audConst.OBJECTIVE.DMP ? "true":"false"'>
+                            </app-form-textarea>
+
+                            <!---------------------------Bd-5 : Method(only for MOBILE APP) ngModel on mat-radio-group--------------------------------------------->
+                            <div class="form-group" *ngIf="assigner.audienceSrc===audConst.OBJECTIVE.MOBILE">
+                              <div class="row">
+                                <div class="col-3">
+                                  <div class="form-label mrl15">
+                                    {{ audConst.METHOD_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                      matTooltip="{{ audConst.METHOD_TOOLTIP }}"></em>
+                                  </div>
+                                </div>
+                                <div class="col-8">
+                                  <mat-radio-group id='methodRadioRow' name='methodRadioRow' class="d-flex flex-column"
+                                    [(ngModel)]='assigner.mobileMethodRadio'>
+                                    <mat-radio-button class='textNormal' id='mobileRadio'
+                                      [value]='mobileMethodEnum.RULE' [disabled]='audId'>
+                                      Mobile Tag
+                                    </mat-radio-button>
+
+                                    <mat-radio-button class='textNormal' id='deviceRadio'
+                                      [value]='mobileMethodEnum.DEVICE' [disabled]='audId'> Upload Device Ids
+                                    </mat-radio-button>
+                                  </mat-radio-group>
+                                </div>
+                                <div class="clearfix"></div>
+                              </div>
+                            </div>
+                            <!---------------------------Bd-5 : Method(only for MOBILE APP)ends------------------------------------------>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <ng-container *ngIf='assigner.audienceSrc===audConst.OBJECTIVE.DMP'>
+                </ng-container>
+
+              </mat-expansion-panel>
+
+              <!-------------------------------------------------------------------------file upload section------------------------------------------------------------------------->
+              <ng-container *ngIf="assigner.audienceSrc===audConst.OBJECTIVE.MOBILE && assigner.mobileMethodRadio===2">
+                <mat-expansion-panel expanded="true" hideToggle disabled>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div class="audsteppers">2</div>
+                      <div class="accor-titles">{{audConst.UPLOAD_SETTINGS}}</div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div>
+                    <div class='pad20-side'>
+                      <div id='page-content'>
+                        <div id='form-container'>
+                          <div class='form-body'>
+                            <div class='col-12 mrl15'>
+                              <div class="form-group">
+                                <div class="row">
+                                  <div class="col-3">
+                                    <div class="form-label mrl15">
+                                      {{audConst.DEVICE_ID_LABEL}}
+                                      <em class="fa fa-info-circle" matTooltipPosition="above"
+                                        matTooltip="{{ audConst.DEVICE_ID_TOOLTIP }}"></em>
+                                    </div>
+                                  </div>
+                                  <div class="col-8">
+
+                                    <div class='ml-3 wd-vw-container'>
+
+                                      <!--Buttons-->
+                                      <div class="d-flex flex-row">
+                                        <!--local button-->
+                                        <div
+                                          *ngIf='(!audId && !assigner.localDetails && !assigner.remoteDetails) || (audId && audienceDto.pixelDataFile && !assigner.localDetails)'>
+                                          <app-generic-uploader (syncFileUploadResp)='localFileUpload($event)'
+                                            title="UPLOAD FILE" width='vw-50' height='vh-85'
+                                            allowedExtensions="{{assigner.allowedExtensions}}"
+                                            [maxFileSizeInKB]="maxFileSizeInKB" detailMessage='{{audConst.DETAILS_MSG}}'
+                                            apiPath="{{appConst.API_PATH.AUDIENCE_FILE_UPLOAD}}">
+                                          </app-generic-uploader>
+                                        </div>
+
+                                        <!--remote button-->
+                                        <div id='link-button' class='uploader-box'
+                                          *ngIf='(!audId && !assigner.localDetails && !assigner.remoteDetails) || (audId && audienceDto.pixelDataSchedule && !assigner.remoteDetails)'>
+                                          <div class="uploadFormContainer  vw-50 vh-85  d-flex flex-row"
+                                            (click)="openRemoteModal()">
+                                            <div class="pull-left icon-section">
+                                              <em class='fa fa-server'></em>
+                                            </div>
+                                            <div class="pull-left detail-section">
+                                              <div class='text-primary'>Link to remote file</div>
+                                              <div class='text-fade'>Setup a remote connection</div>
+                                            </div>
+                                            <div class='clearfix'></div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <!--DETAILS OF FILE UPLOADED-->
+                                    <div>
+                                      <!--local details-->
+                                      <div *ngIf='assigner.localDetails' class='vw-details'>
+                                        <!--heading and button-->
+                                        <div class="row rule-id px-4 py-1 d-flex bd-highlight">
+                                          <div class="flex-grow-1 bd-highlight">File Uploaded
+                                          </div>
+                                          <div id='rmvLocalBtn' class='px-2 rmv-file' (click)='changeFile("local",0)'>
+                                            REMOVE </div>
+                                        </div>
+                                        <!--remote file details-->
+                                        <div class='row rule-txt px-4 py-1 text-wrap text-break'>
+                                          <strong>{{assigner.localDetails.name}}</strong>
+                                        </div>
+                                      </div>
+
+                                      <!--remote details-->
+                                      <div *ngIf='assigner.remoteDetails' class='vw-details'>
+                                        <!--heading and button-->
+                                        <div class="row rule-id px-4 py-1 d-flex bd-highlight">
+                                          <div class="flex-grow-1 bd-highlight">File Uploaded
+                                          </div>
+                                          <div *ngIf='!audId' id='rmvLocalBtn' class='px-2 rmv-file'
+                                            (click)='changeFile("remote",0)'>
+                                            REMOVE
+                                          </div>
+                                          <div id='anthrLocalBtn' class='alter-file' (click)='changeFile("remote",1)'>
+                                            EDIT DETAILS
+                                          </div>
+                                        </div>
+                                        <!--remote file details-->
+                                        <div class='row rule-txt px-4 py-1'>
+                                          <strong>{{assigner.remoteDetails.remoteFile.protocol}}://&nbsp;{{assigner.remoteDetails.url}}</strong>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <!--DETAILS OF FILE UPLOADED ENDS-->
+                                    <mat-error class="error"
+                                      *ngIf="!formValidated && !assigner.remoteDetails && !assigner.localDetails">
+                                      {{audConst.VALIDATION_REQUIRED}}
+                                    </mat-error>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </ng-container>
+
+              <!-------------------------------------------------------------------------rule section--------------------------------------------------------------------------->
+              <ng-container
+                *ngIf="assigner.audienceSrc==audConst.OBJECTIVE.WEBSITE || (assigner.audienceSrc===audConst.OBJECTIVE.MOBILE && assigner.mobileMethodRadio===1)">
+                <mat-expansion-panel expanded="true" hideToggle disabled>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div class="audsteppers">2</div>
+                      <div class="accor-titles">Rules Settings</div>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div>
+                    <!--ui for schedulae-->
+                    <div class='pad20-side'>
+                      <div id='page-content'>
+                        <div id='form-container'>
+                          <div class='form-body'>
+                            <div class='col-12 mrl15'>
+                              <!---------------------------AUDIENCE RULES------------------------------------------------------->
+                              <div class="form-group">
+                                <div class="row">
+                                  <div class="col-3">
+                                    <div class="form-label mrl15">
+                                      {{audConst.AUD_RULES_LABEL}}
+                                      <em class="fa fa-info-circle" matTooltipPosition="above"
+                                        matTooltip="{{ audConst.AUD_RULES_TOOLTIPS }}"></em>
+                                    </div>
+                                  </div>
+                                  <div class="col-8">
+
+                                    <!--set of rules begins-->
+                                    <ng-container *ngIf='assigner.rules'>
+                                      <div class='mb-2 mr-3 ml-2' *ngFor='let rule of assigner.dispRules;let i=index'>
+
+                                        <div *ngIf='i>0' class="text-center src-txt">OR
+                                        </div>
+                                        <!--heading and button-->
+                                        <div class="row rule-id px-4 py-1 d-flex bd-highlight">
+                                          <div class="flex-grow-1 bd-highlight">
+                                            Rule {{i+1}}</div>
+                                          <div id='edtBtn' class='px-2 clr-primary' (click)='editRule(i)'>EDIT
+                                          </div>
+                                          <div id='rmvBtn' class='clr-primary' *ngIf='assigner.rules.length>1'
+                                            (click)='removeRule(i)'>
+                                            REMOVE
+                                          </div>
+                                        </div>
+
+                                        <!--rule display-text-->
+                                        <div class='row rule-txt px-4 py-1' *ngFor='let r of rule; let i=index'>
+                                          <span *ngIf='i>0'
+                                            class="mr-1">AND</span><strong>{{r.filterDisp}}&nbsp;({{r.shortDisp}})</strong>&nbsp;{{r.operatorDisp}}&nbsp;{{r.valueDisp}}
+                                        </div>
+                                      </div>
+
+                                    </ng-container>
+                                    <!--set of rules ends-->
+
+                                    <button id="rules-btn" mat-raised-button [hidden]='assigner.rules.length===15'
+                                      [disabled]='(audId && audienceDto.ruleExpression || dupAudId )&& !assigner.dispRules '
+                                      [ngClass]="{ 'btn-danger':!formValidated && (!assigner.rules || !assigner.rules.length)}"
+                                      class='ml-2 btn-primary' (click)='openRulesModal()'>
+                                      <em class='fa'
+                                        [ngClass]='{"fa-spinner fa-spin":showRulesSpinner , " fa-plus":!showRulesSpinner}'></em>
+                                      <span>{{ showRulesSpinner ? '&nbsp;Loading...' : audConst.BTN_RULES}}</span>
+                                    </button>
+                                    <mat-error class="error"
+                                      *ngIf="!formValidated && (!assigner.rules || !assigner.rules.length)">
+                                      {{audConst.VALIDATION_REQUIRED}}
+                                    </mat-error>
+                                  </div>
+                                  <div class="clearfix"></div>
+                                </div>
+                              </div>
+
+                              <!---------------------------USER EXPIRY (ngModel in Mat-select and input)------------------------>
+                              <div>
+                                <div class='form-group'>
+                                  <div class="row">
+                                    <div class="col-3">
+                                      <div class="form-label mrl15 pt-4">
+                                        {{audConst.USER_EXPIRY_LABEL}}
+                                        <em class="fa fa-info-circle" matTooltipPosition="above"
+                                          matTooltip="{{audConst.USER_EXPIRY_TOOLTIP}}"></em>
+                                      </div>
+                                    </div>
+                                    <div class="col-8">
+                                      <div class="">
+                                        <div class="d-flex flex-row">
+                                          <div class='form-label-1 mr-2 pt-4'>User expires from this audience after
+                                          </div>
+                                          <div>
+                                            <mat-form-field class="wd60">
+                                              <input id="usrExpryInpt" matInput trim="blur"
+                                                [(ngModel)]='audienceDto.duration' name="usrExpryInpt" maxlength="256"
+                                                minlength="1"
+                                                [ngClass]="{ 'input-danger': !formValidated &&(!audienceDto.duration || isInvalidNum(audienceDto.duration) || isLessThanOne(audienceDto.duration))}"
+                                                autocomplete="off" [disabled]='audId' />
+                                            </mat-form-field>
+                                          </div>
+                                          <div class='ml-3' [ngClass]='{"disabledForm":audId}'>
+                                            <mat-form-field name='usrExprySlct'>
+                                              <mat-select id='usrExprySlct' name="d"
+                                                [(ngModel)]='audienceDto.durationUnit' [disabled]='audId'
+                                                [ngClass]='{"disabledForm":audId}'>
+                                                <mat-option id='usrExprySlctOpt' *ngFor="let d of Duration"
+                                                  [value]="d.id">
+                                                  {{d.name}}
+                                                </mat-option>
+                                              </mat-select>
+                                            </mat-form-field>
+                                          </div>
+                                        </div>
+                                        <mat-error class="error" *ngIf="!formValidated && !audienceDto.duration">
+                                          {{audConst.VALIDATION_REQUIRED}}
+                                        </mat-error>
+                                        <mat-error class="error"
+                                          *ngIf="!formValidated && audienceDto.duration && isInvalidNum(audienceDto.duration)">
+                                          {{audConst.VALIDATION_DIGITS}}
+                                        </mat-error>
+                                        <mat-error class="error"
+                                          *ngIf="!formValidated && audienceDto.duration && isLessThanOne(audienceDto.duration)">
+                                          {{audConst.VALIDATION_GREATER_ZERO}}
+                                        </mat-error>
+
+                                      </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </ng-container>
+              <!-------------------------------------------------------------------------rule ends--------------------------------------------------------------------------->
+              <div class="footer-aud" align="end">
+                <button id='audCancel' mat-button (click)="onCancelClick()">Cancel</button>
+                <button [appDisableDemo]='appConst.DISABLE' appDisableRO id='audSaveExit' mat-raised-button
+                  class='btn-primary ml-3' (click)="save()">Save & Exit</button>
+              </div>
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</block-ui>

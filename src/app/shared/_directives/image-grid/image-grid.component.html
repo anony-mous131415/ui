@@ -1,0 +1,61 @@
+<div class="card bg-light text-dark mb-2 form-group">
+  <div class="card-header d-flex flex-row py-1 w-100">
+    <div class="d-flex flex-row col-6 p-0">
+      <h6 class="my-auto mr-3" *ngIf="showTitle" style="font-size:15px"><strong>{{title}}</strong>
+      </h6>
+      <button mat-button class="btn-primary btn-sm text-white my-auto" [appDisableDemo]='appConst.DISABLE' appDisableRO (click)="openUploadModel()"><em
+          class='fa fa-plus'></em>&nbsp;Upload</button>
+      <button mat-button class="my-auto ml-2" *ngIf="selectedImages && selectedImages.length > 0 && selectedImagesHasNoDefaultLogo()" [appDisableDemo]='appConst.DISABLE' appDisableRO 
+        (click)="onDeleteSelectedImages()"><em class='fa fa-trash mb-1'></em>&nbsp;Delete</button>
+    </div>
+    <div class="col-6 p-0 d-flex flex-row justify-content-end">
+      <div class="d-flex flex-row pl-3">
+        <mat-form-field class="wd-full">
+          <mat-select multiple [(ngModel)]="creativesize" placeholder="Creative size" matTooltipPosition="above"
+            matTooltip="Filter based on creative size" (selectionChange)="onCreativeSizeChange($event)">
+            <mat-option *ngFor="let size of creativeSizeList" [value]="size">
+              {{ size.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="search d-flex flex-row pl-3">
+        <mat-form-field class="wd-full mrr10">
+          <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+          <input matInput id="search-input" placeholder="Search" [formControl]="ctrl" autocomplete="off"
+            [(ngModel)]="searchText" />
+        </mat-form-field>
+      </div>
+      <em class="fa fa-lg text-primary fa-external-link my-auto" *ngIf="showTitle" (click)="expandImageGrid()"></em>
+    </div>
+  </div>
+  <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+    <mat-progress-bar *ngIf="requestInProgress" mode="indeterminate"></mat-progress-bar>
+    <!-- <div [ngClass]="{'img-container': showTitle}"> -->
+    <div class="img-container w-100" *ngIf="isDataAvailable">
+      <div class="row mx-3 pt-2" style="max-height: 400px;">
+        <div class="column" *ngFor="let item of [1,2,3,4,5,6]">
+          <div id="image.id" class="card box text-white mb-2" *ngFor="let image of getImageList(item); let i = index"
+            (click)="toggleSelected(image)" [ngClass]="{'defaultLogo':image.key==='DEFAULT_LOGO'}">
+            <img [id]="image.id" class="card-img" [src]="image.url" [alt]="image.name">
+            <div class="card-img-overlay overlay p-0">
+              <div class="d-flex h-100 text-center">
+                <span class="my-auto text-center w-100 px-2 text-nowrap text-truncate" matTooltipPosition="above"
+                  [matTooltip]="image.name">{{image.name}}</span>
+              </div>
+            </div>
+            <div class="card-img-overlay overlay-selected" *ngIf="image.isSelected">
+              <!-- dummy div to show selected overlay -->
+            </div>
+            <div class="card-img-overlay d-flex align-items-center text-center" *ngIf="image.isSelected">
+              <div class="card-title text-white w-100"><em class="fa fa-check fa-3x"></em></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!isDataAvailable">
+      <h6 class="py-3 my-auto">No data available to display</h6>
+    </div>
+  </div>
+</div>

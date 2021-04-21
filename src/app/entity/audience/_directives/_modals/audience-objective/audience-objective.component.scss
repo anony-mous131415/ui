@@ -1,0 +1,77 @@
+.row-container:hover>.d_hover {
+  background-color: rgba(231, 126, 46, 0.1) !important;
+}
+
+.highlight {
+  background-color: rgba(231, 126, 46, 0.1) !important; //from theme-constants
+}
+
+.row-container {
+  border: 1px solid #eeeeee !important;
+  background: #e0e0e0;
+}
+
+.campaign-objective-content,
+a {
+  width: 100%;
+  cursor: pointer;
+}
+
+.campaign-objective-content span {
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #333333;
+  line-height: 16px;
+}
+
+.big-icon {
+  cursor: pointer;
+  font-size: 32px;
+  color: #dddddd;
+  border-radius: 60px;
+  background-color: white;
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  align-content: center;
+  display: inline-grid;
+}
+
+.circle {
+  background-color: var(--primary-color);
+  color: #eeeeee !important;
+}
+
+.modal-title {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px !important;
+  font-weight: bold;
+  text-align: center;
+  text-transform: capitalize;
+  margin-left: 8px;
+}
+
+.modal-header {
+  border-bottom: 0
+}
+
+.modal-footer {
+  border-top: 0;
+}
+
+h1 {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  font-weight: 100 !important;
+  color: #333333 !important;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+}

@@ -1,0 +1,306 @@
+<div>
+    <mat-progress-bar *ngIf="!isToBeHidden() && requestInProgress" mode="indeterminate"></mat-progress-bar>
+
+
+    <div class="form-body py-2  mrl40">
+        <div class="d-flex flex-column">
+
+            <!--revx-371 bulk edit-->
+            <div *ngIf='isBulkEdit' class="border-0 mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 align-self-center">
+                    {{creative.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.CREATIVE : creative.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''  }}
+                </div>
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of creative.allowedBulkEditOpts'
+                        [(ngModel)]="creative.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===creative.selectedBulkEditOpt"
+                            class="bc-title" disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+
+            </div>
+
+            <!--Heading panel-->
+            <div [hidden]='isToBeHidden()'>
+                <div class="search d-flex flex-row flex-wrap col-xs-12 p-0 mb-2 form-group">
+                    <div class="col-xs-5 p-0 d-flex flex-row">
+                        <p class="my-auto"><strong>Show:</strong></p>
+                        <div class="d-flex flex-row">
+                            <button class="btn btn-sm bg-transparent border-right my-auto p-1"
+                                [ngClass]="{'primary': isShowAllCreativesActive}" (click)="showAllCreatives()">All
+                                Creatives</button>
+                            <button class="btn btn-sm bg-transparent my-auto p-1"
+                                [ngClass]="{'primary': isShowSelectedCreativesActive}"
+                                (click)="showSelectedCreatives()">Selected Creatives</button>
+                        </div>
+                    </div>
+                    <div class="col-xs-7 p-0 d-flex flex-row ml-auto">
+                        <p class="my-auto"><strong>Group By:</strong></p>
+                        <div class="d-flex flex-row">
+                            <p class="border-right my-auto p-1">Date uploaded</p>
+                            <button class="btn btn-sm bg-transparent border-right my-auto p-1"
+                                [ngClass]="{'primary': isSortOrderASC}" (click)="changeSortOrder(1)">Asc</button>
+                            <button class="btn btn-sm bg-transparent my-auto p-1"
+                                [ngClass]="{'primary': !isSortOrderASC}" (click)="changeSortOrder(-1)">Desc</button>
+                            <div class="search-input d-flex flex-row my-auto">
+                                <mat-form-field class="wd150">
+                                    <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                                    <input matInput id="creative-search" class="" placeholder="Search"
+                                        [formControl]="ctrl" autocomplete="off" [(ngModel)]="searchText" />
+                                </mat-form-field>
+                                <button style="height: 36px;" mat-button class="mrl5 mt-1" (click)="resetSearch()"
+                                    matTooltip="Refresh" matTooltipPosition="above">
+                                    <em class="fa fa-refresh"></em>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--list of all creatives -->
+                <div class="list mt-2" [hidden]="!isShowAllCreativesActive">
+                    <div *ngIf="!isCreativesAvailable && !requestInProgress">
+                        <div class="alert alert-secondary">
+                            <em class="my-auto fa fa-ban"></em> &nbsp; Currently, no creatives available.
+                        </div>
+                    </div>
+                    <div *ngIf="isCreativesAvailable">
+                        <div class="card bg-light text-dark mb-2 form-group" *ngFor="let day of allCreativeGroupDays">
+                            <div class="card-header d-flex flex-row py-1">
+                                <mat-checkbox class="my-auto w-25" [checked]="isAllSelected(day)"
+                                    (change)="toggleSelectionAll($event, day)">Selected {{getSelectedCount(day)}} of
+                                    {{getTotalCount(day)}}
+                                </mat-checkbox>
+                                <div class="text-center my-auto w-50"><strong>{{formatDate(day)}}</strong></div>
+                            </div>
+                            <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+                                <div class="card bg-white p-1 m-1" *ngFor="let creative of getCreativeForDay(day)"
+                                    [ngClass]="{'selected': getSelectedStatus(creative)}">
+
+                                    <div style="height: 200px;"
+                                        class="bg-gray d-flex flex-column creative-display-content"
+                                        [ngSwitch]="creative.type" (click)="toggleSelection(day, creative)">
+                                        <div class="my-auto" *ngSwitchCase="'nativeAd'">
+                                            <img [ngClass]="{'ht200' : creative.size && creative.size.height>200 , 'wd200' : creative.size && creative.size.width>200}"
+                                                class="w-100 bg-gray border text-dark" matTooltip="Native Ad"
+                                                matTooltipPosition="above"
+                                                src="{{CREATIVE_IMAGE_API}}{{creative.urlPath}}" alt="Native Ad">
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'zippedHTML'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center"
+                                                matTooltip="Zipped HTML" matTooltipPosition="above">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'templateHTML'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center"
+                                                matTooltip="Template HTML" matTooltipPosition="above">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'html'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center"
+                                                matTooltip="HTML" matTooltipPosition="above">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'video'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center"
+                                                matTooltip="Video" matTooltipPosition="above">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-video-camera fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'nativeVideo'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center"
+                                                matTooltip="Native Video" matTooltipPosition="above">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-video-camera fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'image'">
+                                            <img [ngClass]="{'ht200' : creative.size && creative.size.height>200 , 'wd200' : creative.size && creative.size.width>200}"
+                                                class="w-100 d-flex flex-wrap align-content-center bg-gray border text-dark"
+                                                matTooltip="Image" matTooltipPosition="above"
+                                                src="{{CREATIVE_IMAGE_API}}{{creative.urlPath}}" alt="Image">
+                                        </div>
+                                    </div>
+
+                                    <!-- switch end -->
+                                    <div class="card-body text-dark d-flex flex-column p-0 py-2 wd200">
+                                        <div id="creative-active-name" class="card-title d-flex flex-row m-0 mb-2">
+                                            <span class="my-auto">
+                                                <em class="fa fa-circle"
+                                                    [ngClass]="{'text-success': creative.active, 'text-danger': !creative.active}"></em>
+                                            </span>
+                                            <p [matTooltip]="creative.name" matTooltipPosition="above"
+                                                class="px-2 my-auto" (click)="goToCreativeDetailsPage(creative)">
+                                                {{(creative.name.length > 27)? creative.name.substring(0,24)+'...' :creative.name}}
+                                            </p>
+                                        </div>
+                                        <div id="creative-id-size" class="d-flex flex-row mb-2">
+                                            <p class="my-auto"> ID: {{creative.id}}</p>
+                                            <p class="px-3 my-auto" *ngIf="creative.size.width && creative.size.height">
+                                                |
+                                            </p>
+                                            <p class="my-auto" *ngIf="creative.size.width && creative.size.height">
+                                                {{creative.size.width}} x {{creative.size.height}}
+                                            </p>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <p class="my-auto"> Type: {{creative.type}}</p>
+                                        </div>
+                                    </div>
+                                    <em class="fa fa-check selected-icon text-white bg-primary ml-auto p-2 my-auto rounded"
+                                        *ngIf="getSelectedStatus(creative)"
+                                        (click)="toggleSelection(day, creative)"></em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-paginator #paginator id="table-paginator" [length]="totalNoOfRecords" [pageSize]="50"
+                        [pageSizeOptions]="[50, 100, 200, 500]" showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+
+
+                <!--selected creatives only-->
+                <div class="list mt-2" [hidden]="!isShowSelectedCreativesActive">
+                    <div class="card bg-light mb-3 form-group">
+                        <div class="card-header d-flex flex-row py-1">
+                            <p class="my-auto">Selected creatives ({{this.selectedCreativeList.length}})
+                            </p>
+                            <button class="btn btn-default btn-link text-dark text-decoration-none my-auto ml-auto"
+                                *ngIf="selectedCreativeList.length > 0" (click)="clearAllSelection()"><strong>Unselect
+                                    All</strong></button>
+                        </div>
+                        <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+                            <div class="d-flex flex-row flex-wrap" *ngIf="selectedCreativeList.length > 0">
+                                <div class="card bg-white p-1 m-1 selected"
+                                    *ngFor="let creative of selectedCreativeList">
+
+                                    <div style="height: 200px;"
+                                        class="bg-gray d-flex flex-column creative-display-content"
+                                        [ngSwitch]="creative.type" (click)="clearSelection(creative)">
+
+                                        <div class="my-auto" *ngSwitchCase="'nativeAd'">
+                                            <img [ngClass]="{'ht200' : creative.size && creative.size.height>200 , 'wd200' : creative.size && creative.size.width>200}"
+                                                class="w-100 bg-gray border text-dark"
+                                                src="{{CREATIVE_IMAGE_API}}{{creative.urlPath}}" alt="Native Ad">
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'zippedHTML'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'templateHTML'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'html'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-file-text fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'video'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-video-camera fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'nativeVideo'">
+                                            <span class="fa-stack fa-3x w-100 bg-gray border text-center">
+                                                <em
+                                                    class="fa fa-circle-thin fa-stack-2x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                                <em
+                                                    class="fa fa-video-camera fa-stack-1x h-100 d-flex flex-wrap justify-content-center text-secondary"></em>
+                                            </span>
+                                        </div>
+                                        <div class="my-auto" *ngSwitchCase="'image'">
+                                            <img [ngClass]="{'ht200' : creative.size && creative.size.height>200 , 'wd200' : creative.size && creative.size.width>200}"
+                                                class="w-100 bg-gray border text-dark"
+                                                src="{{CREATIVE_IMAGE_API}}{{creative.urlPath}}" matTooltip="Image"
+                                                matTooltipPosition="above" alt="Image">
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-dark d-flex flex-column p-0 py-2 wd200">
+                                        <div id="creative-active-name" class="card-title d-flex flex-row m-0 mb-2">
+                                            <span class="my-auto">
+                                                <em class="fa fa-circle"
+                                                    [ngClass]="{'text-success': creative.active, 'text-danger': !creative.active}"></em>
+                                            </span>
+                                            <p [matTooltip]="creative.name" matTooltipPosition="above"
+                                                class="px-2 my-auto" (click)="goToCreativeDetailsPage(creative)">
+                                                {{(creative.name.length > 27)? creative.name.substring(0,24)+'...' :creative.name}}
+                                            </p>
+                                        </div>
+                                        <div id="creative-id-size" class="d-flex flex-row">
+                                            <p class="my-auto"> ID: {{creative.id}}</p>
+                                            <p class="px-3 my-auto" *ngIf="creative.size.width && creative.size.height">
+                                                |
+                                            </p>
+                                            <p class="my-auto" *ngIf="creative.size.width && creative.size.height">
+                                                {{creative.size.width}} x {{creative.size.height}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <em class="fa fa-check selected-icon text-white bg-primary ml-auto p-2 my-auto rounded"
+                                        (click)="clearSelection(creative)"></em>
+                                </div>
+                            </div>
+                            <div class="w-100" *ngIf="selectedCreativeList.length <= 0">
+                                <div class="card bg-light text-dark p-1 d-flex flex-column text-center">
+                                    <p class="my-1">No creatives selected.</p>
+                                    <p>You can select creatvies under <strong>All Creatives</strong> tab.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="false-footer">
+        <button id="creative-save" mat-raised-button class="btn-primary pull-right" (click)="onReviewAndSave()">Review &
+            Save</button>
+        <button id="creative-back" mat-button class="pull-right mr-2" (click)="goToPrevStep()">Back</button>
+    </div>
+</div>

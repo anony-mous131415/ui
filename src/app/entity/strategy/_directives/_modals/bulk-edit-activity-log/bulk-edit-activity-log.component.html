@@ -1,0 +1,137 @@
+<!-- <div class="modal-spacing"> -->
+
+<div mat-dialog-title class="modal-header border-header px-3 pb-3 d-flex justify-content-between">
+
+    <div class="flex-grow-2 my-auto">
+        <div class="d-flex">
+            <h4 class="my-auto">Strategy Bulk Edit Audit Logs &nbsp;</h4>
+            <!-- <h4 class="my-auto">{{config.dateTitle}}</h4> -->
+        </div>
+    </div>
+
+
+    <!--search box-->
+    <div class="">
+        <i *ngIf="!showProgressBar" class="fa fa-refresh pointer mx-4" (click)="fetchBulkEditLogs()"
+            aria-hidden="true"></i>
+
+        <i *ngIf="showProgressBar" class="fa fa-refresh mx-4" aria-hidden="true"></i>
+
+        <i class="fa fa-times pointer" (click)="closeModal()" aria-hidden="true"></i>
+
+    </div>
+
+</div>
+
+
+<div mat-dialog-content class="modal-body col-12">
+    <!-- <app-slider [activePane]="selectedPane===PANE_LEFT ? 'left' : 'right'">
+            <div leftPane> -->
+    <div id='list-body'>
+        <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+        <div id='table-container'>
+            <div #tableContent id='table-content'>
+                <mat-table class="table-border table-scroll px-3" [dataSource]="listSource" matSort #sort1='matSort'>
+
+                    <!-- id Column -->
+                    <!-- <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+                    </ng-container> -->
+
+                    <!-- createdOn Column -->
+                    <ng-container matColumnDef="createdOn">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="showProgressBar"> UPDATED ON
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div> {{element.createdOn}}</div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <!-- status Column -->
+                    <ng-container matColumnDef="status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="showProgressBar">STATUS
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div><span
+                                    [ngClass]="{'text-danger' : element.color===RED , 'text-success' : element.color===GREEN , 'text-affle ' : element.color===BLUE}">{{element.status}}</span>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <!-- modifiedON Column -->
+                    <!-- <ng-container matColumnDef="modifiedOn">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> MODIFIED ON </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div> {{element.modifiedOn}}</div>
+                        </mat-cell>
+                    </ng-container> -->
+
+                    <!-- userName Column -->
+                    <ng-container matColumnDef="userName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="showProgressBar"> USER
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <div matTooltipPosition='above' matTooltip="{{element.userName}}"
+                                matTooltipClass="auditModalTooltip">
+                                {{(element.userName.length > 22) ? (element.userName | slice:0:22)+'...' : (element.userName)}}
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+                    <!-- reqRes Column -->
+                    <ng-container matColumnDef="reqRes">
+                        <mat-header-cell *matHeaderCellDef> RESULT </mat-header-cell>
+                        <mat-cell *matCellDef="let element" (click)='openReqResModal(element)' style="cursor: pointer;">
+                            <div> <em class='fa fa-external-link'><span class="showLink">&nbsp;View</span></em>
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+
+
+
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                    <mat-row *matRowDef="let row; let i =index ; columns: displayedColumns;"
+                        [ngClass]="{'bg-gray' :  i%2 ===1 }">
+                    </mat-row>
+
+                </mat-table>
+
+
+                <div *ngIf='!showProgressBar &&  noDataCurrently' class='my-4 text-fade text-center no-data'>
+                    <em class='fa fa-warning'></em> No bulk edit data available currently.</div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- </div> -->
+
+</div>
+
+
+<div mat-dialog-actions class="px-3 d-flex border-footer modal-footer">
+
+    <div class="flex-grow-1 d-flex justify-content-start">
+        <div>
+            <mat-paginator #paginator1 [pageSize]='50' [length]="listLen" [pageSizeOptions]="pageSizeArr"
+                showFirstLastButtons>
+            </mat-paginator>
+        </div>
+    </div>
+
+    <div class="my-auto">
+        <!-- <button mat-raised-button class="btn-primary my-auto" (click)="closeModal()">Ok</button> -->
+        <button mat-button class="my-auto" (click)="closeModal()">Close</button>
+
+    </div>
+</div>
+
+<!-- </div> -->

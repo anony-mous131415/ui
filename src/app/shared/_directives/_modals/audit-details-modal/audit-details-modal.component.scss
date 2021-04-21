@@ -1,0 +1,78 @@
+$modal-border-color: #b8b8b8;
+
+
+.modal-body {
+    height: calc(100% - 80px);
+    overflow-x: hidden;
+}
+
+
+.table-scroll {
+    overflow-y: auto;
+    height: fit-content;
+    max-height: 300px;
+
+}
+
+.modal-spacing {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.border-footer {
+    border-top: 1px solid $modal-border-color;
+}
+
+.border-header {
+    border-bottom: 1px solid $modal-border-color;
+}
+
+// column width
+
+.mat-column-time {
+    flex: 0 0 8%;
+}
+
+.mat-column-entity {
+    flex: 0 0 25%;
+}
+
+.mat-column-feild {
+    flex: 0 0 10%;
+}
+
+.mat-column-madeBy {
+    flex: 0 0 15%;
+    justify-content: start;
+}
+
+.mat-column-oldValue {
+    flex: 0 0 17%;
+    justify-content: start;
+}
+
+.mat-column-newValue {
+    flex: 0 0 17%;
+    justify-content: start;
+}
+
+.mat-column-nextBtn {
+    flex: 0 0 8%;
+    justify-content: start;
+}
+
+.zoom {
+    transition: transform 0.3s;
+    margin: 0 auto;
+}
+
+.zoom:hover {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Safari 3-8 */
+    transform: scale(1.5);
+}
+
+.mat-cell {
+    font-size: 13px;
+    padding-left: 0px !important;
+}

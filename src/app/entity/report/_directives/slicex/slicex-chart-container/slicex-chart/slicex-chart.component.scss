@@ -1,0 +1,116 @@
+$danger-color: #f44336;
+$success-color: #4fa845;
+#chart-container {
+    .m20 {
+        margin-bottom: 20px;
+        padding: 0px 4px;
+    }
+    .col-md-4 {
+        float: left;
+    }
+    * {
+        font-size: 9px;
+    }
+}
+
+.charts {
+    border-left: 1px solid #efefef;
+    padding: 10px 0px 0px 0px;
+    // margin: 5px;
+}
+
+.chart-box {
+    border: 1px solid #ddd;
+    background: #fafafa;
+}
+
+.chart-left {
+    .chart-header {
+        font-size: 13px;
+        color: #888888;
+    }
+    .chart-value {
+        font-size: 13px;
+        color: #e77d2e;
+        font-weight: bold;
+    }
+    padding: 10px 0px 0px 0px;
+}
+
+.panel-heading {
+    .panel-title {
+        // background: #ddd;
+        background: #e77e2e;
+        color: white;
+        padding: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        &:after {
+            font-family: 'Glyphicons Halflings';
+            content: "\e082";
+            float: right;
+            opacity: 0.6;
+        }
+        margin-bottom:0px !important;
+    }
+    &.collapsed {
+        .panel-title {
+            &:after {
+                content: "\e081";
+            }
+        }
+    }
+}
+
+.pad-left {
+    padding-left: 15px;
+}
+
+.panel-item {
+    padding: 30px;
+}
+
+.panel {
+    // background: #eee;
+    background: #e77d2e;
+    .nav-tabs {
+        margin-top: 1px;
+    }
+    .tab-pane {
+        padding-bottom: 15px;
+    }
+}
+
+.panel-body {
+    padding-bottom: 1px;
+}
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot');
+    src: url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff') format('woff'), url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.primary {
+    color: var(--primary-color) !important;
+}
+
+.secondary {
+    color: var(--secondary-color) !important;
+}
+
+.bg-light {
+    background-color: white !important;
+}
+
+.boxShadow {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.compare-success {
+    color: $success-color !important;
+}
+
+.compare-danger {
+    color: $danger-color !important;
+}

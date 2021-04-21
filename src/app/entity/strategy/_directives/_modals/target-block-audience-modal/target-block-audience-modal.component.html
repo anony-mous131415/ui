@@ -1,0 +1,305 @@
+<div class="form-group">
+    <div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+        <h4 class="flex-grow-1 my-auto modal-title">{{config.title}}</h4>
+    </div>
+    <div mat-dialog-content class="my-2 d-flex flex-column modal-body col-12 p-0">
+        <mat-progress-bar class="mb-2" *ngIf="requestInProgress" mode="indeterminate"></mat-progress-bar>
+        <div class="alert alert-danger alert-dismissible mx-3" *ngIf="errMessage !== null">
+            <button type="button" class="close" data-dismiss="alert">&times;</button> {{errMessage}}
+        </div>
+        <div class="d-flex flex-row">
+            <div class="left d-flex flex-column col-6 border-right">
+                <div class="search d-flex flex-row">
+
+                    <!-- type of audience-->
+                    <div class='flex-grow-2'>
+                        <mat-form-field class="my-auto">
+                            <mat-select class="my-auto" [(value)]="selectedAudienceType"
+                                (selectionChange)="onAudTypeChange($event)">
+                                <mat-option *ngFor="let opt of audienceType" [value]="opt.value">
+                                    {{ opt.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- search bar -->
+                    <div class="flex-grow-1 ml-2">
+                        <div class="input-group">
+
+                            <input #searchInput style="height: 30px;" class="form-control form-control-sm"
+                                placeholder="Search" autocomplete="off" (keyup.enter)='onEntitySearch()' />
+
+                        </div>
+                    </div>
+
+                    <!--refresh list-->
+                    <button mat-button id="btn-reset" (click)="onReset()" matTooltip="Refresh"
+                        matTooltipPosition="above">
+                        <em class="fa fa-refresh"></em>
+                    </button>
+
+                </div>
+                <div id="list-body" class="list mt-2">
+                    <div id="table-container">
+                        <div id="table-content" *ngIf="gridData">
+                            <mat-table class="table-border col-12 p-0" [dataSource]="gridData" matSortDirection="desc"
+                                matSort (matSortChange)="sortData($event)" matSortActive="">
+
+                                <ng-container class="col-11" matColumnDef="name">
+                                    <mat-header-cell class="col-11" *matHeaderCellDef mat-sort-header
+                                        arrowPosition="after">
+                                        Name
+                                    </mat-header-cell>
+                                    <mat-cell class="d-flex flex-row col-12" *matCellDef="let row">
+                                        <div class="col-9 p-0" [innerHTML]="row.name"></div>
+                                        <div class="d-flex flex-row col-3 p-0">
+                                            <div
+                                                class="border-right d-flex flex-row col-6 p-0 justify-content-center text-center">
+                                                <button
+                                                    class="btn btn-link text-decoration-none text-success flex-fill my-auto text-center"
+                                                    *ngIf="!isRowTargetted(row)" (click)="addToTargetBucket(row)">
+                                                    Target
+                                                </button>
+                                                <i class="fa fa-check text-success my-auto text-center"
+                                                    *ngIf="isRowTargetted(row)"></i>
+                                            </div>
+                                            <div
+                                                class="border-left d-flex flex-row col-6 p-0 justify-content-center text-center">
+                                                <button
+                                                    class="btn btn-link text-decoration-none text-danger flex-fill my-auto text-center"
+                                                    *ngIf="!isRowBlocked(row)" (click)="addToBlockBucket(row)">
+                                                    Block
+                                                </button>
+                                                <i class="fa fa-ban text-danger my-auto text-center"
+                                                    *ngIf="isRowBlocked(row)"></i> &nbsp;
+                                            </div>
+                                        </div>
+
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+                                <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>
+                            </mat-table>
+                        </div>
+
+                        <div *ngIf='!requestInProgress &&  noDataCurrently' class='my-4 text-fade text-center no-data'>
+                            <em class='fa fa-warning'></em> No data available currently.</div>
+
+                        <mat-paginator id="table-paginator" [length]="totalNoOfRecords" [pageSize]="50"
+                            [pageSizeOptions]="[50, 100, 200, 500]" showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+            <div class="right d-flex flex-column col-6 border-left">
+                <div class="header d-flex flex-column">
+                    <div class="d-flex flex-row">
+                        <div class="flex-grow-1 my-auto"><strong>My Selections</strong></div>
+                        <button class="btn btn-sm btn-link primary" (click)="clearAllSelection()">Clear All</button>
+                    </div>
+
+                </div>
+
+
+                <!-----------MY SELECTION : parent container-------------------->
+                <div class="d-flex flex-column " style="height: 90%;">
+
+                    <!-------------------------APP  AUDIENCE------------------------->
+                    <div class="" style="flex: 1 1 0px;">
+
+                        <div class="d-flex flex-column">
+                            <!-- App Audience -->
+                            <div class="flex-fill mb-2">
+                                <div class="header d-flex flex-column bg-gray">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-grow-1 my-auto"><strong>App Audience</strong></div>
+                                        <button class="btn btn-sm btn-link primary"
+                                            (click)='clearSpecific(audConst.TYPE.APP)'>Clear</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+
+                                    <div
+                                        *ngIf="audienceBucketSize(audConst.TYPE.APP, 1) == 0 && audienceBucketSize(audConst.TYPE.APP, 0) == 0">
+                                        No selection
+                                    </div>
+
+                                    <div class="col-12 p-0 d-flex flex-row"
+                                        *ngIf="audienceBucketSize(audConst.TYPE.APP, 1) > 0 || audienceBucketSize(audConst.TYPE.APP, 0) > 0">
+
+                                        <!---------------target list------------------>
+                                        <div class="trgt-selection col-6 p-0"
+                                            [ngClass]="{'selection': config.type !== 0 , 'selection-sm': config.type === 0}"
+                                            *ngIf="audienceBucketSize(audConst.TYPE.APP, 1) > 0">
+                                            <div class="header-secondary"
+                                                *ngIf="audienceBucketSize(audConst.TYPE.APP, 1) > 0">
+                                                <div id="target-header" class="text-success">
+                                                    Target&nbsp;{{audienceBucketSize(audConst.TYPE.APP, 1)}}&nbsp;/&nbsp;{{totalRowCount['app']}}
+                                                </div>
+                                            </div>
+                                            <ul class="list-group">
+                                                <li id="selection-{{sel.id}}"
+                                                    class="list-group-item d-flex flex-row p-2"
+                                                    *ngFor="let sel of getArray(audConst.TYPE.APP, 1)">
+                                                    <span class="flex-grow-1">{{sel.name}}</span>
+                                                    <span><i id="selection-{{sel.id}}-close" class="fa fa-times"
+                                                            (click)="removeItemSelection(sel, audConst.TYPE.APP, 1)"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <!-----------------block list-------------->
+                                        <div class="blck-selection col-6 p-0"
+                                            [ngClass]="{'selection': config.type !== 0 , 'selection-sm': config.type === 0}"
+                                            *ngIf="audienceBucketSize(audConst.TYPE.APP, 0) > 0">
+                                            <div class="header-secondary"
+                                                *ngIf="audienceBucketSize(audConst.TYPE.APP, 0) > 0">
+                                                <div id="block-header" class="text-danger">
+                                                    Block&nbsp;{{audienceBucketSize(audConst.TYPE.APP, 0)}}&nbsp;/&nbsp;{{totalRowCount['app']}}
+                                                </div>
+                                            </div>
+                                            <ul class="list-group">
+                                                <li id="selection-{{sel.id}}"
+                                                    class="list-group-item d-flex flex-row p-2"
+                                                    *ngFor="let sel of getArray(audConst.TYPE.APP, 0)">
+                                                    <span class="flex-grow-1">{{sel.name}}</span>
+                                                    <span><i id="selection-{{sel.id}}-close" class="fa fa-times"
+                                                            (click)="removeItemSelection(sel, audConst.TYPE.APP, 0)"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Web Audience -->
+                            <div class="flex-fill mb-2">
+                                <div class="header d-flex flex-column bg-gray">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-grow-1 my-auto"><strong>Web Audience</strong></div>
+                                        <button class="btn btn-sm btn-link primary"
+                                            (click)='clearSpecific(audConst.TYPE.WEB)'>Clear</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div
+                                        *ngIf="audienceBucketSize(audConst.TYPE.WEB, 1) == 0 && audienceBucketSize(audConst.TYPE.WEB, 0) == 0">
+                                        No selection
+                                    </div>
+                                    <div class="col-12 p-0 d-flex flex-row"
+                                        *ngIf="audienceBucketSize(audConst.TYPE.WEB, 1) > 0 || audienceBucketSize(audConst.TYPE.WEB, 0) > 0">
+                                        <div class="trgt-selection col-6 p-0"
+                                            [ngClass]="{'selection': config.type !== 0 , 'selection-sm': config.type === 0}"
+                                            *ngIf="audienceBucketSize(audConst.TYPE.WEB, 1) > 0">
+                                            <div class="header-secondary"
+                                                *ngIf="audienceBucketSize(audConst.TYPE.WEB, 1) > 0">
+                                                <div id="target-header" class="text-success">
+                                                    Target&nbsp;{{audienceBucketSize(audConst.TYPE.WEB, 1)}}&nbsp;/&nbsp;{{totalRowCount['web']}}
+                                                </div>
+                                            </div>
+                                            <ul class="list-group">
+                                                <li id="selection-{{sel.id}}"
+                                                    class="list-group-item d-flex flex-row p-2"
+                                                    *ngFor="let sel of getArray(audConst.TYPE.WEB, 1)">
+                                                    <span class="flex-grow-1">{{sel.name}}</span>
+                                                    <span><i id="selection-{{sel.id}}-close" class="fa fa-times"
+                                                            (click)="removeItemSelection(sel, audConst.TYPE.WEB, 1)"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="blck-selection col-6 p-0"
+                                            [ngClass]="{'selection': config.type !== 0 , 'selection-sm': config.type === 0}"
+                                            *ngIf="audienceBucketSize(audConst.TYPE.WEB, 0) > 0">
+                                            <div class="header-secondary"
+                                                *ngIf="audienceBucketSize(audConst.TYPE.WEB, 0) > 0">
+                                                <div id="block-header" class="text-danger">
+                                                    Block&nbsp;{{audienceBucketSize(audConst.TYPE.WEB, 0)}}&nbsp;/&nbsp;{{totalRowCount['web']}}
+                                                </div>
+                                            </div>
+                                            <ul class="list-group">
+                                                <li id="selection-{{sel.id}}"
+                                                    class="list-group-item d-flex flex-row p-2"
+                                                    *ngFor="let sel of getArray(audConst.TYPE.WEB, 0)">
+                                                    <span class="flex-grow-1">{{sel.name}}</span>
+                                                    <span><i id="selection-{{sel.id}}-close" class="fa fa-times"
+                                                            (click)="removeItemSelection(sel, audConst.TYPE.WEB, 0)"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DMP Audience -->
+                            <div *ngIf='showDmpSelection' class="flex-fill">
+                                <div class="header d-flex flex-column bg-gray">
+                                    <div class="d-flex flex-row">
+                                        <div class="flex-grow-1 my-auto"><strong>DMP Audience</strong></div>
+                                        <button class="btn btn-sm btn-link primary"
+                                            (click)='clearSpecific(audConst.TYPE.DMP)'>Clear</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <div
+                                        *ngIf="audienceBucketSize(audConst.TYPE.DMP, 1) == 0 && audienceBucketSize(audConst.TYPE.DMP, 0) == 0">
+                                        No selection
+                                    </div>
+                                    <div class="col-12 p-0 d-flex flex-row"
+                                        *ngIf="audienceBucketSize(audConst.TYPE.DMP, 1) > 0 || audienceBucketSize(audConst.TYPE.DMP, 0) > 0">
+                                        <div class="trgt-selection col-6 p-0"
+                                            [ngClass]="{'selection': config.type !== 0 , 'selection-sm': config.type === 0}"
+                                            *ngIf="audienceBucketSize(audConst.TYPE.DMP, 1) > 0">
+                                            <div class="header-secondary"
+                                                *ngIf="audienceBucketSize(audConst.TYPE.DMP, 1) > 0">
+                                                <div id="target-header" class="text-success">
+                                                    Target&nbsp;{{audienceBucketSize(audConst.TYPE.DMP, 1)}}&nbsp;/&nbsp;{{totalRowCount['dmp']}}
+                                                </div>
+                                            </div>
+                                            <ul class="list-group">
+                                                <li id="selection-{{sel.id}}"
+                                                    class="list-group-item d-flex flex-row p-2"
+                                                    *ngFor="let sel of getArray(audConst.TYPE.DMP, 1)">
+                                                    <span class="flex-grow-1">{{sel.name}}</span>
+                                                    <span><i id="selection-{{sel.id}}-close" class="fa fa-times"
+                                                            (click)="removeItemSelection(sel, audConst.TYPE.DMP, 1)"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="blck-selection col-6 p-0"
+                                            [ngClass]="{'selection': config.type !== 0 , 'selection-sm': config.type === 0}"
+                                            *ngIf="audienceBucketSize(audConst.TYPE.DMP, 0) > 0">
+                                            <div class="header-secondary"
+                                                *ngIf="audienceBucketSize(audConst.TYPE.DMP, 0) > 0">
+                                                <div id="block-header" class="text-danger">
+                                                    Block&nbsp;{{audienceBucketSize(audConst.TYPE.DMP, 0)}}&nbsp;/&nbsp;{{totalRowCount['dmp']}}
+                                                </div>
+                                            </div>
+                                            <ul class="list-group">
+                                                <li id="selection-{{sel.id}}"
+                                                    class="list-group-item d-flex flex-row p-2"
+                                                    *ngFor="let sel of getArray(audConst.TYPE.DMP, 0)">
+                                                    <span class="flex-grow-1">{{sel.name}}</span>
+                                                    <span><i id="selection-{{sel.id}}-close" class="fa fa-times"
+                                                            (click)="removeItemSelection(sel, audConst.TYPE.DMP, 0)"></i></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button mat-button class="mrr15" (click)="onCancelClick()">Cancel</button>
+        <button mat-raised-button class="btn-primary" (click)="onSaveClick()">Save</button>
+    </div>
+</div>

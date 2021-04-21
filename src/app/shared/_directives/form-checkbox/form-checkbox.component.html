@@ -1,0 +1,29 @@
+<div class="form-group">
+  <div class="row">
+        <div class="col-md-3 col-lg-3 mrl15">
+      <div class="form-label">
+        {{ label }}
+        <em class="fa fa-info-circle" *ngIf='tooltip && tooltipPosition' matTooltipPosition="{{ tooltipPosition }}"
+          matTooltip="{{ tooltip }}"></em>
+      </div>
+    </div>
+    <div class="col-md-3 col-lg-3" [ngClass]="{'no-cursor-wrapper': disable ===true }">
+      <div [ngClass]="{'no-ptr-events': disable ===true}">
+
+        <mat-checkbox [ngClass]="{ 'input-danger': validated == 'false' && !val }" [(ngModel)]="value"
+          (ngModelChange)="cbEvent($event)" class='primary'> {{checkboxLevel}}
+        </mat-checkbox>
+
+        <span *ngIf='showAlertMsg' class="ml-3">{{alertMsgStr}}</span>
+
+
+      </div>
+
+      <mat-error class="error" *ngIf="validated == 'false' && !val">
+        {{validationMsg}}
+      </mat-error>
+
+    </div>
+    <div class="clearfix"></div>
+  </div>
+</div>

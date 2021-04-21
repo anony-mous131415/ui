@@ -1,0 +1,17 @@
+<div id='date-range-picker' class="d-flex flex-row mrt3">
+  <ejs-daterangepicker [allowEdit]='false' [min]='minDate' [max]='maxDate' format='dd MMM yyyy' placeholder='Select a range' matTooltip="All date & time are in GMT" matTooltipPosition="above" [(value)]='dateRange' (change)="changeDateRange($event)">
+      <div>
+          <e-presets>
+              <e-preset label="Today" [start]='todayStart' [end]='todayEnd'></e-preset>
+              <e-preset label="Yesterday" [start]='yesterdayStart' [end]='yesterdayEnd'></e-preset>
+              <e-preset label="Last 7 days" [start]='last7DaysStart' [end]='last7DaysEnd'></e-preset>
+              <e-preset label="Last 14 days" [start]='last14DaysStart' [end]='last14DaysEnd'></e-preset>
+              <e-preset label="Last 30 days" [start]='last30DaysStart' [end]='last30DaysEnd'></e-preset>
+              <e-preset label="Last 60 days" [start]='last60DaysStart' [end]='last60DaysEnd'></e-preset>
+              <e-preset label="Last 90 days" [start]='last90DaysStart' [end]='last90DaysEnd'></e-preset>
+              <e-preset label="This Month" [start]='monthStart' [end]='monthEnd'></e-preset>
+              <e-preset label="This Quarter" [start]='thisQuarterStart' [end]= 'thisQuarterEnd'></e-preset>
+          </e-presets>
+      </div>
+  </ejs-daterangepicker>
+</div>

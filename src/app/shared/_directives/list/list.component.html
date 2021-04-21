@@ -1,0 +1,254 @@
+<div id="tableContainer" class="listTable">
+    <div id='list-header'>
+        <div class='float-left mrr10'>
+            <button mat-raised-button class="btn-secondary" appDisableRO (click)='createEntity()' id="create-btn">
+                <em class='fa fa-plus'></em> <span>Create {{entity}}</span>
+            </button>
+        </div>
+
+
+        <!--revx-371 bulk edit-->
+        <div *ngIf='showStrBulkEdit' class='float-left mrr10'>
+            <button mat-raised-button class="btn-primary" appDisableRO [appDisableDemo]='appConst.DISABLE'
+                (click)='onBulkEditClick()' id="create-btn"
+                [ngClass]="{'disableUI': !selectedRowDetails || 2 > selectedRowDetails.length  }">
+                <em class='fa fa-pencil'></em> <span>Bulk Edit</span>
+            </button>
+        </div>
+
+        <div class='float-left mrr10'>
+            <button [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class="btn-primary"
+                [ngClass]="{'disableUI':disableActivateBtn == true}" (click)='confirm(1)' id="activate-btn">
+                <em class='fa fa-play'></em>
+                <span>Activate</span>
+            </button>
+        </div>
+        <div class='float-left mrr10'>
+            <button [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class="btn-primary"
+                [ngClass]="{'disableUI':disableDeactivateBtn == true}" (click)='confirm(0)' id="deactivate-btn">
+                <em class='fa fa-pause'></em>
+                <span>Deactivate</span>
+            </button>
+        </div>
+
+
+        <div *ngIf="showStrBulkEdit" class='float-left mrr10' matTooltip="Audit logs for strategy bulk edit."
+            matTooltipPosition="above">
+            <button [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class="btn-primary"
+                (click)='onBulkEditLogClick()' id="deactivate-btn">
+                <span>Audit Logs</span>
+            </button>
+        </div>
+
+        <div class='float-right mrt3'>
+            <a mat-button id="list-refresh-btn" (click)="reload()" matTooltip="Refresh" matTooltipPosition="above">
+                <em class="fa fa-refresh"></em>
+            </a>
+        </div>
+        <div class='float-right mrt3' [ngClass]="{'no-cursor-wrapper': !selectedRowIds || !selectedRowIds.length }">
+            <a mat-button [appDisableDemo]='appConst.DISABLE'
+                [ngClass]="{'no-ptr-events': !selectedRowIds || !selectedRowIds.length }" (click)='downloadCSV()'
+                id="list-export-btn" matTooltip="Export" matTooltipPosition="above">
+                <em class="fa fa-download"></em>
+            </a>
+        </div>
+
+        <div class='float-right mrt3' *ngIf='showImportExport=="true"'>
+            <a mat-button [appDisableDemo]='appConst.DISABLE' appDisableRO (click)='importCSV()' id="list-export-btn"
+                matTooltip="Import" matTooltipPosition="above">
+                <em class="fa fa-upload"></em>
+            </a>
+        </div>
+
+        <div class="float-right mrr5 header-btn">
+            <form [formGroup]="listSearchForm" class='list-search-container'>
+                <mat-form-field>
+                    <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                    <input matInput id='list-filter' formControlName="searchInput" [(ngModel)]="searchTxt"
+                        (keyup.enter)="applySearchFilter(false , true)"
+                        (keyup)="searchEntitiesOnKeyup($event.target.value)" placeholder="Search" autocomplete="off">
+                    <span id='list-search-btn' class='icon-outside' (click)='applySearchFilter(false , true)'></span>
+                </mat-form-field>
+                <div class='options-list' *ngIf='searchedList.length > 0' (clickOutside)="hideSearchEntitiesResults()">
+                    <div *ngFor='let en of searchedList; let i = index' class='list-items'>
+                        <em class='fa fa-circle'
+                            [ngClass]="{'text-success':en.active === true,'text-danger':en.active === false}"></em>
+                        <span matTooltipPosition='left' matTooltip="{{ en.name }}"
+                            [routerLink]="['/'+entity+'/details',en.id]">{{(en.name.length>24)? (en.name | slice:0:24)+'...':(en.name)}}</span>
+                    </div>
+                    <div class='list-footer' (click)='applySearchFilter(false , true)'><em class='fa fa-search'></em>
+                        <span>See all Results</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="float-right mrr10">
+            <mat-form-field class='header-btn wd250'>
+                <mat-label>Display</mat-label>
+                <mat-select id='matSelect' [formControl]="selectedMetrics" multiple
+                    matTooltip="List of all available columns - select ones you want to see and hide ones you don't."
+                    matTooltipPosition="above">
+                    <mat-option id='matOption' *ngFor="let metric of metricsOptions" [value]="metric.id"
+                        (onSelectionChange)='onChangeSelectedMetrics($event)'>{{metric.title}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class='clearfix'></div>
+
+        <div class='search-txt-handler' *ngIf='searchedText'>
+            <span class='mrr3'>Search Results</span>
+            <span class='search-txt mrr3'> '{{searchedText}}' </span>
+            <span class='st-link' (click)='applySearchFilter(true, false)'>Back to All</span>
+        </div>
+    </div>
+
+    <div id='list-body'>
+        <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+        <div id='table-container'>
+            <div #tableContent id='table-content'>
+                <mat-table id="listTable" class="table-border" [dataSource]="listSource" matSortDirection="" matSort
+                    matSortActive="">
+                    <ng-container *ngFor="let column of listMetrics" [matColumnDef]="column.id"
+                        sticky="{{column.id==='active' || column.id==='name' || column.id==='action' || column.id==='dropdown' ?true:false}}">
+                        <!-- Table Header HTML -->
+
+                        <!-- Only for ACTION (For the checkbox) column header -->
+                        <div *ngIf="column.id == 'action'">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox [(ngModel)]="allRowSelected" (change)="selectAllRows()"></mat-checkbox>
+                            </mat-header-cell>
+                        </div>
+                        <!-- Only for status column header -->
+                        <div *ngIf="column.id == 'active'">
+                            <mat-header-cell *matHeaderCellDef>
+                                <a [matMenuTriggerFor]="menu" class='pointer'
+                                    matTooltip='Status (Green circle = active campaigns)' matTooltipPosition="above">
+                                    <em class='fa fa-circle mrr3'
+                                        [ngClass]="{'text-success':selectedStatus === 'true','text-danger':selectedStatus === 'false', 'text-default':selectedStatus === '' }"></em>
+                                    <em class='fa fa-caret-down'></em>
+                                </a>
+
+                                <mat-menu #menu="matMenu" dense>
+                                    <div class='statusMatMenu'>
+                                        <div mat-menu-item (click)='applyStatusFilter(true)'><em
+                                                class='fa fa-circle text-success'></em> Active
+                                        </div>
+                                        <div mat-menu-item (click)='applyStatusFilter(false)'><em
+                                                class='fa fa-circle text-danger'></em> Inactive
+                                        </div>
+                                        <div mat-menu-item (click)='applyStatusFilter(null)'><em
+                                                class='fa fa-circle text-default'></em> All
+                                        </div>
+                                    </div>
+                                </mat-menu>
+                            </mat-header-cell>
+                        </div>
+                        <!-- Only for dropdown column header -->
+                        <div *ngIf="column.id == 'dropdown'">
+                            <mat-header-cell *matHeaderCellDef>
+                                <div><i class='fa fa-bar'></i></div>
+                            </mat-header-cell>
+                        </div>
+                        <!-- All header columns -->
+                        <div *ngIf="column.id != 'active' && column.id != 'action' &&  column.id != 'dropdown'">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='before'>
+                                <div matTooltipPosition='above' matTooltip="{{column.hover}}">
+                                    {{ column.title | uppercase }}</div>
+                            </mat-header-cell>
+                        </div>
+
+
+                        <!-- Table body HTML -->
+                        <mat-cell *matCellDef="let row ; let i =index"
+                            [ngClass]="{'row-selected':row.action === true, 'bg-white':row.action=== false && i%2===0 , 'bg-gray' : row.action=== false && i%2 ===1 }">
+                            <div *ngIf='column.id == "action"' class=''>
+                                <mat-checkbox [(ngModel)]="row.action"
+                                    (change)="selectRow(row.id, row ,row.action, row.active)">
+                                </mat-checkbox>
+                            </div>
+                            <!-- Dropdown Column | popup bar--->
+                            <div *ngIf='column.id == "dropdown"'>
+                                <div>
+                                    <i class='fa fa-list menu-i' [matMenuTriggerFor]="reptiles"></i>
+                                    <mat-menu #reptiles="matMenu">
+                                        <div *ngFor='let me of menu' class="statusMatMenu">
+                                            <button class='cstm-btn' mat-menu-item *ngIf='me.click'
+                                                (click)='quickEdit(row)'>
+                                                <i class='{{me.icon}} mr'></i>
+                                                <span>{{me.label}}</span>
+                                            </button>
+                                            <button class='cstm-btn' mat-menu-item *ngIf='!me.click'
+                                                [routerLink]='[me.href, row.id]'>
+                                                <i class='{{me.icon}} mr'></i>
+                                                <span>{{me.label}}</span>
+                                            </button>
+                                        </div>
+                                        <!-- </ng-container> -->
+                                    </mat-menu>
+                                </div>
+                            </div>
+
+                            <!-- Status Column -->
+                            <div *ngIf='column.id == "active"'>
+                                <div>
+                                    <em class='fa fa-circle mc-status'
+                                        [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></em>
+                                </div>
+                            </div>
+                            <!-- name column of the table -->
+                            <div *ngIf='column.id == "name"'>
+                                <div><a class='details-link' matTooltipPosition='above' matTooltip="{{row.name}}"
+                                        [routerLink]="['/'+entity+'/details/', row.id]">{{(row.name.length>25)? (row.name | slice:0:25)+'...':(row.name)}}</a>
+                                </div>
+                                <div *ngIf='row.campaign' class='text-muted'>
+                                    {{row.campaign.startTime | epochDateFormat}} -
+                                    {{row.campaign.endTime | epochDateFormat}}</div>
+                                <div *ngIf='row.strategy' class='text-muted'>
+                                    {{row.strategy.startTime | epochDateFormat}} -
+                                    {{row.strategy.endTime | epochDateFormat}}</div>
+                            </div>
+
+
+                            <!-- other columns -->
+                            <!-- except uu columns -->
+                            <div *ngIf='column.id != "name" && column.id != "active" && column.id != "action" && column.id != "dropdown" && column.id != "eligibleUniqUsers"
+                            && column.id != "impressionUniqUsers" && column.id != "eligibleBids"'
+                                matTooltipPosition='above' matTooltip="{{column.cellTooltip(row)}}">
+                                {{ column.cell(row) }}
+                            </div>
+
+                            <!-- uu columns : causing latency in bq -->
+                            <div *ngIf='column.id != "name" && column.id != "active" && column.id != "action" && column.id != "dropdown" && (column.id == "eligibleUniqUsers"
+                            || column.id == "impressionUniqUsers" || column.id == "eligibleBids") '>
+                                <div *ngIf="uuRespReceived" matTooltipPosition='above'
+                                    matTooltip="{{column.cellTooltip(row)}}">
+                                    {{ column.cell(row) }}
+                                </div>
+                                <div *ngIf="!uuRespReceived">
+                                    <div style="visibility: hidden;">0.00%</div>
+                                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                </div>
+                            </div>
+
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <div *ngIf='showDataUnavailableMsg' class='data-unavailable-msg'><em class='fa fa-warning'></em>
+                    {{dataUnavailableMsg}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='list-footer'>
+        <!--do not use ngIf here, pagination won't work-->
+        <mat-paginator id='paginator' [length]="listLen" [pageSize]="10"
+            [pageSizeOptions]="[10,20,50,100,200,300 ,400,500,1000]" showFirstLastButtons>
+        </mat-paginator>
+
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<!-- Links -->
+<ul class="navbar-nav navbar-left">
+  <li class="nav-item" *ngFor="let me of menucrumbs"
+    [ngClass]="{ 'navtab-active': activeMenu === me.entity, 'dropdown' : me.href == null }">
+    <a *ngIf='me.href != null' id='menu-home' class="nav-link" routerLink={{me.href}}>{{me.title}}</a>
+
+    <a *ngIf='me.href == null' class="nav-link">
+      <span id='menu-{{me.entity}}' class='text'>{{me.title}}</span>
+    </a>
+    <div *ngIf='me.isList && me.menu != null' class="dropdown-menu">
+      <div class='mc-left-list'>
+        <div class='menucrumb-list' (mouseleave)="mouseoverHandler(me.activeEntity)">
+          <div class='mc-section-top' *ngIf='me.menu.list != null'>
+            <div *ngFor="let listItem of me.menu.list" id='mc-controller-{{listItem.entity}}'
+              (mouseover)="mouseoverHandler(listItem.entity)">
+              <div class='mc-subtitle' [ngClass]="{'mc-list-subtitle-active':listItem.active === true}"><a
+                  [routerLink]=listItem.href>{{listItem.title}}</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf='!me.isList && me.menu != null' class="dropdown-menu">
+      <div class='menucrumb' (mouseleave)="mouseoverHandler(me.activeEntity)">
+        <!-----LEFT SIDE VIEW ----->
+        <div class='mc-left' *ngIf='me.menu.leftSide != null'>
+          <div class='mc-section-top' *ngIf='me.menu.leftSide.view != null'>
+            <div class='mc-title'>View</div>
+            <div *ngFor="let view of me.menu.leftSide.view" id='mc-controller-{{view.entity}}'
+              (mouseover)="mouseoverHandler(view.entity)">
+              <div class='mc-subtitle' [ngClass]="{'mc-subtitle-active':view.active === true}"><a [routerLink]=view.href
+                  [queryParams]="view.queryHref? {type : view.queryHref} : {}">{{view.title}}</a></div>
+            </div>
+          </div>
+          <div class='mc-section-bottom' *ngIf='me.menu.leftSide.create != null'>
+            <div appDisableRO class='mc-title'>Create</div>
+            <div appDisableRO *ngFor="let create of me.menu.leftSide.create" class='mc-subtitle mc-create'>
+              <a [routerLink]="create.href"><em class='fa fa-plus'></em> Create {{create.entity}}</a>
+            </div>
+          </div>
+        </div>
+        <!--RIGHT side list-->
+        <div class='mc-right' *ngIf='me.menu.rightSide != null'>
+          <div *ngFor="let rtMenu of me.menu.rightSide" id='mc-reactor-{{rtMenu.entity}}'
+            class='menu-searchbar-container'>
+            <div *ngIf="rtMenu.active">
+              <mat-form-field class="wd-full">
+                <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                <!-- <input matInput id='menucrumb-search' (keyup)="searchEntitiesByTxt($event.target.value, rtMenu.entity)"
+                  placeholder="Search {{rtMenu.entity | lowercase}}" autocomplete="off"> -->
+                <input matInput id='menucrumb-search' (keyup)="searchEntitiesByTxt($event.target.value, rtMenu.entity)"
+                  [placeholder]="getPlaceHolder(rtMenu.entity)" autocomplete="off" />
+              </mat-form-field>
+              <div class='m-list-container'>
+                <div *ngFor='let en of rtMenu.list' class='list-row'>
+                  <em class='fa fa-circle mc-status'
+                    [ngClass]="{'text-success':en.active === true,'text-danger':en.active === false}"></em>
+                  <span class='mc-li-title'><a matTooltipPosition='right' matTooltip="{{ en.name }}"
+                      [routerLink]="[rtMenu.detailsLink,en.id]">{{(en.name.length>33)? (en.name | slice:0:33)+'...':(en.name)}}</a></span>
+                </div>
+                <div *ngIf='rtMenu.list.length==0' class='text-muted bold'>{{noEntityFound}}</div>
+              </div>
+              <div class='menu-search-footer' *ngIf='rtMenu.list.length>0'>
+                <a (click)='viewAllHandler(rtMenu.viewAllLink , rtMenu.viewAllQueryParam)'>{{rtMenu.viewAllMessage}}</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!--RIGHT side list ENDS-->
+        <div class='clearfix'></div>
+      </div>
+    </div>
+
+  </li>
+
+</ul>

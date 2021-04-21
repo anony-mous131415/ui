@@ -1,0 +1,75 @@
+.primary {
+    color: var(--primary-color) !important;
+}
+
+.mat-step-header .mat-step-icon {
+    background-color: #e7e7e7 !important;
+}
+
+.mat-step-header .mat-step-icon-selected {
+    background-color: var(--primary-color) !important;
+}
+
+.mat-expansion-panel {
+    font-weight: normal !important;
+    color: #333 !important;
+}
+
+// .strategy-form-container .mat-expansion-panel-body {
+//     padding: 0px 0px !important;
+// }
+#page-content #form-container .form-header .mat-button span {
+    font-size: 14px !important;
+    line-height: 36px;
+    font-weight: 500;
+}
+
+.strsteppers {
+    display: inline-table;
+    padding: 0px 9px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 19px;
+    margin-top: 10px;
+    line-height: 27px !important;
+}
+
+.strategy-form-container .mat-expansion-panel-header {
+    color: #343a40!important;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 0 0 24px !important;
+    margin-left: 0 !important;
+    cursor: auto !important;
+}
+
+.expCursor .mat-expansion-panel-header {
+    cursor: pointer !important;
+}
+
+.mat-expansion-panel-header span {
+    line-height: 28px;
+}
+
+.mat-expansion-panel-header-title {
+    margin-right: 0 !important;
+    // cursor: auto;
+}
+
+.mat-expansion-panel-header div.accor-titles {
+    width: calc(100% - 45px);
+    display: inline;
+    border-bottom: 1px solid #555;
+    line-height: 40px;
+}
+
+.mrl40 {
+    margin-left: 40px !important;
+}
+
+.pdl-10 {
+    padding-left: 10px !important;
+}

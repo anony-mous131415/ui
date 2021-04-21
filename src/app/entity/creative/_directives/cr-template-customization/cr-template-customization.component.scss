@@ -1,0 +1,34 @@
+.colorPickerShow {
+    width:15px;
+    height:15px;
+    display:inline-block;
+    margin-right: 5px;
+}
+.btn-secondary, .btn-primary{
+    width: auto !important;
+}
+.colorPickerInput {
+    width: 75px;
+    font-size: 15px !important;
+}
+.img-thumbnail {
+    height: 100px;
+    width: 100px;
+}
+.wd120 {
+    width: 120px;
+}
+.customize {
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+.customize-right {
+    border: 1px solid #ccc;
+    padding: 20px;
+    max-height: 800px;
+    overflow-y: auto;
+}
+.isEditWrapper {
+    max-height: 50vh;
+    overflow-y: auto;
+}

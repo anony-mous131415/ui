@@ -1,0 +1,30 @@
+.list-card:nth-of-type(odd) {
+  padding-right: 5px !important;
+}
+
+.list-card:nth-of-type(even) {
+  padding-left: 5px !important;
+}
+
+.active {
+  color: var(--primary-color) !important;
+}
+
+
+em.view-icon {
+    font-size: 17px;
+}
+
+.box1{
+  width: 300px;
+  height: 300px;
+  background-color: cornflowerblue;
+  margin: 5px;
+}
+
+.box2{
+  width: 300px;
+  height: 100px;
+  background-color:darkorange;
+  margin: 5px;
+}

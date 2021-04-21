@@ -1,0 +1,52 @@
+.uploadFormContainer {
+    // height: 100px;
+    border: 1px dashed #aaa !important;
+    padding: 10px;
+    i {
+        font-size: 30px;
+        color: #bbb;
+        // color: var(--primary-color);
+    }
+    &:hover {
+        i {
+            color: var(--primary-color) !important;
+        }
+        cursor: pointer;
+        background-color: #aaaaaa;
+        // opacity: 0.8;
+        border: 1px dashed var(--primary-color) !important;
+    }
+}
+
+.file-card {
+    margin-bottom: 10px;
+    .file-icon {
+        min-height: 70px;
+        text-align: center;
+        margin: 0 auto;
+        background: #fafafa;
+    }
+    .file-title {
+        margin-top: 2px;
+        font-size: 10px;
+        color: #888;
+    }
+    .file-subtitle {
+        font-size: 10px;
+        color: #888;
+    }
+    .file-remove {
+        margin-top: 4px;
+        font-size: 10px;
+        color: #f44336;
+        cursor: pointer;
+        &:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+    }
+}
+
+.mrr20 {
+    margin-right: 20px !important;
+}

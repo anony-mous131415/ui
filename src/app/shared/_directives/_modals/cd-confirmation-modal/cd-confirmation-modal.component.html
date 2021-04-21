@@ -1,0 +1,59 @@
+<app-common-modal>
+
+  <div mat-dialog-title class="modal-header">
+    <h4 class="modal-title">Warning</h4>
+    <button type="button" class="close" aria-label="Close" (click)="decline()">
+      <em class='fa fa-times'></em>
+    </button>
+  </div>
+
+
+  <div mat-dialog-content class="modal-body">
+    <div id='page-content'>
+
+      <!--when only url parts are to be shown-->
+      <ng-container *ngIf='dataInjected.type===1'>
+        <div class='container'>
+
+          <div class='mb-2'>
+            Please make sure you have either filled or removed the following feilds :
+          </div>
+
+          <div *ngFor='let header of keyArr' class='mb-2'>
+            <div>
+              <b><u>{{header}}</u></b>
+
+              <ul>
+                <li *ngFor='let msg of dataInjected.msgMap.get(header)'>
+                  <div class='ml-2'>
+                    {{msg}}
+                  </div>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!--when only sinlge msgn string is to be shown-->
+      <div class='container' *ngIf='dataInjected && dataInjected.modalMsg && dataInjected.modalMsg.length'>
+        <p>{{dataInjected.modalMsg}}</p>
+      </div>
+
+
+    </div>
+
+  </div>
+
+  <div mat-dialog-actions id='footer' class="modal-footer pt">
+    <button id="decline_btn" mat-button type="button" class="float-right" (click)="decline()">Cancel</button>
+    <div class='clearfix'></div>
+    <button id="accept_btn" mat-raised-button type="button" class="btn-primary float-left"
+      (click)="accept()">{{dataInjected.saveBtnMsg}}</button>
+  </div>
+
+
+
+
+</app-common-modal>

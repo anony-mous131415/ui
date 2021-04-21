@@ -1,0 +1,39 @@
+<div class='row mrt20'>
+    <div class="d-flex flex-column w-100 mrl15">
+        <div class="d-flex flex-row flex-fill col-12 mrl15">
+            <div id='date-range-picker' class="col-6 d-flex flex-row ">
+                <em class="fa fa-calendar fa-2x icon-primary mr-3" aria-hidden="true"></em>
+                <ejs-daterangepicker class="w-50" style="min-width: 250px;" [allowEdit]='false' [max]='maxDate' [min]="minDate" format='dd MMM yyyy' [(value)]='dateRange' (change)="changeDateRange($event)" [enabled]="true" floatLabelType='Auto' [showClearButton]='false'>
+                    <div>
+                        <e-presets>
+                            <span *ngFor="let preset of presets">
+                <e-preset [label]="preset.label" [start]="preset.start" [end]="preset.end">
+                </e-preset>
+              </span>
+                        </e-presets>
+                    </div>
+                </ejs-daterangepicker>
+            </div>
+
+            <div class='col-6 intervalAlign'>
+                <div id='interval-picker' class="d-flex flex-row wd300">
+                    <em class="fa fa-clock-o fa-2x icon-primary" aria-hidden="true"></em>
+                    <div class='d-flex flex-column'>
+                        <mat-form-field class="custom ml-3">
+                            <mat-label>
+                                <span class='text-primary'>Interval</span>
+                            </mat-label>
+                            <mat-select [(value)]="selectedInterval" (selectionChange)='changeInterval()' disableOptionCentering>
+                                <mat-option *ngFor="let i of intervalArr" [value]="i.name.toLowerCase()">{{i.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div #msg class='text-secondary small'></div>
+    </div>
+</div>

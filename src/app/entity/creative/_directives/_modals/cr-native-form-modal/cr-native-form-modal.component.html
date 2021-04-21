@@ -1,0 +1,57 @@
+<div mat-dialog-title class="modal-header">
+    <h4 class="flex-grow-1 my-auto modal-title">Native Asset</h4>
+</div>
+<div mat-dialog-content class="modal-body">
+    <div id='page-content'>
+        <div id='form-container'>
+            <div class='form-body native-form-body'>
+                <div class=''>
+                    <app-form-input [(ngModel)]="native.title" tooltipPosition="above" label="{{crConst.NATIVE_TITLE}}*" tooltip="{{crConst.NATIVE_TITLE_TOOLTIP}}" maxLen="25" minLen="4" id="nativeTitle" validationMsg="{{crConst.VALIDATION_NATIVE_TITLE}}" validated="{{formValidated}}"
+                        width="wd250" marginBottom="mrb15">
+                    </app-form-input>
+
+                    <app-form-input [(ngModel)]="native.body" tooltipPosition="above" label="{{crConst.NATIVE_BODY}}*" tooltip="{{crConst.NATIVE_BODY_TOOLTIP}}" maxLen="90" minLen="4" id="nativeBody" validationMsg="{{crConst.VALIDATION_NATIVE_BODY}}" validated="{{formValidated}}"
+                        width="wd250" marginBottom="mrb15">
+                    </app-form-input>
+
+                    <app-form-select [(ngModel)]="selectedCallToAction" entity="CALL_TO_ACTION" label="{{crConst.NATIVE_CALLTOACTION}}*" tooltipPosition="above" tooltip="{{crConst.NATIVE_CALLTOACTION_TOOLTIP}}" validated="{{formValidated}}" validationMsg="{{crConst.VALIDATION_NATIVE_CALLTOACTION}}"
+                        id="nativeCallToAction" width="wd250" marginBottom="mrb15">
+                    </app-form-select>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-4">
+                                <div class="form-label">
+                                    {{ crConst.NATIVE_UPLOAD_ICON }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{ crConst.NATIVE_UPLOAD_ICON_TOOLTIP }}"></em>
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-8">
+                                <div *ngIf='native.icon' class='logo-cover'>
+                                    <img src='{{native.icon}}' alt="Icon" />
+                                    <span class='link' (click)="removeIcon()"><em class='fa fa-trash'></em> Remove</span>
+                                </div>
+                                <app-generic-uploader *ngIf='!native.icon' (syncFileUploadResp)='syncFileUploadResp($event)' title="Click or drop the logo" allowedExtensions="jpg,png,jpeg" maxFileSizeInKB='102400' detailMessage='{{crConst.NATIVE_UPLOAD_ICON_TOOLTIP}}' width='wd300'
+                                    apiPath="{{appConst.API_PATH.CREATIVE_FILE_UPLOAD}}">
+                                </app-generic-uploader>
+                                <div class='text-primary'>
+                                    <span *ngIf="isUploading"><em class='fa fa-spinner fa-spin text14'></em>
+                    Uploading</span>
+                                </div>
+                                <mat-error class="error" *ngIf='invalidIconMeassge'>
+                                    {{invalidIconMeassge}}
+                                </mat-error>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button mat-button class='mrr15' (click)="cancel()">Cancel</button>
+    <button mat-raised-button class='btn-primary mrr15' (click)="onDoneClick()">Done</button>
+</div>

@@ -1,0 +1,450 @@
+<div>
+    <div class="form-body py-2  mrl40" *ngIf="strategyDTO">
+
+
+        <!--location-->
+        <div>
+
+            <!-- REVX-371 : strategy bulk edit -->
+            <div *ngIf='isBulkEdit' class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 text-secondary align-self-center"><strong>GEO TAGS</strong></div>
+
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of geo.allowedBulkEditOpts'
+                        [(ngModel)]="geo.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===geo.selectedBulkEditOpt" class="bc-title"
+                            disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+            <div *ngIf='isBulkEdit'>
+                {{geo.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.GEO : geo.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''}}
+            </div>
+
+            <!-- Country -->
+            <ng-container *ngIf="!isToBeHidden(0)">
+                <div class="form-subheader border-0 small px-0 mb-2">
+                    <div class="pdl-10 text-secondary"><strong>{{SCONST.TARGETING_SUBHEADER_GEO_LOC_COUNTRY}}</strong>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <app-strategy-target-geo identifier="geo-location-country" entity="COUNTRY" title="Country"
+                        icon="fa-map-marker" actionBtnLabel="Browse"
+                        [targetList]="selectionData['geo-location-country'].targetList"
+                        [blockList]="selectionData['geo-location-country'].blockList"
+                        [targetAlltext]="SCONST.COUNTRY_TARGET_ALL_TEXT" targetListHeader="Any of the below countries"
+                        blockListHeader="Any of the below countries" (actionBtnClick)="actionCountryClick($event)"
+                        (selectionRemoved)="onSelectionRemoved($event)">
+                    </app-strategy-target-geo>
+                </div>
+
+                <!-- state -->
+                <div class="form-subheader border-0 small px-0 mb-2">
+                    <div class="pdl-10 text-secondary"><strong>{{SCONST.TARGETING_SUBHEADER_GEO_LOC_STATE}}</strong>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <app-strategy-target-geo identifier="geo-location-state" entity="STATE" title="State"
+                        icon="fa-map-marker" [dependents]="stateDependents" actionBtnLabel="Browse"
+                        [targetList]="selectionData['geo-location-state'].targetList"
+                        [blockList]="selectionData['geo-location-state'].blockList"
+                        [targetAlltext]="SCONST.STATE_TARGET_ALL_TEXT" targetListHeader="Any of the below states"
+                        blockListHeader="Any of the below states" (actionBtnClick)="actionStateClick()"
+                        (selectionRemoved)="onSelectionRemoved($event)">
+                    </app-strategy-target-geo>
+                </div>
+
+                <!-- city -->
+                <div class="form-subheader border-0 small px-0 mb-2">
+                    <div class="pdl-10 text-secondary"><strong>{{SCONST.TARGETING_SUBHEADER_GEO_LOC_CITY}}</strong>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <app-strategy-target-geo identifier="geo-location-city" entity="CITY" title="City"
+                        icon="fa-map-marker" [dependents]="cityDependents" actionBtnLabel="Browse"
+                        [targetList]="selectionData['geo-location-city'].targetList"
+                        [blockList]="selectionData['geo-location-city'].blockList"
+                        [targetAlltext]="SCONST.CITY_TARGET_ALL_TEXT" targetListHeader="Any of the below cities"
+                        blockListHeader="Any of the below cities" (actionBtnClick)="actionCityClick()"
+                        (selectionRemoved)="onSelectionRemoved($event)">
+                    </app-strategy-target-geo>
+                </div>
+
+            </ng-container>
+
+        </div>
+
+        <!-- Audience -->
+        <!-- REVX-724 : skad ui changes : audience targetting not allowed for SKAD strategy -->
+        <div [hidden]='hideAudienceSection()===true'>
+            <div class="form-subheader border-0 small  mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 text-secondary align-self-center">
+                    <strong>{{SCONST.TARGETING_SUBHEADER_AUDIENCE}}</strong></div>
+
+
+                <!-- REVX-371 : strategy bulk edit -->
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of audience.allowedBulkEditOpts'
+                        [(ngModel)]="audience.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===audience.selectedBulkEditOpt"
+                            class="bc-title" disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+
+            <div *ngIf='isBulkEdit'>
+                {{audience.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.AUDIENCE : audience.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''}}
+            </div>
+
+
+            <div class="mb-3" [hidden]="isToBeHidden(1)">
+                <app-strategy-target-specific identifier="audience" entity="AUDIENCE" icon="fa-users"
+                    actionBtnLabel="Browse" [targetList]="selectionData['audience'].targetList"
+                    [blockList]="selectionData['audience'].blockList" [targetAlltext]="SCONST.AUDIENCE_TARGET_ALL_TEXT"
+                    targetListHeader="of the below audience(s)" blockListHeader="Any of the below audience(s)"
+                    [targetOperator]="audienceTargetOperator" [blockOperator]="audienceBlockOperator"
+                    (actionBtnClick)="actionAudienceClick()" (selectionRemoved)="onSelectionRemoved($event)"
+                    (optionChange)=onTargetBlockOptionChange($event)
+                    [hideAnyAllOptions]='isBulkEdit && audience.selectedBulkEditOpt === SCONST.APPEND'>
+                </app-strategy-target-specific>
+                <mat-error class="error" *ngIf="error['audience'].hasError">
+                    {{error['audience'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <!-- Day part -->
+        <div>
+            <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                [ngClass]="{'px-0': !isBulkEdit}">
+                <div class="pdl-10 text-secondary"><strong>{{SCONST.TARGETING_SUBHEADER_DAY_PART}}&nbsp; <em
+                            class="fa fa-info-circle" matTooltipPosition="above"
+                            matTooltip="{{SCONST.TARGETING_SUBHEADER_DAY_PART_HINT}}"></em></strong>
+                </div>
+
+                <!-- REVX-371 : strategy bulk edit -->
+                <div *ngIf='isBulkEdit' class="pull-right">
+                    <mat-button-toggle-group *ngFor='let o of days.allowedBulkEditOpts'
+                        [(ngModel)]="days.selectedBulkEditOpt">
+                        <mat-button-toggle [value]="o.id" [checked]="o.id===days.selectedBulkEditOpt" class="bc-title"
+                            disableRipple>
+                            {{o.name}}
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+            </div>
+
+
+            <div *ngIf='isBulkEdit'>
+                {{days.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''}}
+            </div>
+
+            <div class="mb-3 form-group" [hidden]="isToBeHidden(2)">
+                <div class="row d-flex flex-row col-12 m-0 pr-0 bg-light ">
+                    <div class="col-2 border-right p-0">
+                        <div class="p-2">
+                            <mat-checkbox id="toggle-all-day-and-hr" [checked]="isAllDaysSelected()"
+                                (change)="toggleAllDaysSelection()">
+                                Days</mat-checkbox>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row col-10 p-0">
+                        <div class="col-2 p-0 my-auto text-center border-right">
+                            <div class="p-2 m-0">
+                                <mat-checkbox id="toggle-morning" [checked]="isAllHourGroupSelected('morning')"
+                                    (change)="toggleHourGroupSelection('morning')">
+                                    Morning
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="col-4 p-0 my-auto text-center border-right">
+                            <div class="p-2 m-0">
+                                <mat-checkbox id="toggle-office" [checked]="isAllHourGroupSelected('officeHrs')"
+                                    (change)="toggleHourGroupSelection('officeHrs')">Office Hours</mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="col-2 p-0 my-auto text-center border-right">
+                            <div class="p-2 m-0">
+                                <mat-checkbox id="toggle-evening" [checked]="isAllHourGroupSelected('evening')"
+                                    (change)="toggleHourGroupSelection('evening')">
+                                    Evening</mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="col-4 p-0 my-auto text-center">
+                            <div class="p-2 m-0">
+                                <mat-checkbox id="toggle-night" [checked]="isAllHourGroupSelected('night')"
+                                    (change)="toggleHourGroupSelection('night')">Night
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex flex-row col-12 m-0 pr-0 border-bottom" *ngFor="let day of dayparts">
+                    <div class="col-2 border-right p-0 my-auto">
+                        <mat-checkbox id="toogle-{{day.day}}" [checked]="isAllDaySelected(day.day)"
+                            (change)="toggleAllDaySelection(day.day)">
+                            {{getDayFromIndex(day.day) | uppercase}}</mat-checkbox>
+                    </div>
+                    <div class="d-flex flex-row col-10 p-0">
+                        <div class="col-2 p-0 text-center border-right d-flex flex-row p-1">
+                            <div class="flex-fill border" *ngFor="let hr of getDayPart('morning', day.hours)"
+                                [ngClass]="{'border-default text-light': !hr.checked, 'primary-selection': hr.checked}">
+                                <div id="toogle-{{day.day}}-{{hr.hr}}" class="" (click)="toggleDayPartSelection(hr)">
+                                    <em class="fa fa-check my-auto" aria-hidden="true"></em>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 p-0 text-center border-right d-flex flex-row p-1">
+                            <div class="flex-fill border" *ngFor="let hr of getDayPart('officeHrs', day.hours)"
+                                [ngClass]="{'border-default text-light': !hr.checked, 'primary-selection': hr.checked}">
+                                <div id="toogle-{{day.day}}-{{hr.hr}}" class="" (click)="toggleDayPartSelection(hr)">
+                                    <em class="fa fa-check my-auto" aria-hidden="true"></em>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 p-0 text-center border-right d-flex flex-row p-1">
+                            <div class="flex-fill border" *ngFor="let hr of getDayPart('evening', day.hours)"
+                                [ngClass]="{'border-default text-light': !hr.checked, 'primary-selection': hr.checked}">
+                                <div id="toogle-{{day.day}}-{{hr.hr}}" class="" (click)="toggleDayPartSelection(hr)">
+                                    <em class="fa fa-check my-auto" aria-hidden="true"></em>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 p-0 text-center d-flex flex-row p-1">
+                            <div class="flex-fill border" *ngFor="let hr of getDayPart('night', day.hours)"
+                                [ngClass]="{'border-default text-light': !hr.checked, 'primary-selection': hr.checked}">
+                                <div id="toogle-{{day.day}}-{{hr.hr}}" class="" (click)="toggleDayPartSelection(hr)">
+                                    <em class="fa fa-check my-auto" aria-hidden="true"></em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="small d-flex flex-row">
+                    <div class="col-2 p-0"></div>
+                    <div class="col-10 d-flex flex-row p-0">
+                        <div class="col-2 p-0">
+                            06:00
+                        </div>
+                        <div class="col-4 p-0 ml-n1">
+                            10:00
+                        </div>
+                        <div class="col-2 p-0 ml-n1">
+                            18:00
+                        </div>
+                        <div class="col-4 p-0 d-flex flex-row">
+                            <span>22:00</span>
+                            <span class="ml-auto mr-n2">06:00</span>
+                        </div>
+                    </div>
+
+                </div>
+                <mat-error class="error" *ngIf="error['daypart'].hasError">
+                    {{error['daypart'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <!-- creative placement -->
+        <div [hidden]='isBulkEdit'>
+            <div class="form-subheader border-0 small px-0 mb-2">
+                <div class="pdl-10 text-secondary"><strong>{{SCONST.TARGETING_SUBHEADER_CREATIVE_PLACEMENT}}</strong>
+                </div>
+            </div>
+            <div class="mb-3">
+                <app-strategy-target identifier="creative-placement" icon="fa-desktop"
+                    [options]="creativePlacementOptions" (selectionChange)="onCheckboxSelectionChange($event)">
+                </app-strategy-target>
+                <mat-error class="error" *ngIf="error['creativePlacement'].hasError">
+                    {{error['creativePlacement'].msg}}
+                </mat-error>
+            </div>
+        </div>
+
+        <div [hidden]='getHideBelowCreativePlacement()===true'>
+            <!-- Mobile Operating System -->
+            <div>
+                <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                    [ngClass]="{'px-0': !isBulkEdit}">
+                    <div class="pdl-10 text-secondary align-self-center">
+                        <strong>{{SCONST.TARGETING_SUBHEADER_OS}}</strong></div>
+
+                    <div *ngIf='isBulkEdit' class="pull-right">
+                        <mat-button-toggle-group *ngFor='let o of os.allowedBulkEditOpts'
+                            [(ngModel)]="os.selectedBulkEditOpt">
+                            <mat-button-toggle [value]="o.id" [checked]="o.id===os.selectedBulkEditOpt" class="bc-title"
+                                disableRipple>
+                                {{o.name}}
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                </div>
+
+                <div *ngIf='isBulkEdit'>
+                    {{os.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''}}
+                </div>
+
+                <div class="mb-3" [hidden]="isToBeHidden(3)">
+                    <app-strategy-target identifier="operating-system" icon="fa-mobile" actionBtnLabel="Edit Versions"
+                        [options]="mobileOSOptions" showDesc="true" (actionBtnClick)="actionMobileOS($event)"
+                        (selectionChange)="onCheckboxSelectionChange($event)">
+                    </app-strategy-target>
+                    <mat-error class="error" *ngIf="error['os'].hasError">
+                        {{error['os'].msg}}
+                    </mat-error>
+                </div>
+            </div>
+
+
+            <!-- REVX-244 -->
+            <!-- Deal Category -->
+            <div>
+                <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+                    [ngClass]="{'px-0': !isBulkEdit}">
+                    <div class="pdl-10 text-secondary align-self-center">
+                        <strong>{{SCONST.TARGETING_SUBHEADER_DEAL_BASED}}</strong></div>
+
+
+                    <!-- REVX-371 : strategy bulk edit -->
+                    <div *ngIf='isBulkEdit' class="pull-right">
+                        <mat-button-toggle-group *ngFor='let o of deal.allowedBulkEditOpts'
+                            [(ngModel)]="deal.selectedBulkEditOpt">
+                            <mat-button-toggle [value]="o.id" [checked]="o.id===deal.selectedBulkEditOpt"
+                                class="bc-title" disableRipple>
+                                {{o.name}}
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+
+                </div>
+
+
+
+                <div *ngIf='isBulkEdit'>
+                    {{deal.selectedBulkEditOpt === SCONST.APPEND ? SCONST.APPEND_MSG.DEAL : deal.selectedBulkEditOpt === SCONST.REPLACE ? SCONST.REPLACE_MSG.GENERIC : ''}}
+                </div>
+
+                <div class="mb-3" [hidden]="isToBeHidden(4)">
+                    <app-strategy-target-all identifier="deal_category" entity="DEAL_CATEGORY" icon="fa-users"
+                        actionBtnLabel="Browse" [targetAlltext]="SCONST.DEAL_CATEGORY_TARGET_ALL_TEXT"
+                        [selectionList]="selectionData['deal_category'].targetList"
+                        (actionBtnClick)="actionAdvancedTargeting($event)"
+                        (selectionRemoved)="onDealSelectionRemoved($event)">
+                    </app-strategy-target-all>
+                    <mat-error class="error" *ngIf="error['deal'].hasError">
+                        {{error['deal'].msg}}
+                    </mat-error>
+                </div>
+            </div>
+
+            <!-- REVX-244 -->
+            <!--Advanced targeting-->
+            <div [hidden]='isBulkEdit'>
+                <mat-accordion class="mb-3">
+
+                    <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header style="padding: 0px !important; align-items: flex-start;">
+                            <mat-panel-title style="margin: 0px !important;">
+                                <div class="px-0 mb-2 form-subheader border-0 small w-100">
+                                    <div class="pdl-10 text-secondary"><strong>{{SCONST.TARGETING_ADVANCED}}</strong>
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+
+
+                        <!-- Connection Type -->
+                        <div class="form-subheader border-0 small px-0 mb-2">
+                            <div class="pdl-10 text-secondary">
+                                <strong>{{SCONST.TARGETING_SUBHEADER_CONNECTION_TYPE}}</strong></div>
+                        </div>
+                        <div class="mb-3">
+                            <app-strategy-target identifier="connection-type" icon="fa-wifi"
+                                [options]="connectionTypeOptions" (selectionChange)="onCheckboxSelectionChange($event)">
+                            </app-strategy-target>
+                            <mat-error class="error" *ngIf="error['connectionType'].hasError">
+                                {{error['connectionType'].msg}}
+                            </mat-error>
+                        </div>
+
+
+                        <!-- Device Type -->
+                        <div class="form-subheader border-0 small px-0 mb-2">
+                            <div class="pdl-10 text-secondary">
+                                <strong>{{SCONST.TARGETING_SUBHEADER_DEVICE_TYPE}}</strong>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <app-strategy-target identifier="device-type" icon="fa-mobile" [options]="deviceTypeOptions"
+                                (selectionChange)="onCheckboxSelectionChange($event)">
+                            </app-strategy-target>
+                            <mat-error class="error" *ngIf="error['deviceType'].hasError">
+                                {{error['deviceType'].msg}}
+                            </mat-error>
+                        </div>
+
+
+                        <!-- Mobile Brands -->
+                        <div class="form-subheader border-0 small px-0 mb-2">
+                            <div class="pdl-10 text-secondary">
+                                <strong>{{SCONST.TARGETING_SUBHEADER_MOBILE_BRANDS}}</strong>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <app-strategy-target-all identifier="mobile-brands" entity="DEVICE_BRAND" icon="fa-mobile"
+                                actionBtnLabel="Browse" [targetAlltext]="SCONST.MOBILE_BRANDS_TARGET_ALL_TEXT"
+                                [selectionList]="selectionData['mobile-brands'].targetList"
+                                (actionBtnClick)="actionMobileBrandsClick($event)"
+                                (selectionRemoved)="onSelectionRemoved($event)">
+                            </app-strategy-target-all>
+                            <mat-error class="error" *ngIf="error['brands'].hasError">
+                                {{error['brands'].msg}}
+                            </mat-error>
+                        </div>
+
+
+                        <!-- Mobile Models -->
+                        <div class="form-subheader border-0 small px-0 mb-2">
+                            <div class="pdl-10 text-secondary">
+                                <strong>{{SCONST.TARGETING_SUBHEADER_MOBILE_MODELS}}</strong>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <app-strategy-target-all identifier="mobile-models" entity="DEVICE_MODEL" icon="fa-mobile"
+                                actionBtnLabel="Browse" [targetAlltext]="SCONST.MOBILE_MODELS_TARGET_ALL_TEXT"
+                                [selectionList]="selectionData['mobile-models'].targetList"
+                                (actionBtnClick)="actionMobileModelsClick($event)"
+                                (selectionRemoved)="onSelectionRemoved($event)">
+                            </app-strategy-target-all>
+                            <mat-error class="error" *ngIf="error['models'].hasError">
+                                {{error['models'].msg}}
+                            </mat-error>
+                        </div>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="false-footer">
+        <button id="target-save" mat-raised-button class="btn-primary pull-right" *ngIf="mode === MODE.EDIT"
+            (click)="onReviewAndSave()">Review &
+            Save</button>
+        <button id="target-next" mat-raised-button class="btn-secondary pull-right mr-2"
+            (click)="goToNextStep()">Next</button>
+        <button id="target-back" mat-button class="pull-right mr-2" (click)="goToPrevStep()">Back</button>
+    </div>
+</div>

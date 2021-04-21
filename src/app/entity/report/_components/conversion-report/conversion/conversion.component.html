@@ -1,0 +1,158 @@
+<navbar></navbar>
+<block-ui>
+  <div class="page-container">
+    <div class='page-header'>
+      <div class='breadcrumbs-container'>
+        <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+      <div class='clearfix'></div>
+    </div>
+    <div id='page-content'>
+      <div class='row justify-content-center'>
+        <div class='col-xs-12 col-md-10 col-lg-8'>
+          <div id='form-container'>
+            <div class='form-header sticky-top z10'>
+              <span class=''>Conversion Reports</span>
+
+            </div>
+
+            <mat-accordion [multi]="true">
+              <!--------------------------------------- BASIC ------------------------------------------->
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile_basic'>
+                    <div class="repSteppers">1</div>
+                    <div class="repAccor-titles">Basic Details</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <app-adcon-date-picker [showInterval]=false type="{{appConst.REPORTS.CONVERSION}}">
+                </app-adcon-date-picker>
+              </mat-expansion-panel>
+
+
+              <!------------------------------------- FILTERS----------------------------------------------------->
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile_filters'>
+                    <div class="repSteppers">2</div>
+                    <div class="repAccor-titles">Filters</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class='row mrt20 mrl10' id="convFilter">
+                  <div class="d-flex flex-column w-100 mrl10">
+                    <div class="d-flex flex-row flex-fill col-12 mrl10">
+
+                      <mat-accordion class="w-100" multi>
+                        <!----------------------------advertiser filter--------------------------------->
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              <i class="fa fa-users icon-primary" style="font-size: x-large;" aria-hidden="true"></i>
+                              <p class='ml-3 my-auto text12'> Advertiser/Campaign/Strategy</p>
+                              <i [hidden]='!checkForIndicator(0)' class="fa fa-check icon-primary ml-3 my-auto"
+                                style="font-size: small;" aria-hidden="true"></i>
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
+                          <div class='p-2'>
+                            <button id="advBtn" class="mr-2" mat-flat-button color="accent"
+                              (click)='openModalForAdvCmpStr()'><i class='fa fa-file-image-o'></i>Select</button>
+                            <button id="advBtn" class="mr-2" mat-flat-button color="accent" (click)='openViewModal()'><i
+                                class='fa fa-file-image-o'></i>View Selection</button>
+                            <button id="advBtn" class="mr-2" mat-flat-button color="accent"
+                              (click)='resetSelection()'><i class='fa fa-file-image-o'></i>Reset Selection</button>
+                          </div>
+                        </mat-expansion-panel>
+
+                        <!-------------------------- conversion type filter----------------------------------->
+                        <mat-expansion-panel>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title>
+                              <i class="fa fa-newspaper-o icon-primary" style="font-size: x-large;"
+                                aria-hidden="true"></i>
+                              <p class='ml-3 my-auto text12'> Conversion Type</p>
+                              <i [hidden]='!checkForIndicator(1)' class="fa fa-check icon-primary ml-3 my-auto"
+                                style="font-size: small;" aria-hidden="true"></i>
+
+                            </mat-panel-title>
+                          </mat-expansion-panel-header>
+                          <div class="p-2">
+                            <div class="d-flex flex-row justify-content-between">
+                              <div class="d-flex flex-col w-75 ">
+                                <div *ngFor='let obj of convType' class='mr-5'>
+                                  <mat-checkbox (change)='changeConvType(obj)' [checked]='obj.select'>
+                                    {{obj.label}}
+                                  </mat-checkbox>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </mat-expansion-panel>
+
+                        <!------------------------------------ METRICS ------------------------------------------------------>
+                        <mat-expansion-panel expanded="true" hideToggle disabled>
+                          <mat-expansion-panel-header>
+                            <mat-panel-title id='tile_metrics'>
+                              <div class="repSteppers">3</div>
+                              <div class="repAccor-titles"><span class="mr-1">Metrics</span>
+                                <mat-checkbox class="ml-3 text-dark" [checked]='getSelectAllStatus()'
+                                  (change)="onSelectAll($event)">
+                                  <span class="text12">Select all</span>
+                                </mat-checkbox>
+                              </div>
+                              <div class="clearfix"></div>
+                            </mat-panel-title>
+                            <div class="clearfix"></div>
+                          </mat-expansion-panel-header>
+                          <div class="mrl15 mrt20">
+                            <div class="d-flex flex-row mrl30">
+                              <div class="flex-grow-1 d-flex flex-column">
+                                <div *ngFor="let metric of metricUIList | slice:3 :8">
+                                  <span>
+                                    <mat-checkbox [value]="metric.value" [checked]='metric.isSelected'
+                                      (change)="updateBucket($event , metric)">
+                                      <span class="text12">{{metric.label}} </span>
+                                    </mat-checkbox>
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class="flex-grow-1 d-flex flex-column">
+                                <div *ngFor="let metric of metricUIList | slice:8:12">
+                                  <span>
+                                    <mat-checkbox [value]="metric.value" [checked]='metric.isSelected'
+                                      (change)="updateBucket($event , metric)">
+                                      <span class="text12">{{metric.label}} </span>
+                                    </mat-checkbox>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class='mt-3 d-flex justify-content-end'>
+                            <button id='cancelReport' mat-button [routerLink]="['/home']">Cancel</button>
+                            <button id='runReport' mat-raised-button class='btn-primary ml-3'
+                              (click)="runReport()">Publish
+                              Report</button>
+                          </div>
+                        </mat-expansion-panel>
+
+                      </mat-accordion>
+
+
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</block-ui>

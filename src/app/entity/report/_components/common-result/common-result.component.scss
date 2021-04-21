@@ -1,0 +1,153 @@
+$table-bg-color: #ffffff;
+$table-odd-bg: #ffffff;
+$table-even-bg: #f7f7f7;
+$table-border: #bbbbbb;
+$dotted-border: #e4e4e4;
+.listTable #list-header {
+    padding: 15px 20px 15px 20px !important;
+    background-color: $table-bg-color;
+    .search-txt-handler {
+        font-size: 15px !important;
+        span {
+            color: var(--primary-color);
+        }
+        .search-txt {
+            color: #626262 !important;
+        }
+        .st-link {
+            text-decoration: underline;
+            cursor: pointer;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+#list-footer {
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+#list-body {
+    border: 1px dotted $dotted-border;
+    #table-content {
+        width: 100%;
+        overflow: auto;
+        background: $table-bg-color;
+        &::-webkit-scrollbar,
+        &::-webkit-scrollbar-thumb {
+            width: 5px;
+            height: 5px;
+            border-radius: 13px;
+            background-clip: padding-box;
+            border: 2px solid transparent;
+        }
+        &::-webkit-scrollbar-thumb {
+            box-shadow: inset 0px 0px 0px 10px;
+        }
+        .mat-header-row {
+            min-height: 45px;
+            border-bottom-width: 0px;
+            .mat-header-cell {
+                text-align: left !important;
+                background: $table-bg-color;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                min-width: 87px;
+                display: flex;
+                justify-content: flex-start !important;
+                &:first-of-type {
+                    padding-left: 15px !important;
+                }
+                &:last-of-type {
+                    padding-right: 15px !important;
+                }
+                .mat-checkbox-frame {
+                    border-color: #333 !important;
+                }
+                .mat-sort-header-button {
+                    color: #626262;
+                    text-align: left !important;
+                }
+                .mat-sort-header-arrow,
+                em.fa-caret-down {
+                    color: var(--primary-color) !important;
+                }
+                .mat-column-name {
+                    border-right: 1px solid $table-border;
+                }
+            }
+        }
+        .mat-column-id {
+            min-width: 75px !important;
+        }
+        .mat-column-action {
+            width: 40px !important;
+            max-width: 40px !important;
+            min-width: 40px !important;
+        }
+        .mat-column-active,
+        .mat-column-dropdown {
+            padding-left: 0px !important;
+            flex: 0 0 3% !important;
+            width: 25px !important;
+            min-width: 25px !important;
+            max-width: 25px !important;
+        }
+        .mat-column-select {
+            flex: 0 0 3% !important;
+            min-width: 30px !important;
+            // margin-right: 5px !important;
+        }
+        #listTable .mat-column-name {
+            flex: 0 0 15% !important;
+            width: 200px;
+            max-width: 200px;
+            border-right: 1px solid $table-border;
+        }
+        .mat-row {
+            border-bottom: 0 !important;
+            .mat-cell {
+                min-width: 87px;
+                padding-left: 18px;
+                display: flex !important;
+                justify-content: flex-start !important; // or flex-end
+                font-size: 11px;
+                border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
+                &:first-of-type {
+                    padding-left: 15px !important;
+                }
+                &:last-of-type {
+                    padding-right: 15px !important;
+                }
+            }
+            &:nth-child(even),
+            &:nth-child(even) .mat-cell {
+                background-color: $table-even-bg !important;
+            }
+            &:nth-child(odd),
+            &:nth-child(odd) .mat-cell {
+                background-color: $table-odd-bg !important;
+            }
+            &:nth-child(odd) .mat-cell.row-selected,
+            &:nth-child(even) .mat-cell.row-selected,
+            & .mat-cell.row-selected {
+                background-color: var(--table-hover-selected) !important;
+            }
+            &:hover .mat-cell,
+            &:nth-child(odd):hover .mat-cell,
+            &:nth-child(even):hover .mat-cell {
+                background-color: var(--table-hover-selected) !important;
+            }
+        }
+    }
+}
+
+#convResult #all-details {
+    background: #ffffff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    border: 0 !important;
+    .page-title-cover {
+        padding: 15px 20px 0px 20px;
+    }
+}

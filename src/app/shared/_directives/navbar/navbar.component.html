@@ -1,0 +1,26 @@
+<nav *ngIf="isLoggedIn" class="navbar navbar-expand-sm sticky-top">
+  <!-- Brand -->
+  <a id='header-logo' class="navbar-brand" href='/home'>
+    <div class="header-logo" [style.backgroundImage]="'url('+ headerLogo +')'"></div>
+  </a>
+
+  <app-menucrumbs></app-menucrumbs>
+  <ul class="navbar-nav navbar-right theme-switch">
+
+    <!-- Dropdown -->
+    <li class="nav-item dropdown">
+      <a class="var-link" href="#" data-toggle="dropdown">
+        <span id='user-control-dropdown' class='text'>{{userName}}</span> <span class='user-icon'>
+          <em class='fa fa-user-circle'></em></span>
+      </a>
+      <div class="dropdown-menu">
+        <a id='switch-licensee-menu' *ngIf="showSwitchLicenseeBtn" class="dropdown-item"
+          (click)="openSwitcherModal()">Switch Licensee</a>
+        <a id="change-password" *ngIf='showChangePasswordBtn' class="dropdown-item"
+          (click)="changePasswordModal()">Change Password</a>
+        <a id='sign-out' class="dropdown-item" (click)="signOut()">Sign Out</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+<app-alert></app-alert>

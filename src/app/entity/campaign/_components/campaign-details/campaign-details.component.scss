@@ -1,0 +1,22 @@
+$dotted-border: #e4e4e4;
+#all-details {
+    background: #ffffff;
+    border-width: 1px 1px 0 1px;
+    border-style: dotted;
+    border-color: $dotted-border;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}
+
+#brdrBtm {
+    border-top: 1px solid rgba(0, 0, 0, .12);
+    margin-bottom: 10px;
+}

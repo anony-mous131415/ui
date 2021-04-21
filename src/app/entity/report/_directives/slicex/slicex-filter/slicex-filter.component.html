@@ -1,0 +1,23 @@
+<div class="breadcrumbs-container mrt15">
+    <div class="br-crumbs d-flex flex-row">
+        <mdb-breadcrumb customClass="bg-transparent m-0 p-0 pb-2" class="flex-grow-1">
+            <mdb-breadcrumb-item class="d-flex flex-row p-0 m-0 bg-transparent" *ngFor='let entity of bcEntities;let i = index; let isLastEntity = last'>
+                <span class="bc-title my-auto text12" *ngIf="bc[entity].values.length > 0">{{bc[entity].name | lowercase}}</span>
+                <div class="mx-1 my-auto pill d-flex flex-row bc-name">
+                    <button class="btn btn-sm my-auto px-2 p-0 text12" [ngClass]="{'border-right': !isLast}" *ngFor="let value of getBCList(entity, bc[entity].values); let isLast = last">
+            {{value.title}} &nbsp;<em class='fa fa-times' title="Remove selection"
+              (click)="clearSelection(entity, value.id, value.title)"></em>
+          </button>
+                    <button class="btn btn-sm my-auto px-2 filter-more p-0 text12" *ngIf="remainingFilterCount[entity]" (click)="showFilterModal(entity)">{{remainingFilterCount[entity]}}&nbsp;more</button>
+                </div>
+                &nbsp;
+                <em [hidden]="checkArrow(i, entity)" class="fa fa-angle-right mr-2 mt-1"></em>
+                <div class="clearfix"></div>
+            </mdb-breadcrumb-item>
+            <div *ngIf="bc !== null">
+                <button class="btn btn-sm btn-revx btn-link primary text12 text-decoration-none p-0" *ngIf="bcEntities.length > 0" (click)="clearAll()">
+          <em class="fa fa-refresh"></em>&nbsp; Reset</button>
+            </div>
+        </mdb-breadcrumb>
+    </div>
+</div>

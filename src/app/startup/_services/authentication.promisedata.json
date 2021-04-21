@@ -1,0 +1,26 @@
+{
+    "respObject": {
+        "username": "SAdmin",
+        "masterToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJTQWRtaW4iLCJzY29wZXMiOiJST0xFX1NBRE1JTixST0xFX0FETUlOLFJPTEVfUk8iLCJpYXQiOjE1NjQ0NTMxNDQsImV4cCI6MTU2NDQ3MTE0NCwianRpIjoi5K-V54GAXHVEODY1XHVERjEzy7kiLCJpc3MiOiJ7XCJhdXRob3JpdGllc1wiOltcIlJPTEVfU0FETUlOXCIsXCJST0xFX0FETUlOXCIsXCJST0xFX1JPXCJdLFwidXNlcm5hbWVcIjpcIlNBZG1pblwifSJ9.fwW4ednOvvPVhoo4yvTwwRLTJNPUzqIU5zru7nHyoXY",
+        "extObject": {
+            "userId": 0,
+            "username": "SAdmin",
+            "authorities": [
+                {
+                    "role": "ROLE_ADMIN"
+                },
+                {
+                    "role": "ROLE_RO"
+                },
+                {
+                    "role": "ROLE_SADMIN"
+                }
+            ],
+            "accountNonExpired": true,
+            "accountNonLocked": true,
+            "credentialsNonExpired": true,
+            "enabled": true
+        }
+    },
+    "respId": "WSqMAoBnz4gSN0xnfWyrwd6lqsyAamzi"
+}

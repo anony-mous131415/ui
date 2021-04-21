@@ -1,0 +1,54 @@
+<!-- showing uploaded files with error message along with that -->
+<div class='row justify-content-center'>
+    <div class='col-md-12'>
+        <div id='non_native_section'>
+            <div class='preview-section-header'>
+                <div class='pull-left psh-title mrr15'>Non Native Dynamic Creatives</div>
+                <div class='pull-left psh-toggler'>
+                    <mat-slide-toggle [(ngModel)]="value" color="blue" class='primary'></mat-slide-toggle>
+                </div>
+                <div class='pull-right psh-verify'>verify <em class='fa fa-info-circle'></em></div>
+                <div class='clearfix'></div>
+            </div>
+
+            <div id='form-container'>
+                <div class='form-body'>
+                    <app-form-input [(ngModel)]="dco.slots" tooltipPosition="above" label="{{crConst.LABEL_DCO_NUM_SLOTS}}*" tooltip='{{crConst.LABEL_DCO_NUM_SLOTS_TOOLTIP}}' maxLen="256" minLen="4" id="dcoSlots" validationMsg="{{crConst.VALIDATION_DCO_NUM_SLOTS}}" validated="{{formValidated}}"
+                        width="wd250">
+                    </app-form-input>
+
+                    <app-form-input [(ngModel)]="dco.marcoList" tooltipPosition="above" tooltip='{{crConst.LABEL_DCO_MACRO_LIST_TOOLTIP}}' label="{{crConst.LABEL_DCO_MACRO_LIST}}*" maxLen="256" minLen="4" id="dcoMacroList" validationMsg="{{crConst.VALIDATION_DCO_MACRO_LIST}}"
+                        validated="{{formValidated}}" width="wd250">
+                    </app-form-input>
+                </div>
+            </div>
+
+            <!-- Non Native section start -->
+            <!-- ----HTML section -->
+            <app-cr-preview-card *ngIf='nonNativeHTMLList' cardType='{{crConst.ALLOWED_TYPES.HTML}}' data='{{nonNativeHTMLList}}'></app-cr-preview-card>
+            <!-- Non native section end -->
+        </div>
+
+        <div id='native_section'>
+            <div class='preview-section-header' *ngIf='nativeImageList'>
+                <div class='pull-left psh-title mrr15'>Native Dynamic Creatives</div>
+                <div class='pull-left psh-toggler'>
+                    <mat-slide-toggle [(ngModel)]="value" color="blue" class='primary'></mat-slide-toggle>
+                </div>
+                <div class='pull-right psh-verify'>verify <em class='fa fa-info-circle'></em></div>
+                <div class='clearfix'></div>
+            </div>
+
+            <mat-card id='native_form' class='mrb20'>
+                <app-cr-native-form></app-cr-native-form>
+            </mat-card>
+
+            <app-cr-preview-card *ngIf='nativeImageList' cardType='{{crConst.ALLOWED_TYPES.IMAGE}}' data='{{nativeImageList}}'></app-cr-preview-card>
+
+
+        </div>
+
+
+    </div>
+</div>
+<div class='clearfix'></div>

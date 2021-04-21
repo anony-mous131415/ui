@@ -1,0 +1,150 @@
+<navbar></navbar>
+<div class='page-container'>
+  <div class='page-header'>
+    <div class='breadcrumbs-container'>
+      <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+    </div>
+    <div class='date-range-container'>
+      <app-date-range-picker></app-date-range-picker>
+    </div>
+    <div class='clearfix'></div>
+  </div>
+  <div id="all-details">
+
+    <!--static header-->
+    <div *ngIf="cmpId" class='page-title-cover'>
+      <div class='float-left'>
+        <div class='title pull-left mrr5'>{{campaignDTO.name}}</div>
+        <div class='pull-left icon-pad'><em
+            [ngClass]="{'text-success':campaignDTO.active == true,'text-danger':campaignDTO.active == false}"
+            class='fa fa-circle text13 mrr5'></em></div>
+        <div class='clearfix'></div>
+      </div>
+      <div class='float-right'>
+        <button *ngIf="campaignDTO.active==false" [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button
+          class="btn-primary mrr10" (click)='updateStatus(1)' id="cmp-deactivate-btn">
+          <em class='fa fa-play'></em>
+          <span>Activate</span>
+        </button>
+        <button *ngIf="campaignDTO.active==true" [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button
+          class='btn-primary mrr10' (click)='updateStatus(0)' id="cmp-deactivate-btn">
+          <em class='fa fa-pause'></em>
+          <span>Deactivate</span>
+        </button>
+        <button mat-raised-button class="btn-secondary" appDisableRO [routerLink]="['/campaign/create/'+cmpId]"
+          id="cmp-edit-btn">
+          <em class='fa fa-pencil'></em> <span>Edit</span>
+        </button>
+      </div>
+      <div class='clearfix'></div>
+    </div>
+
+    <app-chart column="{{column}}" entityId="{{cmpId}}" entity="campaign"></app-chart>
+
+    <div class='entity-details' *ngIf="displayDTO.id">
+      <div class='row'>
+        <div class='col-md-6'>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_STATUS}}"
+            [rowValue]="displayDTO.active?'Active':'Inactive'"
+            [prefixIcon]="displayDTO.active?'fa-circle text-success':'fa-circle text-danger'" marginBottom="mrb15">
+          </app-entity-details-row>
+
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_DATE_CREATED}}" rowValue="{{displayDTO.creationTime}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_START_TIME}}" rowValue="{{displayDTO.startTime}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_LIFETIME_BUDGET}}"
+            rowValue="{{displayDTO.lifetimeBudget}}" marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_LIFETIME_DCAP}}"
+            rowValue="{{displayDTO.lifetimeDeliveryCap}}" marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_DEFAULT_DAILY_FCAP}}"
+            rowValue="{{displayDTO.dailyUserFcap}}" marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <div appAdvertiserAccessRoDisable>
+            <app-entity-details-row rowTitle="{{cmpConst.COLUMN_PRICING}}" rowValue="{{displayDTO.pricingId}}"
+              marginBottom="mrb15">
+            </app-entity-details-row>
+          </div>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_LIFETIME_FCAP}}"
+            rowValue="{{displayDTO.lifetimeUserFcap}}" marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <!--REVX-724 -->
+          <div *ngIf="campaignDTO && campaignDTO.skadTarget">
+            <app-entity-details-row rowTitle="{{cmpConst.SKAD_LABEL}}" rowValue="Yes" marginBottom="mrb15">
+            </app-entity-details-row>
+          </div>
+
+          <!-- <div *ngIf="campaignDTO && !campaignDTO.skadTarget">
+            <app-entity-details-row rowTitle="{{cmpConst.SKAD_LABEL}}" rowValue="No" marginBottom="mrb15">
+            </app-entity-details-row>
+          </div> -->
+
+        </div>
+        <div class='col-md-6'>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_ID}}" rowValue="{{displayDTO.id}}" marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_ATTR_RATIO}}" rowValue="{{displayDTO.attributionRatio}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_END_TIME}}" rowValue="{{displayDTO.endTime}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_DAILY_BUDGET}}" rowValue="{{displayDTO.dailyBudget}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_DAILY_DCAP}}" rowValue="{{displayDTO.dailyDeliveryCap}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.COLUMN_MAX_FCAP}}" rowValue="{{displayDTO.fcap}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <app-entity-details-row rowTitle="{{cmpConst.CPA_TARGET}}" rowValue="{{displayDTO.cpaTarget}}"
+            marginBottom="mrb15">
+          </app-entity-details-row>
+
+          <!--pixel details-->
+          <div class='row mrb15'>
+            <div id='rowTitle' class='col-md-5 text-bold'>{{cmpConst.COLUMN_TRACKING_PIXEL}}</div>
+
+            <div id='rowValue' class='col-md-7 text-fade gotoLink' *ngIf='campaignDTO.pixel' (click)='gotoPixel()'>
+              {{campaignDTO.pixel.name}}
+            </div>
+            <div id='rowValue' class='col-md-7 text-fade' *ngIf='!campaignDTO.pixel'>No Pixel Attached</div>
+            <div class='clearfix'></div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <!-----------------------------------DETAILS ENDS-------------------------------------->
+
+    <div id="brdrBtm" class="clearfix"></div>
+
+    <!--revx-371 bulk edit-->
+    <app-list listTitle='STRATEGIES' entity="strategy" column="{{column}}" entityId="{{cmpId}}"
+      dataUnavailableMsg="This Campaign doesn't have any Strategy." showImportExport='false' [showStrBulkEdit]='true'
+      [openFromCampaignDetails]='true' (navigateToStrBulkEit)='navigateToStrBulkEit($event)'
+      (openBulkEditLogModal)='openBulkEditLogModal($event)'></app-list>
+  </div>
+</div>

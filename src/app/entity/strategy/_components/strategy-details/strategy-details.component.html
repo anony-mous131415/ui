@@ -1,0 +1,19 @@
+<navbar></navbar>
+<block-ui>
+    <div class='page-container'>
+        <div class='page-header'>
+            <div class='breadcrumbs-container'>
+                <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+            </div>
+            <div class='date-range-container'>
+                <app-date-range-picker></app-date-range-picker>
+            </div>
+            <div class='clearfix'></div>
+        </div>
+        <div id="all-details">
+            <app-strategy-static-header [strategyID]="entityId" [strategyName]="strName" [isActive]="strIsActive" (onDuplicate)="onDuplicateStrategy($event)"></app-strategy-static-header>
+            <app-chart column="{{column}}" entityId="{{entityId}}" entity="strategy"></app-chart>
+            <app-strategy-summary [isBulkEdit]='false' [data]="summaryDetails" (goToPixel)="goToPixel($event)"></app-strategy-summary>
+        </div>
+    </div>
+</block-ui>

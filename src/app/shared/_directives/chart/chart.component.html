@@ -1,0 +1,144 @@
+<!-- Chart is populated from chart.components.ts-->
+<mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+<div id='widgets-container'>
+    <div class='row d-flex'>
+        <div class='flex-fill widget-box' [ngClass]="{'mr-2': isLast}"
+            *ngFor="let widget of formattedWidgetData; let isLast = last;" id='widget-{{widget.id}}'>
+            <div class="widgetContent">
+
+                <div id='widget-title' class='widget-title' matTooltip='{{widget.valTooltip}}' matTooltipPosition="above">{{widget.title}} <em class="fa "></em></div>
+
+                <div class='widget-body' *ngIf="!disableWidget">
+                    <div id='widget-value' matTooltip='{{nrFormatTooltip(widget.value, widget.type)}}' matTooltipPosition="above">
+
+                        <!--reach widget-->
+                        <ng-container *ngIf="widget.id==='userReach' ; else other_content">
+                            <ng-container *ngIf='uuRespReceived'>
+                                {{widget.value | numFormat: widget.type: widget.currencyCode}}
+                            </ng-container>
+
+                            <div class='w-25' *ngIf="!uuRespReceived">
+                                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                            </div>
+                        </ng-container>
+
+                        <!--other widgets-->
+                        <ng-template #other_content>
+                            {{widget.value | numFormat: widget.type: widget.currencyCode}}
+                        </ng-template>
+
+                    </div>
+
+                    <div *ngFor="let widgetC of widget.children">
+                        <div id='widget-child'>
+                            <div id='widget-child-title' class='float-left' matTooltip='{{widgetC.valTooltip}}'
+                                matTooltipPosition="above">{{widgetC.title}}</div>
+
+                            <div id='widget-child-value' class='float-left' matTooltip='{{nrFormatTooltip(widgetC.value, widgetC.type)}}' matTooltipPosition="above">
+
+                                <!--children of reach widget-->
+                                <ng-container *ngIf="widget.id==='userReach' ; else other_child_content">
+                                    <ng-container *ngIf='uuRespReceived'>
+                                        {{widgetC.value | numFormat: widgetC.type : widgetC.currencyCode}}
+                                    </ng-container>
+
+                                    <div *ngIf="!uuRespReceived" class="">
+                                        <div style="visibility: hidden; font-size: 6px;">0.00%</div>
+                                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                    </div>
+                                </ng-container>
+
+                                <!--childern of other widgets-->
+                                <ng-template #other_child_content>
+                                    {{widgetC.value | numFormat: widgetC.type : widgetC.currencyCode}}
+                                </ng-template>
+                            </div>
+                            <div class='clearfix'></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="widget-body disableUI" *ngIf="disableWidget">
+                    <div class='row'>
+                        <div class='col-md-2'>
+                            <em class="fa fa-warning widget-warning" aria-hidden="true"></em>
+                        </div>
+                        <div class='col-md-10'>
+                            <div class='mrt10'>&nbsp;No data available. </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="chart-over-container" [ngClass]="{'disableUI pad10' : disableChart}">
+    <div class='chart-filter-container'>
+        <div class='float-left'>
+            <mat-form-field class='header-btn'>
+                <mat-label>Metric 1 (Y-Axis Left)</mat-label>
+                <mat-select [(value)]="this.chartObj.selector1" (selectionChange)="drawChart()"
+                    matTooltip="Use the date range picker above to change period" matTooltipPosition="above">
+                    <mat-option *ngFor="let m of chartObj.metrics" [value]="m.id">
+                        {{m.title}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class='float-left campare-metrics-flag'>
+            <em class='fa fa-plus' title='Compare other metrics' [hidden]="compareChart" (click)="compareOtherMetrics()"
+                matTooltip="Compare against another metric within the same period" matTooltipPosition="above"></em>
+            <em class='vs' [hidden]="!compareChart">vs.</em>
+        </div>
+        <div class='float-left' [hidden]="!compareChart">
+            <mat-form-field class='header-btn'>
+                <mat-label>Metric 2 (Y-Axis Right)</mat-label>
+                <mat-select [(value)]="this.chartObj.selector2" (selectionChange)="drawChart()"
+                    matTooltip="Use the date range picker above to change period" matTooltipPosition="above">
+                    <mat-option *ngFor="let m of chartObj.metrics" [value]="m.id">
+                        {{m.title}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class='float-left campare-metrics-flag' [hidden]="!compareChart">
+            <em class='fa fa-close' title='Remove' (click)="removeCompareChart()"></em>
+        </div>
+
+        <div class='float-right mrt7'>
+            <a mat-button (click)="reload()" matTooltip="Refresh Graph" matTooltipPosition="above">
+                <em class="fa fa-refresh"></em>
+            </a>
+        </div>
+
+        <div class='float-right mrt7'>
+            <a mat-button (click)="downloadCSV()" [appDisableDemo]='appConst.DISABLE' matTooltip="Download CSV"
+                matTooltipPosition="above">
+                <em class="fa fa-download"></em>
+            </a>
+        </div>
+        <div class='float-right mrr10' title="Showing selected data on tooltip">
+            <mat-form-field class='header-btn'>
+                <mat-label>On Hover Show</mat-label>
+                <mat-select [(value)]="this.chartObj.tooltipSelector" (selectionChange)="drawChart()"
+                    matTooltip="Select if you want to see metric or funnel data when hovering over chart"
+                    matTooltipPosition="above">
+                    <mat-option *ngFor="let op of chartObj.tooltipOptions" [value]="op.id">
+                        {{op.title}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <div class='clearfix'></div>
+    </div>
+    <div *ngIf="disableChart">
+        <em class="fa fa-warning" aria-hidden="true"></em> No data available. This {{entity}} hasn't served any ad or
+        the data is not yet processed.
+    </div>
+    <div id="chart-container"></div>
+</div>

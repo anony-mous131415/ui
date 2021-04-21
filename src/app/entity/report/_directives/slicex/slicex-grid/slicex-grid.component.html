@@ -1,0 +1,98 @@
+<div id="list-header" class="mrt10">
+    <div class="float-left">
+        <div class="list-title">{{ nameAlias }}</div>
+    </div>
+
+    <div class="float-right">
+        <button id="list-refresh-btn" class="close" aria-label="Close" (click)="closeGrid()" title='Close'>
+      <em class='fa fa-times'></em>
+    </button>
+    </div>
+    <div class="float-right mrr10">
+        <form class='list-search-container'>
+            <mat-form-field>
+                <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                <input matInput id='list-filter' (keyup)="filterGridData($event.target.value)" placeholder="Search" autocomplete="off">
+            </mat-form-field>
+        </form>
+
+
+
+    </div>
+    <div class="float-right mrr10">
+        <mat-form-field>
+            <mat-select multiple [(value)]="selGridMetrics">
+                <div class="d-flex flex-row col-12">
+                    <button class="btn btn-primary flex-fill m-2" [ngClass]="{'btn-default': !toggleRTSelection}" (click)="onRTSelected()">Re-Targeting</button>
+                    <button class="btn btn-primary flex-fill m-2" [ngClass]="{'btn-default': !toggleUASelection}" (click)="onUASelected()">User Acquisition</button>
+                </div>
+                <mat-option id="chartmetric-{{metric.id}}" class="ml-3" *ngFor="let metric of ddMetrics" [value]="metric.id" (onSelectionChange)="onCheckboxChange($event)">
+                    {{metric.title}}
+                </mat-option>
+
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="float-right mrr10"></div>
+    <div class="float-right mrr10">
+        <button mat-button (click)='onExportClicked()' id="list-export-btn" matTooltip="Export" matTooltipPosition="above">
+      <em class="fa fa-download"></em>
+    </button>
+    </div>
+    <div class="clearfix"></div>
+    <mat-progress-bar *ngIf="showLoading" mode="indeterminate"></mat-progress-bar>
+</div>
+
+
+<div id="list-body">
+    <div id="table-container">
+        <div id="table-content">
+            <h5 class="text-center" [hidden]="!showLoading">
+                Loading...
+            </h5>
+            <mat-table [hidden]="showLoading" id="sliceGrid" class="table-border" [dataSource]="gridData" matSortDirection="desc" matSort matSortStart="desc" matSortDisableClear="true" (matSortChange)="sortData($event)" matSortActive="">
+                <ng-container matColumnDef="select" sticky="true">
+                    <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox class="my-auto" (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <mat-checkbox class="my-auto" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container *ngFor="let col of metrics; trackBy: trackByIndex" [matColumnDef]="col.id" sticky="{{ col.id === 'name' ? true : false }}">
+                    <span *ngIf="displayForUserRole(col)">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="col.id==='name'? true : false"
+              arrowPosition="before">
+              <div matTooltipPosition="above" matTooltip="{{ col.hover }}">
+                {{ col.title }}
+              </div>
+            </mat-header-cell>
+          </span>
+
+                    <span *ngIf="col.id === 'change' || col.id === 'per_change'">
+            <mat-cell [ngClass]="{'text-success': row.diffFactor === 1, 'text-danger': row.diffFactor === -1}"
+              *matCellDef="let row">
+              {{ col.cell(row, row.currencyId) }}</mat-cell>
+          </span>
+
+                    <span *ngIf="col.id !== 'change' && col.id !== 'per_change' && displayForUserRole(col)">
+            <mat-cell matTooltip="{{col.tooltipValue(row)}}" matTooltipPosition="above" *matCellDef="let row">
+              {{ col.cell(row) }}</mat-cell>
+          </span>
+
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+                <mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></mat-row>
+            </mat-table>
+        </div>
+    </div>
+</div>
+
+<div id="list-footer fixed-bottom">
+    <mat-paginator [length]="listLen" [pageSize]="10" [pageSizeOptions]="[10, 30, 50, 150]" showFirstLastButtons>
+    </mat-paginator>
+</div>

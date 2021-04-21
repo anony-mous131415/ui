@@ -1,0 +1,53 @@
+<app-common-modal>
+  <block-ui>
+    <div mdbModal #basicModal="mdbModal" class="" data-keyboard="false" [config]="{keyboard: false}"
+      data-backdrop="static" role="dialog" aria-hidden="true">
+      <div class="modal-md" role="document">
+        <div class='modal-content'>
+          <div class="modal-header">
+            <h4 class="modal-title">Select Licensee</h4>
+            <button type="button" class="close" aria-label="Close" *ngIf='showDismissModalIcon'
+              (click)="dismissModal()">
+              <em class="fa fa-times"></em>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div leftPane class='modal-table-box'>
+              <div class="filterData">
+                <mat-form-field>
+                  <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                  <input matInput (keyup)="applyLicenseeFilter($event.target.value)" placeholder="Search"
+                    autocomplete="off">
+                </mat-form-field>
+              </div>
+              <div id='modal-table' *ngIf="licenseeSource">
+                <mat-table class="licensee-table-scroll" [dataSource]="licenseeSource">
+
+                  <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Licensee </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      <a (click)='switchLicenseeClick(row.id)'>
+                        {{row.name}}
+                      </a>
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+                <mat-paginator [pageSize]='5' [pageSizeOptions]="[5, 10, 50, 100, 200]">
+                </mat-paginator>
+                <div class='clearfix mrb15'></div>
+                <!-- <p class="text12 text-fade mrr15 mrl15">Please select a licensee to view. If you cannot find the
+                  licensee you are looking for, please contact us here (Here is a link that opens up contact us page or
+                  helpscout form)</p> -->
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button mat-raised-button color="primary" id='log-out' (click)="signOut()">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </block-ui>
+</app-common-modal>

@@ -1,0 +1,27 @@
+<div class='modal-header'>
+    Uploading Creatives...
+</div>
+<div class='modal-body'>
+    <div class="alert alert-success mrb10">
+        <em class='fa fa-check-circle text-success mrr10'></em>
+        <strong>{{getSuccessListLength()}} of {{crList.length}}</strong> Creatives Uploaded
+    </div>
+    <mat-nav-list *ngIf='crList && crList.length > 0'>
+        <mat-list-item *ngFor="let c of crList">
+            <em class="fa fa-picture-o fa-2x text-gray"></em>
+            <span matLine class='' *ngIf='!c.errorMsg'>{{ c.name }}</span>
+            <span matLine class='' *ngIf='c.errorMsg'>{{ c.name }}(Error!! Not uploaded)</span>
+            <span class='text-success upload-text' *ngIf='!c.errorMsg'>
+        <span><em class='fa fa-check'></em> Uploaded</span>
+            </span>
+            <span class='text-danger upload-text' *ngIf='c.errorMsg'>
+        <span><em class='fa fa-close'></em> Failed</span>
+            </span>
+        </mat-list-item>
+    </mat-nav-list>
+</div>
+
+<div class='modal-footer'>
+    <button id='saveStrategies' mat-raised-button class='btn-primary mrr15' (click)="associateToStrategies()">Select Strategies</button>
+    <button id='associateStrCancle' mat-raised-button class='btn-primary' (click)="cancel()">Done & Exit </button>
+</div>

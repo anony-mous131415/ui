@@ -1,0 +1,88 @@
+<block-ui>
+    <div class='pad20-side mrb20'>
+        <!-- showing uploaded files with error message along with that -->
+        <div class='row justify-content-center'>
+            <div class='col-12'>
+                <div id='page-content'>
+
+                    <div id='non_native_section' *ngIf='creativeUIPreview.nonNativeImageList.length > 0 || creativeUIPreview.nonNativeVideoList.length > 0 || creativeUIPreview.nonNativeHTMLList.length > 0'>
+                        <div class='preview-section-header'>
+                            <div class='pull-left psh-title mrr15'>Non Native</div>
+                            <div class='pull-left psh-toggler'>
+                                <mat-slide-toggle [(ngModel)]="toggle.nonNativeChecked" class='primary'>
+                                </mat-slide-toggle>
+                            </div>
+                            <div *ngIf='shouldShowClickVerifyForTemplates()'>
+                                <div *ngIf='verification.nonNative == false && verification.dynamicHtml == false' class='pull-right psh-verify' (click)="openVerifyModal()" [ngClass]="{'disableUI':toggle.nonNativeChecked == false}">
+                                    <em class='fa fa-warning-circle'></em> verify </div>
+
+                                <div *ngIf='verification.nonNative == true || verification.dynamicHtml == true' class='pull-right psh-verify' (click)="openVerifyModal()" [ngClass]="{'disableUI':toggle.nonNativeChecked == false}">
+                                    <em class='fa fa-check'></em> verified</div>
+
+                            </div>
+                            <div class='clearfix'></div>
+                        </div>
+
+                        <div [ngClass]="{'disableUI':toggle.nonNativeChecked == false}">
+                            <!-- dco form start -->
+
+                            <div id='form-container' *ngIf='isDynamic==true'>
+                            </div>
+
+                            <!-- dco form end -->
+
+                            <!-- Non Native section start -->
+                            <!-- ----Image section -->
+                            <app-cr-preview-card *ngIf='nonNativeImageList && isDynamic==false' cardType='{{crConst.ALLOWED_TYPES.IMAGE}}' data='{{nonNativeImageList}}' (syncRemovalOfCreative)="syncRemovalOfCreative($event)" (syncUpdatedCreative)="syncUpdatedCreative($event)" (syncToggle)="syncToggle($event)">
+                            </app-cr-preview-card>
+                            <!-- ----Video Section -->
+                            <app-cr-preview-card *ngIf='nonNativeVideoList && isDynamic==false' cardType='{{crConst.ALLOWED_TYPES.VIDEO}}' data='{{nonNativeVideoList}}' (syncRemovalOfCreative)="syncRemovalOfCreative($event)" (syncUpdatedCreative)="syncUpdatedCreative($event)" (syncToggle)="syncToggle($event)">
+                            </app-cr-preview-card>
+                            <!-- ----HTML section -->
+                            <app-cr-preview-card *ngIf='nonNativeHTMLList' cardType='{{crConst.ALLOWED_TYPES.HTML}}' data='{{nonNativeHTMLList}}' (syncRemovalOfCreative)="syncRemovalOfCreative($event)" (syncUpdatedCreative)="syncUpdatedCreative($event)" (syncToggle)="syncToggle($event)">
+                            </app-cr-preview-card>
+                            <!-- Non native section end -->
+                        </div>
+                    </div>
+
+                    <div id='native_section' *ngIf='creativeUIPreview.nativeImageList.length > 0 || creativeUIPreview.nativeVideoList.length > 0'>
+                        <div class='preview-section-header' *ngIf='nativeImageList || nativeVideoList'>
+                            <div class='pull-left psh-title mrr15'>Native</div>
+                            <div class='pull-left psh-toggler'>
+                                <mat-slide-toggle [(ngModel)]="toggle.nativeChecked" color="blue" class='primary'>
+                                </mat-slide-toggle>
+                            </div>
+                            <div class='clearfix'></div>
+                        </div>
+
+                        <div [ngClass]="{'disableUI':toggle.nativeChecked == false}">
+                            <div id='native-asset-form'>
+                                <div class='form-subheader mrb20'>Native Assets</div>
+                                <!-- REVX-974 : mode used for preselect default logo -->
+                                <app-cr-native-form advId='{{advertiserId}}' isDCO='{{isDCO}}' (syncNativeAsset)="syncNativeAsset($event)" [mode]='0'>
+                                </app-cr-native-form>
+                            </div>
+
+                            <app-cr-preview-card *ngIf='nativeImageList' cardType='{{crConst.ALLOWED_TYPES.IMAGE}}' data='{{nativeImageList}}' (syncRemovalOfCreative)="syncRemovalOfCreative($event)" (syncToggle)="syncToggle($event)" (syncUpdatedCreative)="syncUpdatedCreative($event)"
+                                nativeAssetData="{{nativeStr}}">
+                            </app-cr-preview-card>
+
+                            <app-cr-preview-card *ngIf='nativeVideoList && isDynamic==false' cardType='{{crConst.ALLOWED_TYPES.VIDEO}}' data='{{nativeVideoList}}' (syncRemovalOfCreative)="syncRemovalOfCreative($event)" (syncUpdatedCreative)="syncUpdatedCreative($event)" (syncToggle)="syncToggle($event)"
+                                nativeAssetData="{{nativeStr}}">
+                            </app-cr-preview-card>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+    <div class='false-footer mrr15'>
+        <div class='pull-left text-danger text12' *ngIf='errorMsg.globalError'><em class='fa fa-warning'></em> {{errorMsg.globalError}}
+        </div>
+        <button mat-raised-button class='btn-primary pull-right mrl15' [appDisableDemo]='appConst.DISABLE' (click)="onContinueClick()">Create</button>
+        <button mat-button class='pull-right mrl15' (click)="onGoBackClick()">Go Back</button>
+        <div class='clearfix'></div>
+    </div>
+</block-ui>

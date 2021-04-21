@@ -1,0 +1,18 @@
+<navbar></navbar>
+<div class='page-container'>
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='date-range-container'>
+            <app-date-range-picker></app-date-range-picker>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+    <!--revx-371 bulk edit-->
+    <app-list listTitle='STRATEGIES' entity="strategy" dataUnavailableMsg="This Licensee doesn't have any Strategy."
+        showImportExport='false' [showStrBulkEdit]='true' [openFromCampaignDetails]='false'
+        (navigateToStrBulkEit)='navigateToStrBulkEit($event)' (openBulkEditLogModal)='openBulkEditLogModal($event)'>
+    </app-list>
+</div>

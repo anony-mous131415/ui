@@ -1,0 +1,129 @@
+<div mat-dialog-title class="modal-header">
+    <h4 class="flex-grow-1 my-auto modal-title">{{creativeDTO.name}}</h4>
+</div>
+<div mat-dialog-content class="modal-body">
+
+    <div class='preview-body'>
+        <div class='pull-left mrr20'>
+            <div class='preview-cover'>
+
+                <!-- Ad-tag preview -->
+                <div id='html-preview' *ngIf='creativeDTO.type==crConst.ALLOWED_TYPES.AD_TAG  || creativeDTO.type==crConst.ALLOWED_TYPES.HTML'>
+                    <div id='creative-holder'>
+                        <iframe [src]='creativeDTO.previewUrl | safeUrl' scrolling='yes' width="{{creativeDTO.size.width+4}}" height="{{creativeDTO.size.height+4}}" title="Ad-tag"></iframe>
+                    </div>
+                </div>
+
+                <!-- show image creatives non dco-->
+                <div id='image-creative' class='mobile-view' *ngIf='creativeDTO.nativeAd==false && (creativeDTO.type==crConst.ALLOWED_TYPES.IMAGE)'>
+                    <img id='img-icon' [src]='creativeDTO.previewUrl' alt="creative icon" />
+                </div>
+
+                <div class='clearfix'></div>
+
+                <!-- show Video dco and non dco -->
+                <div id='video-creative' class='mobile-view' *ngIf='creativeDTO.nativeAd==false && creativeDTO.type==crConst.ALLOWED_TYPES.VIDEO'>
+                    <video id='video-icon' width="100%" controls>
+            <source [src]="creativeDTO.videoAttributes[0].videoPath" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+                </div>
+
+                <!-- show Native Image Creatives or dco native image-->
+                <div id='native-creative' class='native-view' *ngIf='creativeDTO.nativeAd==true'>
+                    <div class='native-content-stream'>
+                        <div class='dummy-content'>
+                            <div class='stream80'></div>
+                            <div class='stream100'></div>
+                            <div class='stream70'></div>
+                            <div class='stream80'></div>
+                        </div>
+                        <div class='real-content'>
+                            <div class='header-section'>
+                                <div class='logo'>
+                                    <img [src]='nativeAssets.iconurl' alt="{{nativeAssets.title}}" />
+                                </div>
+                                <div class='native-title'>{{nativeAssets.title}}</div>
+                                <div class='clearfix'></div>
+                            </div>
+                            <div class='body-section'>
+                                <img [src]='creativeDTO.previewUrl' alt="{{nativeAssets.title}}" />
+                            </div>
+                            <div class='footer-section'>
+                                <div class='body-text'>{{nativeAssets.body}}</div>
+                                <div class='call-to-action'>
+                                    <div class='bttn'>{{nativeAssets.callToAction}}</div>
+                                </div>
+                                <div class='clearfix'></div>
+                            </div>
+                        </div>
+                        <div class='dummy-content mrt10'>
+                            <div class='stream70'></div>
+                            <div class='stream100'></div>
+                            <div class='stream80'></div>
+                        </div>
+                    </div>
+                    <div class='native-icon-stream' *ngIf="creativeDTO.type != crConst.ALLOWED_TYPES.VIDEO && creativeDTO.dco == false">
+                        <div class='dummy-content borderBottom1'>
+                            <div class='stream50'></div>
+                            <div class='stream100'></div>
+                            <div class='stream70'></div>
+                            <div class='stream80'></div>
+                        </div>
+                        <div class='icon-content borderBottom1'>
+                            <div class='logo'>
+                                <img [src]='creativeDTO.previewUrl' alt="{{nativeAssets.title}}" />
+                            </div>
+                            <div class='native-title'>{{nativeAssets.title}}</div>
+                            <div class='body-text'>{{nativeAssets.body}}</div>
+                            <div class='call-to-action'>
+                                <div class='bttn'>{{nativeAssets.callToAction}}</div>
+                            </div>
+                            <div class='clearfix'></div>
+                        </div>
+                        <div class='dummy-content borderBottom1'>
+                            <div class='stream80'></div>
+                            <div class='stream100'></div>
+                            <div class='stream70'></div>
+                            <div class='stream50'></div>
+                        </div>
+                        <div class='dummy-content borderBottom1'>
+                            <div class='stream50'></div>
+                            <div class='stream100'></div>
+                            <div class='stream80'></div>
+                            <div class='stream70'></div>
+                        </div>
+
+                        <div class='dummy-content'>
+                            <div class='stream50'></div>
+                            <div class='stream100'></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='creative-details' class='pull-left'>
+            <div class='mrl10'>
+                <app-entity-details-row rowTitle="{{crConst.LABEL_PREVIEW_NAME}}" rowValue="{{creativeDTO.name}}" marginBottom="mrb15">
+                </app-entity-details-row>
+
+                <app-entity-details-row rowTitle="{{crConst.LABEL_PREVIEW_ADVERTISER}}" rowValue="{{creativeDTO.advertiser.name}}" marginBottom="mrb15">
+                </app-entity-details-row>
+
+                <app-entity-details-row rowTitle="{{crConst.LABEL_DIMENSION}}" rowValue="{{creativeDTO.size.width}}x{{creativeDTO.size.height}}" marginBottom="mrb15">
+                </app-entity-details-row>
+
+                <app-entity-details-row rowTitle="{{crConst.LABEL_CLICK_DESTINATION}}" rowValue="{{creativeDTO.clickDestination.name}}" marginBottom="mrb15">
+                </app-entity-details-row>
+
+                <div class='clearfix'></div>
+            </div>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button mat-raised-button class="btn-primary" (click)="onOkClick()">Ok</button>
+</div>

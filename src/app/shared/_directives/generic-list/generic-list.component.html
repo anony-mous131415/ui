@@ -1,0 +1,312 @@
+<div id="tableContainer">
+  <div id='list-header' class='mrt10'>
+    <!-- <div class="warning_msg_alert">
+            <ngb-alert [hidden]='entity != appConst.ENTITY.PIXEL' *ngIf="!closed" (close)="closed=true" type="warning">Conversion type and rules are defined on this page which define the criteria for conversion event tracking</ngb-alert>
+            <ngb-alert [hidden]='entity != appConst.ENTITY.CREATIVE' *ngIf="!closed" (close)="closed=true" type="warning">You are viewing creatives associated with this advertiser</ngb-alert>
+            <ngb-alert [hidden]='entity != appConst.ENTITY.CATALOG' *ngIf="!closed" (close)="closed=true" type="warning">Configure dynamic advertisements (DCO) from this section</ngb-alert>
+            <ngb-alert [hidden]='selectedAudienceType!="dmp"' *ngIf="!closed" (close)="closed=true" type="warning">Optimise spends by targeting specific segmented audiences during campaign creation. To create an audience please use the New Audience button. Inside you will be able to define rules on which users will be segmented. After which they will be
+                available to you as a list while creating campaign strategies. </ngb-alert>
+        </div> -->
+    <!-- <div class="float-left mrr30">
+  <!-----------type of audience : for audience list only---------->
+    <div [hidden]='entity != appConst.ENTITY.AUDIENCE' class="float-left mrr30">
+      <mat-form-field class="my-auto">
+        <mat-select id="audience-type-selector" class="my-auto" [disabled]='listParams.showProgressBar'
+          [(value)]="selectedAudienceType" (selectionChange)="onAudTypeChange($event)">
+          <mat-option *ngFor="let opt of audienceType" [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class='float-left mrr10' *ngIf="createPageLink">
+      <button mat-raised-button class="btn-secondary" appDisableRO id="create-btn" [routerLink]="createPageLink">
+        <em class='fa fa-plus'></em> <span>New {{entityLower}}</span>
+      </button>
+    </div>
+
+    <div class='float-left mrr10' *ngIf="showActivateDeActivateBtn">
+      <button [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class="btn-primary mat-raised-button"
+        [ngClass]="{'disableUI':listParams.disableActivateBtn == true}" (click)='changeStatus(1)' id="activate-btn">
+        <em class='fa fa-play'></em>
+        <span>Activate</span>
+      </button>
+    </div>
+    <div class='float-left mrr10' *ngIf="showActivateDeActivateBtn">
+      <button [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class="btn-primary mat-raised-button"
+        [ngClass]="{'disableUI':listParams.disableDeactivateBtn == true}" (click)='changeStatus(0)' id="deactivate-btn">
+        <em class='fa fa-pause'></em>
+        <span>Deactivate</span>
+      </button>
+    </div>
+
+    <div class='float-left mrr10' *ngIf='entity=="CREATIVE" && advId'>
+      <button appDisableRO mat-raised-button class="btn-secondary"
+        [ngClass]="{'disableUI':!listParams.selectedRowDetails.length }" (click)='associateToStrategies()'
+        id="associate-str-btn">
+        Associate Strategies
+      </button>
+    </div>
+
+    <div class='float-right mrt3'>
+      <a mat-button id="list-refresh-btn" (click)="reload()" matTooltip="Refresh" matTooltipPosition="above">
+        <em class="fa fa-refresh"></em>
+      </a>
+    </div>
+
+    <div class="float-right mrr5 header-btn">
+      <form [formGroup]="listSearchForm" class='list-search-container'>
+        <mat-form-field *ngIf="!showAutoCompleteSearch">
+          <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+          <input matInput id='list-filter' formControlName="searchInput" [(ngModel)]="listParams.searchTxt"
+            (keyup.enter)="applySearchFilter()" placeholder="Search" (keyup.enter)="applySearchFilter()"
+            autocomplete="off">
+          <span id='list-search-btn' class='icon-outside' (click)='applySearchFilter()'></span>
+        </mat-form-field>
+        <mat-form-field *ngIf="showAutoCompleteSearch">
+          <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+          <input matInput id='list-filter' formControlName="searchInput" [(ngModel)]="listParams.searchTxt"
+            placeholder="Search" (keyup.enter)="applySearchFilter()"
+            (keyup)="searchEntitiesOnKeyup($event.target.value)" autocomplete="off">
+          <span id='list-search-btn' class='icon-outside' (click)='applySearchFilter()'></span>
+        </mat-form-field>
+        <!-- search items on keyup autosuggest -->
+        <div class='options-list' *ngIf='listParams.searchedList.length > 0'
+          (clickOutside)="hideSearchEntitiesResults()">
+          <div *ngFor='let en of listParams.searchedList; let i = index' class='list-items'>
+            <em class='fa fa-circle'
+              [ngClass]="{'text-success':en.active === true,'text-danger':en.active === false}"></em>
+            <span matTooltipPosition='left' matTooltip="{{ en.name }}"
+              [routerLink]="[detailsPageLink,en.id]">{{(en.name.length>24)? (en.name | slice:0:24)+'...':(en.name)}}</span>
+          </div>
+          <div class='list-footer' (click)='applySearchFilter()'><em class='fa fa-search'></em> <span>See All
+              Results</span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class='float-right mrr10' *ngIf="exportBtnLink">
+      <button mat-button [appDisableDemo]='appConst.DISABLE' (click)='downloadCSV()' id="list-export-btn"
+        matTooltip="Export" matTooltipPosition="above">
+        <em class="fa fa-download"></em>
+      </button>
+    </div>
+
+    <div class='clearfix'></div>
+
+    <div class='search-txt-handler' *ngIf='listParams.searchedText'>
+      <span class='mrr3'>Search Results</span>
+      <span class='search-txt mrr3'> '{{listParams.searchedText}}' </span>
+      <span class='st-link' (click)='applySearchFilter(true)'>Back to All</span>
+    </div>
+  </div>
+
+
+
+
+  <div id='list-body'>
+    <mat-progress-bar *ngIf="listParams.showProgressBar" mode="indeterminate"></mat-progress-bar>
+    <div id='table-container'>
+      <div #tableContent id='table-content'>
+        <mat-table id="genericTable" *ngIf="entity == 'CATALOG_DETAILS' " class="table-border"
+          [dataSource]="listParams.listSource" matSortDirection="" matSort matSortActive="">
+          <ng-container *ngFor="let column of listParams.listMetrics" [matColumnDef]="column.id">
+            <!-- Only for left padding column header -->
+            <div *ngIf="column.id == 'leftPad'">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            </div>
+            <div
+              *ngIf="column.id != 'active' && column.id != 'action' && column.id != 'leftPad' && column.id != 'dropdown' && column.id != 'samples' ">
+              <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='before'>
+                <div matTooltipPosition='above' matTooltip="{{column.hover}}">
+                  {{ column.title | uppercase }}
+                </div>
+              </mat-header-cell>
+            </div>
+            <div *ngIf="column.id == 'samples' ">
+              <mat-header-cell *matHeaderCellDef>
+                <div matTooltipPosition='above' matTooltip="{{column.hover}}">
+                  {{ column.title | uppercase}}
+                </div>
+              </mat-header-cell>
+            </div>
+            <mat-cell *matCellDef="let row">
+              <!-- name column of the table -->
+              <div *ngIf='column.id == "name"'>
+                <div class='text-bold'>{{row.name}}</div>
+                <div *ngIf='row.variablePath' class='text-muted'>{{row.variablePath}}</div>
+              </div>
+
+              <div *ngIf='column.id == "standardVariable"'>
+                <div class='text-bold'>{{row.standardVariable}}</div>
+                <div *ngIf='row.description' class='text-muted'>{{row.description}}</div>
+              </div>
+
+              <!-- other columns -->
+              <div *ngIf='column.id != "name" && column.id != "standardVariable"'>
+                {{ column.cell(row) }}
+              </div>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="listParams.displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: listParams.displayedColumns;"></mat-row>
+
+        </mat-table>
+
+        <mat-table *ngIf=" entity != 'CATALOG_DETAILS' " class="table-border" [dataSource]="listParams.listSource"
+          matSortDirection="" matSort matSortActive="">
+          <ng-container *ngFor="let column of listParams.listMetrics" [matColumnDef]="column.id"
+            sticky="{{column.id==='dropdown' || column.id==='active' || column.id==='name' || column.id==='action' ?true:false}}">
+            <!-- Table Header HTML -->
+
+            <!-- Only for left padding column header -->
+            <div *ngIf="column.id == 'leftPad'">
+              <mat-header-cell *matHeaderCellDef>
+              </mat-header-cell>
+            </div>
+
+            <!-- Only for ACTION (For the checkbox) column header -->
+            <div *ngIf="column.id == 'action'">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox [disabled]='selectedAudienceType===audConst.TYPE.DMP'
+                  [(ngModel)]="listParams.selectedAllRow" (change)="selectAllRows()">
+                </mat-checkbox>
+              </mat-header-cell>
+            </div>
+
+            <!-- Only for dropdown column header -->
+            <div *ngIf="column.id == 'dropdown'">
+              <mat-header-cell *matHeaderCellDef>
+                <div><em class='fa fa-bar'></em></div>
+              </mat-header-cell>
+            </div>
+
+            <!-- Only for status column header -->
+            <div *ngIf="column.id == 'active'">
+              <mat-header-cell *matHeaderCellDef>
+                <a [matMenuTriggerFor]="menu" class='pointer'>
+                  <em class='fa fa-circle mrr3'
+                    [ngClass]="{'text-success':listParams.selectedStatus === 'true','text-danger':listParams.selectedStatus === 'false', 'text-default':listParams.selectedStatus === '' }"></em>
+                  <em class='fa fa-caret-down'></em>
+                </a>
+                <mat-menu #menu="matMenu" dense>
+                  <div class="statusMatMenu">
+                    <div mat-menu-item (click)='applyStatusFilter(true)'><em class='fa fa-circle text-success'></em>
+                      Active
+                    </div>
+                    <div mat-menu-item (click)='applyStatusFilter(false)'><em class='fa fa-circle text-danger'></em>
+                      Inactive
+                    </div>
+                    <div mat-menu-item (click)='applyStatusFilter(null)'><em class='fa fa-circle text-default'></em> All
+                    </div>
+                  </div>
+                </mat-menu>
+              </mat-header-cell>
+            </div>
+            <!-- All header columns -->
+            <div
+              *ngIf="column.id != 'active' && column.id != 'action' && column.id != 'leftPad' && column.id != 'dropdown'">
+              <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition='before' [disabled]="!column.sorting">
+                <div matTooltipPosition='above' matTooltip="{{column.hover}}"
+                  [ngClass]="{'padLeft18': !column.sorting }">{{ column.title | uppercase }}</div>
+              </mat-header-cell>
+            </div>
+
+
+            <!-- Table body HTML -->
+            <mat-cell *matCellDef="let row ; let i = index"
+              [ngClass]="{'row-selected':row.action === true , 'bg-white':row.action=== false}">
+              <div *ngIf='column.id == "action"' [ngClass]="{ 'no-cursor-wrapper': getDisableStatus(row)}">
+                <mat-checkbox [disabled]='getDisableStatus(row)' [ngClass]="{ 'no-ptr-events' : getDisableStatus(row)}"
+                  [(ngModel)]="row.action" (change)="selectRow(row.id, row , row.action, row.active)">
+                </mat-checkbox>
+              </div>
+
+              <!-- Dropdown Column | popup bar--->
+              <div *ngIf='column.id == "dropdown"'>
+                <div>
+                  <em class='fa fa-list menu-i' [matMenuTriggerFor]="reptiles"></em>
+                  <mat-menu #reptiles="matMenu">
+                    <div *ngFor='let me of menu' class="statusMatMenu">
+
+                      <button class='cstm-btn' mat-menu-item *ngIf='me.click' (click)='me.click()'>
+                        <em class='{{me.icon}} mr'></em>
+                        <span>{{me.label}}</span>
+                      </button>
+                      <button class='cstm-btn' mat-menu-item *ngIf='!me.click' [routerLink]='[me.href, row.id]'>
+                        <em class='{{me.icon}} mr'></em>
+                        <span>{{me.label}}</span>
+                      </button>
+                    </div>
+                  </mat-menu>
+                </div>
+              </div>
+
+              <!-- Status Column -->
+              <div *ngIf='column.id == "active"'>
+                <div>
+                  <em class='fa fa-circle mc-status'
+                    [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></em>
+                </div>
+              </div>
+              <!-- name column of the table -->
+              <div *ngIf='column.id == "name"'>
+                <div><a class='details-link' matTooltipPosition='above' matTooltip="{{row.name}}"
+                    [routerLink]="[detailsPageLink, row.id]">{{(row.name.length>25)? (row.name | slice:0:25)+'...':(row.name)}}</a>
+                </div>
+              </div>
+
+              <!-- other columns -->
+              <div
+                *ngIf='column.id != "name" && column.id != "active" && column.id != "action" && column.id != "dropdown"'
+                [matTooltipDisabled]="!column.showToolTip" matTooltipPosition='above'
+                [matTooltip]="getTooltip(column , row)">
+
+                <!--icon for all-creatives-list -->
+                <ng-container *ngIf='entity==="CREATIVE" && column.id ==="icon"'>
+                  <div *ngIf='row.type!=="image" && row.type!=="nativeAd"'>
+                    <em class="fa"
+                      [ngClass]="{ ' fa-file-video-o':row.type==='nativeVideo' || row.type==='video' , 'fa-file-code-o': row.type==='html' || row.type==='zippedHTML' }"
+                      aria-hidden="true"></em>
+                  </div>
+                  <div *ngIf='row.type==="image"  || row.type ==="nativeAd" '>
+                    <!--if preview availabe-->
+                    <ng-container *ngIf='row.previewUrl'>
+                      <img class='img_dimension' [src]="row.previewUrl" alt="">
+                    </ng-container>
+                    <!--if preview not available-->
+                    <ng-container *ngIf='!row.previewUrl'>
+                      <em class="fa fa-file-image-o" aria-hidden="true"></em>
+                    </ng-container>
+                  </div>
+                </ng-container>
+
+                <!--text for all except creatives-list -->
+                <ng-container *ngIf='column.id !=="icon"'>
+                  {{ column.cell(row) }}
+                </ng-container>
+
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="listParams.displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: listParams.displayedColumns;"></mat-row>
+        </mat-table>
+        <div *ngIf='listParams.showDataUnavailableMsg' class='data-unavailable-msg'><em class='fa fa-warning'></em>
+          {{dataUnavailableMsg}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id='list-footer'>
+    <!--do not use ngIf here, pagination won't work-->
+    <mat-paginator id='generic-paginator' [length]="listParams.listLen" [pageSize]="10"
+      [pageSizeOptions]="[10,20,50,100,200,300 ,400,500,1000]" showFirstLastButtons>
+    </mat-paginator>
+
+  </div>
+</div>

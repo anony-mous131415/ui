@@ -1,0 +1,84 @@
+$danger-color: #f44336;
+.mat-column-select {
+    width: 70px !important;
+    max-width: 70px !important;
+    mat-checkbox {
+        margin-top: 7px !important;
+    }
+}
+
+.mat-column-active {
+    max-width: 60px !important;
+}
+
+#table-content::-webkit-scrollbar,
+#table-content::-webkit-scrollbar-thumb {
+    width: 16px;
+    height: 10px;
+    border-radius: 13px;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+}
+
+#table-content::-webkit-scrollbar-thumb {
+    box-shadow: inset 0px 0px 0px 10px;
+}
+
+#table-content {
+    overflow: auto;
+    color: rgba(0, 0, 0, 0);
+    transition: color 0.3s ease;
+    &:hover {
+        color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+.mat-cell {
+    font-size: 13px;
+}
+
+.selection-body {
+    max-height: 300px;
+    overflow-x: hidden;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 15px;
+    p {
+        i {
+            font-size: 8px;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+    }
+}
+
+.table-scroll {
+    overflow-y: auto;
+    height: 300px;
+}
+
+.error-message {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    color: $danger-color;
+    font-size: 11px;
+}
+
+.my-container {
+    padding: 10px 10px;
+}
+
+.entity-disp {
+    font-size: 0.6rem;
+    font-size: 13px;
+    text-decoration: underline;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff !important;
+}

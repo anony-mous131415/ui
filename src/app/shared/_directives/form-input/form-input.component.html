@@ -1,0 +1,11 @@
+<div class="col-md-8 col-lg-8">
+  <div [ngClass]="{'disableUI': disable =='true'}">
+      <mat-form-field class="wd-full">
+          <input id="{{ id }}" name="{{ name }}" maxlength="{{ maxLen }}" minlength="{{ minLen }}" [(ngModel)]="value" matInput placeholder="{{label}}" matTooltipPosition="{{tooltipPosition}}" matTooltip="{{tooltip}}" autocomplete="off">
+      </mat-form-field>
+  </div>
+  <mat-error class="error" *ngIf="validated == 'false' && !val">
+      {{ validationMsg }}
+  </mat-error>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,32 @@
+.textarea {
+  width: 100% !important;
+  height: 250px !important;
+  resize: none !important;
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+#fileLoader {
+  display: none;
+}
+
+.list-group-item {
+  line-height: 20px !important;
+}
+
+.list-group-fixed-height {
+  height: 250px !important;
+  overflow-y: auto !important;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+}

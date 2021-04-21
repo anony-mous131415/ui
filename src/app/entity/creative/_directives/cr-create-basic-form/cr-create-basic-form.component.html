@@ -1,0 +1,209 @@
+<div class='pad20-side' id="creativeEdit">
+    <div id='page-content'>
+        <div id='form-container'>
+            <div class='form-body'>
+                <div class="col-12 mrl15">
+                    <!--Advertiser select-->
+                    <div class="form-group">
+                        <div class="row mrt15 m-0">
+                            <div class="col-3">
+                                <div class="form-label">
+                                    {{ crConst.LABEL_ADVERTISER }}*
+                                </div>
+                            </div>
+                            <div class="col-8 pt-1">
+                                <div class='d-flex flex-row'>
+                                    <div *ngIf='selectedAdv && editAdvAllowed'><span class='mrr10 editModal'
+                                            (click)="openAdvModal()">
+                                            Edit</span></div>
+                                    <div *ngIf='selectedAdv' class='form-txt gotoLink' (click)='gotoAdv()'>
+                                        {{selectedAdv.name}}</div>
+                                    <div *ngIf='!selectedAdv'>
+                                        <button id="advSelectBtn" [ngClass]="{ 'btn-danger': !formValidated}"
+                                            mat-raised-button class='btn-primary' (click)='openAdvModal()'>
+                                            <em class='fa fa-file-image-o'></em>
+                                            <span>Select</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <mat-error class="error" *ngIf="!formValidated && !this.basicDetails.advertiserId">
+                                    {{crConst.VALIDATION_ADVERTISER}}
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="clearfix mrb15"></div>
+                    </div>
+                    <!--Advertiser select ends-->
+
+
+                    <!--Click-Destination select -->
+                    <div class="form-group">
+                        <div class="row m-0">
+                            <div class="col-md-3 col-lg-3">
+                                <div class="form-label">
+                                    {{ crConst.CLK_DESTINATION_LABEL }}*
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                        matTooltip="{{ crConst.CLK_DESTINATION_TOOLTIP }}"></em>
+                                </div>
+                            </div>
+                            <div class="col-8 pt-1">
+                                <div *ngIf='this.basicDetails.clickDestination'>
+                                    <span class='mrr10 editModal' (click)="showClickDestinationModal()">Edit</span>
+                                    <span class='form-txt'>{{this.basicDetails.clickDestination.name}}</span>
+                                </div>
+
+                                <div *ngIf='!this.basicDetails.clickDestination'
+                                    [ngClass]="{'disableUI': disableCDSelect==true}">
+                                    <button (click)="showClickDestinationModal()" mat-raised-button class='btn-primary'
+                                        [ngClass]="{ 'btn-danger': !formValidated}">
+                                        <em class='fa fa-file-image-o'></em>
+                                        <span>Select</span>
+                                    </button>
+                                </div>
+                                <mat-error class="error" *ngIf="!formValidated && !this.basicDetails.clickDestination">
+                                    {{crConst.VALIDATION_CLK_DESTINATION}}
+                                </mat-error>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix mrb15"></div>
+
+                    <div class="clearfix mrb15"></div>
+
+                    <app-form-input [(ngModel)]="basicDetails.name" tooltipPosition="above"
+                        label="{{crConst.NAME_LABEL}}*" maxLen="256" minLen="4" id="advName"
+                        validationMsg="{{crConst.VALIDATION_NAME}}" validated="{{formValidated}}" width="wd250">
+                    </app-form-input>
+                    <div class="clearfix mrb15"></div>
+
+
+                    <!-- asset-type select begins-->
+                    <!-- <div class="form-group" [hidden]='basicDetails.isDCO===true'>
+                        <div class="row m-0">
+                            <div class="col-md-3 col-lg-3">
+                                <div class="form-label pt-3">
+                                    {{ crConst.ASSET_TYPE_LABEL }}
+                                    <em class="fa fa-info-circle" matTooltipPosition="above"
+                                        matTooltip="{{ crConst.ASSET_TYPE_TOOLTIP }}"></em>
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-8">
+                                <div [ngClass]="{'disableUI': crObj.disableAssetType == true}">
+                                    <mat-form-field class='header-btn wd250'>
+                                        <mat-select [(value)]="this.crObj.assetTypeSelected"
+                                            (selectionChange)="assetTypeSelectHandler()">
+                                            <mat-option *ngFor="let a of crObj.assetTypeOptions" [value]="a.id">
+                                                {{a.title}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div> -->
+                    <!--asset-type select ends-->
+
+
+                    <div class="clearfix mrb15"></div>
+
+                    <div class="row m-0 ml-1">
+                        <!-- <div class="icons"> -->
+                        <!-- <em class="fas fa-robot"></em> -->
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            aria-hidden="true" focusable="false" width="30px" height="50px"
+                            style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);margin-left:10px"
+                            preserveAspectRatio="xMidYMid meet" viewBox="0 0 640 512">
+                            <path
+                                d="M32 224h32v192H32a31.962 31.962 0 0 1-32-32V256a31.962 31.962 0 0 1 32-32zm512-48v272a64.063 64.063 0 0 1-64 64H160a64.063 64.063 0 0 1-64-64V176a79.974 79.974 0 0 1 80-80h112V32a32 32 0 0 1 64 0v64h112a79.974 79.974 0 0 1 80 80zm-280 80a40 40 0 1 0-40 40a39.997 39.997 0 0 0 40-40zm-8 128h-64v32h64zm96 0h-64v32h64zm104-128a40 40 0 1 0-40 40a39.997 39.997 0 0 0 40-40zm-8 128h-64v32h64zm192-128v128a31.962 31.962 0 0 1-32 32h-32V224h32a31.962 31.962 0 0 1 32 32z"
+                                fill="#999999" />
+                        </svg> -->
+                        <!-- </div> -->
+
+                        <!-- DCO select begins-->
+                        <!-- <div class="col-md-2 col-lg-2 "> -->
+                            <div class="form-group ml-2">
+                                <div>
+                                    <mat-form-field class='header-btn'>
+                                        <mat-label>{{ crConst.IS_DCO_LABEL }}</mat-label>
+                                        <mat-select [(ngModel)]="basicDetails.isDCO" (selectionChange)="DCOSelectHandler()" [disabled]="isDCODisabled">
+                                            <mat-option [value]="true">Enabled</mat-option>
+                                            <mat-option [value]="false">Disabled</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        <!-- </div> -->
+                        <div class="form-group ml-2" [hidden]='basicDetails.isDCO!==true'>
+                            <div>
+                                <mat-form-field class='header-btn'>
+                                    <mat-label>Template</mat-label>
+                                    <mat-select [(ngModel)]="crObj.templateOption">
+                                        <mat-option [value]="true">Enabled</mat-option>
+                                        <mat-option [value]="false">Disabled</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group ml-2" [hidden]='basicDetails.isDCO!==true||this.crObj.templateOption===false'>
+                            <div>
+                                <mat-form-field class='header-btn'>
+                                    <mat-label>Creative Type</mat-label>
+                                    <mat-select [(ngModel)]="crObj.creativeType">
+                                        <mat-option [value]="'display'">Display</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <!-- asset-type select begins-->
+                        <!-- <div class="col-md-2 col-lg-2 ml-5"> -->
+                            <div class="form-group ml-2" [hidden]='basicDetails.isDCO===true'>
+                                <div [ngClass]="{'disableUI': crObj.disableAssetType == true}">
+                                    <mat-form-field class='header-btn'>
+                                        <mat-label>{{ crConst.ASSET_TYPE_LABEL }}</mat-label>
+                                        <mat-select [(value)]="this.crObj.assetTypeSelected"
+                                            (selectionChange)="assetTypeSelectHandler()">
+                                            <mat-option *ngFor="let a of crObj.assetTypeOptions" [value]="a.id">
+                                                {{a.title}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        <!-- </div> -->
+
+                        <!--templace select begins-->
+                        <!-- <div class="col-md-2 col-lg-2 ml-5"> -->
+                            <div class="form-group ml-2"
+                                [hidden]='(basicDetails.isDCO!==true&&this.crObj.assetTypeSelected!==3)||
+                                (basicDetails.isDCO===true&&this.crObj.templateOption===false)'>
+                                <div [ngClass]="{'disableUI': crObj.disableAssetType == true}">
+                                    <mat-form-field class='header-btn'>
+                                        <mat-label>{{ crConst.TEMPLATE_SELECTION_LABEL }}</mat-label>
+                                        <mat-select [(value)]="this.crObj.templateSelected">
+                                            <mat-option *ngFor="let a of crObj.templateSelectionOptions" [value]="a.id">
+                                                {{a.title}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        <!-- </div> -->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class='false-footer'>
+    <button class='btn-primary pull-right' mat-raised-button (click)="validateBasicDetails()">Continue</button>
+    <div class='clearfix'></div>
+</div>

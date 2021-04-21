@@ -1,0 +1,305 @@
+<navbar></navbar>
+<block-ui>
+    <div class='page-container'>
+        <div class='page-header'>
+            <div class='breadcrumbs-container'>
+                <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+            </div>
+
+            <div class='clearfix'></div>
+        </div>
+
+        <div id='page-content'>
+
+            <div class='row justify-content-center'>
+                <div class='col-7'>
+                    <div id='form-container'>
+                        <div class='form-header sticky-top z10'>
+                            <span class=''>Edit Creative</span>
+                        </div>
+                        <div id='creative-edit-form' class='form-body' *ngIf='creative && creative.id'>
+
+                            <!--basic details-->
+                            <div id='basic-details'>
+                                <div class="form-group mrl30">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="form-label">
+                                                {{ crConst.LABEL_ADVERTISER }}*
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class='form-txt gotoLink' (click)='gotoAdv()'>
+                                                {{creative.advertiser.name}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+
+                                <div class="form-group mrl30">
+                                    <div class="row">
+                                        <div class="col-md-3 col-lg-3">
+                                            <div class="form-label">
+                                                {{ crConst.CLK_DESTINATION_LABEL }}*
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8">
+                                            <div *ngIf='creative.clickDestination' class='form-txt'>
+                                                <span class='mrr10 editModal' (click)="showClickDestinationModal()">Edit</span>
+                                                <span>{{creative.clickDestination.name}}</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+
+                                <div class="form-group mrl30">
+                                    <div class="row">
+                                        <div class="col-md-3 col-lg-3">
+                                            <div class="form-label">
+                                                {{ crConst.LABEL_CREATIVE_TYPE }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8">
+                                            <div class='form-txt'>
+                                                <span>{{creative.type | uppercase}} {{showTemplateType(creative)}}</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+
+
+                                <div class="col-12">
+                                    <app-form-checkbox [(ngModel)]="creative.dcoAd" label="{{crConst.IS_DCO_LABEL}}" tooltipPosition="above" tooltip="{{crConst.IS_DCO_TOOLTIP}}" checkboxLevel="{{creative.dcoAd==true?'Yes':'No'}}" [disable]=true>
+                                    </app-form-checkbox>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+                                <div class="col-12">
+
+                                    <app-form-input [(ngModel)]="creative.name" tooltipPosition="above" label="{{crConst.NAME_LABEL}}*" maxLen="256" minLen="4" id="crName" validationMsg="{{crConst.VALIDATION_NAME}}" validated="{{formValidated}}" width="wd250">
+                                    </app-form-input>
+                                </div>
+
+                                <div class="form-group mrl30">
+                                    <div class="row">
+                                        <div class="col-md-3 col-lg-3">
+                                            <div class="form-label mrt15">
+                                                {{ crConst.LABEL_DIMENSION }}*
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8">
+                                            <div *ngIf='creative.size'>
+                                                <div class='form-txt mrt15' *ngIf='creative.type != crConst.ALLOWED_TYPES.HTML && creative.type != crConst.ALLOWED_TYPES.AD_TAG'>
+                                                    {{creative.size.width}}x{{creative.size.height}}</div>
+                                                <div id='dimension-form-cover' *ngIf='creative.type == crConst.ALLOWED_TYPES.HTML || creative.type == crConst.ALLOWED_TYPES.AD_TAG'>
+                                                    <mat-form-field class="col-md-3">
+                                                        <input matInput [(ngModel)]='creative.size.width' [ngClass]="{'error':!formValidated && !creative.size.width}" type='number' min='1' placeholder="Width" title="Width" />
+                                                    </mat-form-field>
+                                                    <em class='text-gray'>&nbsp;X&nbsp;</em>
+                                                    <mat-form-field class="col-md-3">
+                                                        <input matInput [(ngModel)]='creative.size.height' [ngClass]="{'error':!formValidated && !creative.size.width}" type='number' min='1' placeholder="Height" title="Height" />
+                                                    </mat-form-field>
+                                                    <div class="clearfix"></div>
+                                                    <mat-error class="error" *ngIf='!formValidated && (!creative.size.width || !creative.size.height)'>
+                                                        Field is missing.
+                                                    </mat-error>
+                                                    <span class='clearfix'></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="clearfix mrb15"></div>
+
+                            </div>
+
+                            <!-- Native assets -->
+                            <div id='native-nativeAsset' *ngIf='creative.nativeAd === true'>
+
+                                <div class='form-subheader mrb20'>Native Assets</div>
+                                <div class="form-group mrl30">
+                                    <!-- REVX-974 : mode used for preselect default logo -->
+                                    <app-cr-native-form advId='{{creative.advertiser.id}}' isDCO="{{creative.dcoAd}}" nativeAsset="{{nativeAssetString}}" (syncNativeAsset)="syncNativeAsset($event)" [mode]='1'>
+                                    </app-cr-native-form>
+                                </div>
+                            </div>
+
+                            <div class="clearfix mrb15"></div>
+                            <!-- DCO attributes -->
+                            <div id='dco-attributes' *ngIf='creative.dcoAd === true && creative.type === crConst.ALLOWED_TYPES.HTML'>
+                                <div class='form-subheader mrb20'>DCO attributes</div>
+
+                                <div class='pad20-side col-12'>
+                                    <app-form-input [(ngModel)]="creative.dcoAttributes.noOfSlots" tooltipPosition="above" tooltip="{{crConst.LABEL_DCO_NUM_SLOTS_TOOLTIP}}" label="{{crConst.LABEL_DCO_NUM_SLOTS}}*" maxLen="256" minLen="4" id="cr-dco-no-of-slots" validationMsg="{{crConst.VALIDATION_DCO_NUM_SLOTS}}"
+                                        validated="{{formValidated}}" width="wd250">
+                                    </app-form-input>
+                                    <div class="clearfix mrb15"></div>
+                                    <app-form-textarea [(ngModel)]="creative.dcoAttributes.macroList" tooltipPosition="above" label="{{crConst.LABEL_DCO_MACRO_LIST}}*" tooltip="{{crConst.LABEL_DCO_MACRO_LIST_TOOLTIP}}" maxLen="2048" minLen="4" id="cr-dco-marco-list" validated="{{formValidated}}"
+                                        validationMsg="{{crConst.VALIDATION_DCO_MACRO_LIST}}">
+                                    </app-form-textarea>
+                                </div>
+                            </div>
+                            <div class="clearfix mrb15"></div>
+
+                            <div class='form-subheader mrb20' style='line-height: 2rem;'>
+                                Content
+                                <button mat-raised-button class='btn-secondary mrl15 pull-right' (click)="openCustomizeModal()" *ngIf="creative.type === crConst.ALLOWED_TYPES.HTML&&creative.templateBased === true">Customize</button>
+                            </div>
+                            <!-- For 3rd Party Ad tag and ZippedHTML -->
+                            <div id='html-items' *ngIf='creative.type === crConst.ALLOWED_TYPES.HTML || creative.type === crConst.ALLOWED_TYPES.AD_TAG'>
+                                <div class='pad20-side col-12'>
+                                    <!-- <app-form-textarea [(ngModel)]="creative.content" tooltipPosition="above" label="{{crConst.LABEL_HTML_CONTENT}}*" tooltip="{{crConst.LABEL_HTML_CONTENT}}" id="cr-dco-marco-list" validated="{{formValidated}}" validationMsg="{{crConst.VALIDATION_HTML_CONTENT}}"
+                                        height="ht250">
+                                    </app-form-textarea> -->
+                                    <br/>
+                                    <textarea [(ngModel)]="creative.content" matInput rows="25" style="border: 1px solid black; padding: 5px;margin-top:10px"></textarea>
+                                </div>
+                            </div>
+                            <div class="clearfix mrb15"></div>
+
+                            <!-- For Images and Videos  -->
+                            <div id='uploaded-items' class='pad20-side'>
+                                <div class="form-group" *ngIf='creative.type !== crConst.ALLOWED_TYPES.HTML && creative.type !== crConst.ALLOWED_TYPES.AD_TAG'>
+                                    <div class="row">
+                                        <div class="col-12">
+
+                                            <div class='uploader-cover mrl15' *ngIf='showUploader'>
+                                                <div class='uploader-cover-header'>
+                                                    <span class='title'>{{crObj.uploderTitle}}</span>
+                                                    <span class='clearfix'></span>
+                                                </div>
+                                                <app-cr-create-upload-form allowedMultiple="{{crObj.allowedMultiple}}" allowedExtensions="{{crObj.allowedExtensions}}" allowedFileSizeInKB="{{crObj.allowedFileSizeInKB}}" (syncUploadedFiles)='syncUploadedFiles($event)'>
+                                                </app-cr-create-upload-form>
+                                            </div>
+
+
+                                            <div *ngIf="creative.urlPath == '__DEFAULT_IMAGE__' || creative.urlPath == '__ADDITIONAL_IMAGES__'">
+                                                <div id='dynamic-variable-form'>
+                                                    <div id='form-container'>
+                                                        <div class='form-body'>
+                                                            <div class='row form-group mrb20'>
+                                                                <div class="col-3">
+                                                                    <div class="form-label">
+                                                                        {{crConst.DV_LABEL}}
+                                                                        <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{crConst.DV_LABEL}}"></em>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='col-8'>
+                                                                    <mat-form-field class='header-btn wd250'>
+                                                                        <mat-select [(value)]="dv.macroSelected" (selectionChange)="macroSelectionHandler()">
+                                                                            <mat-option *ngFor="let a of dv.macrosOptions" [value]="a.id">
+                                                                                {{a.title}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                                <div class='clearfix'></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class='dv-cover' *ngIf='DCOVariables && DCOVariables.macroText'>
+                                                        <mat-card>
+                                                            <div class='file-card text12'>
+                                                                <div class='row'>
+                                                                    <div class="col-3">
+                                                                        <div class='file-icon text-center'>
+                                                                            <div class='html-bg'>
+                                                                                <em class='mrt20 text20 fa fa-file-image-o'></em>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-9">
+                                                                        <div class='row'>
+                                                                            <div class='col-3'>Variable:</div>
+                                                                            <div class='col-9'></div>
+                                                                        </div>
+                                                                        <div class='row mrt5'>
+                                                                            <div class='col-3'>Sample:</div>
+                                                                            <div class='col-9 text-normal text-wrap text-break'>
+                                                                                {{DCOVariables.samples[0]}}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </mat-card>
+                                                    </div>
+
+                                                    <div class='error-msg mrt10'>
+                                                        <div class="alert alert-danger alert-dismissible text11" *ngIf='dv.errorMsg'>
+                                                            {{dv.errorMsg}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class='file-cover' *ngIf='!showUploader'>
+                                                <div class='file-cover-header' *ngIf="creative.urlPath != '__DEFAULT_IMAGE__' && creative.urlPath != '__ADDITIONAL_IMAGES__'">
+                                                    <span class='title'>Files </span>
+                                                    <span class='action' (click)="toggleUploader()">Upload
+                                                        Another</span>
+                                                    <span class='clearfix'></span>
+                                                </div>
+
+                                                <div class='file-cover-body'>
+                                                    <!-- uploaded non-native image and non-native/native video-->
+                                                    <!-- card preview and remove section for above creatives -->
+                                                    <!-- Image-->
+                                                    <div class='cr-icon' *ngIf='creative.type == crConst.ALLOWED_TYPES.IMAGE || creative.type == crConst.ALLOWED_TYPES.NATIVE_IMAGE'>
+                                                        <img id='img-icon' class='img-icon' [src]='creative.previewUrl' alt="Preview" />
+                                                    </div>
+
+                                                    <div id='video-cover'>
+                                                        <!-- video -->
+                                                        <div class='cr-video-icon' *ngIf='creative.type == crConst.ALLOWED_TYPES.VIDEO || creative.type == crConst.ALLOWED_TYPES.NATIVE_VIDEO'>
+                                                            <video id='video-icon' width="100%" controls>
+                                <source [src]="creative.videoAttributes[0].videoPath" type="video/mp4">
+                                                                Your browser does not support HTML5 video.
+                                                            </video>
+                                                        </div>
+
+                                                        <!-- companion ad -->
+                                                        <div class='cr-icon' *ngIf='(creative.type == crConst.ALLOWED_TYPES.VIDEO || creative.type == crConst.ALLOWED_TYPES.NATIVE_VIDEO) && creative.videoAttributes[0].hasCompanion'>
+                                                            <img id='campanion-ad' class='img-icon' [src]='creative.videoAttributes[0].companionPath' alt="companion ad" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class='clearfix'></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class='pad20-side col-12'>
+                                <div *ngIf='formValidated == false' class="alert alert-danger" role="alert"><em class='fa fa-warning text-bold'></em> {{errorMsg}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class='form-footer' *ngIf='!showUploader' [ngClass]="{'no-cursor-wrapper': dv.errorMsg}">
+                            <button mat-raised-button [appDisableDemo]='appConst.DISABLE' class='btn-primary mrl15 pull-right' (click)="updateCreative()" [ngClass]="{'disableUI': dv.errorMsg}">Update</button>
+
+                            <button mat-button class='pull-right' [routerLink]="['/creative']">Cancel</button>
+                            <div class='clearfix'></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block-ui>

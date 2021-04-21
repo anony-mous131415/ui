@@ -1,0 +1,33 @@
+<div class='pad20-side'>
+    <div id='page-content'>
+        <div id='form-container'>
+            <div class='form-body'>
+                <div class="form-group">
+                    <div class="col-md-8 col-lg-8">
+                        <div>
+                            <mat-form-field class="wd-full">
+                                <textarea id="third_party_ad_tag" minlength="4" [ngClass]="{ 'input-danger': !formValidated }" [(ngModel)]="adTag" matInput placeholder="{{crConst.LABEL_ENTER_AD_TAG}}" autocomplete="none">
+                                      </textarea>
+                            </mat-form-field>
+                        </div>
+                        <mat-error class="error" *ngIf="!formValidated">
+                            {{ crConst.VALIDATION_TP_URL }}
+                        </mat-error>
+                        <div class='text-gray text11 mrt15 text-normal'>
+                            <div>Notes:</div><br> |CLICK|: This is an encoded ATOM click tracking macro. Special characters are URL encoded.<br> |CLICK|NOENCODING|: This is an unencoded ATOM click tracking macro. Special characters are not encoded and sent
+                            as is.<br> |RANDOM|: This is a cache busting macro. Some ad servers require this to be inserted to avoid browser caching of ads. Not adding this correctly may lead to discrepancy with these ad servers.<br>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class='false-footer'>
+    <button mat-raised-button class='btn-primary pull-right mrr15' (click)="onContinueClick()">Continue</button>
+    <button mat-button class='pull-right mrr15' (click)="onGoBackClick()">Go Back</button>
+    <div class='clearfix'></div>
+</div>

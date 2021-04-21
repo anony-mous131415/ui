@@ -1,0 +1,262 @@
+<navbar *ngIf='isNavbarRequired'></navbar>
+<block-ui>
+
+    <div class='page-container pxl-form-container'>
+        <div class='page-header'>
+            <div  *ngIf = 'isNavbarRequired' class='breadcrumbs-container' id='bc-cont'>
+                <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+            </div>
+            <div class='clearfix'></div>
+        </div>
+        <app-adv-static-header *ngIf="advId" entityId="{{advId}}" activeTab="2"></app-adv-static-header>
+
+        <div id='page-content' class="convTracker">
+            <div class='row '>
+                <div [ngClass]="{'col-xs-12':!advertiserDetails ,  'col-md-10': !advertiserDetails ,  'col-lg-8': !advertiserDetails}">
+
+                    <div id='form-container' class="formContent">
+                        <div class='form-header  sticky-top z10'>
+                            <span class=''>{{pixelDto && pixelDto.id ? "Edit Conversion Tracker" : "New Conversion Tracker"}}</span>
+                        </div>
+                        <!-- <div class="warning_msg_alert mrl15" *ngIf="!(pixelDto && pixelDto.id)">
+                            <ngb-alert *ngIf="!closed" (close)="closed=true" type="warning">Create the conversion pixel used for tracking conversions on this section</ngb-alert>
+                        </div> -->
+                        <mat-accordion id='campaign-form' [multi]="true">
+
+                            <!--basic details-->
+                            <mat-expansion-panel expanded="true" hideToggle disabled>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title id='tile-basic'>
+                                        <div class="consteppers">1</div>
+                                        <div class="accor-titles">Basic Details</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <div>
+                                    <div class='pad20-side'>
+                                        <div id='page-content'>
+                                            <div id='form-container'>
+                                                <div class='form-body'>
+                                                    <div class='col-12 mrl15'>
+                                                        <div class="form-group">
+                                                            <div class="row mrl0">
+
+                                                                <div class="col-md-4 col-lg-4 pt-3">
+                                                                    <div class="form-label">
+                                                                        {{pxlConst.PXL_TYPE_LABEL}}
+                                                                        <em class="fa fa-info-circle xyz" matTooltipPosition="above" matTooltip="{{pxlConst.PXL_TYPE_TOOLTIP}}"></em>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-lg-4 pad-rt25">
+                                                                    <div id='pxlType' name='pxlType'>
+                                                                        <mat-form-field class="wd-full">
+                                                                            <mat-select [(ngModel)]="selectedTypeStr">
+                                                                                <mat-option *ngFor="let t of TypeStr" [value]="t">
+                                                                                    {{t}}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <!-----------------name feild--------------------------------------------------------------->
+                                                        <app-form-input [(ngModel)]="pixelDto.name" tooltipPosition="above" label="{{pxlConst.PXL_NAME_LABEL}}*" tooltip="{{pxlConst.PXL_NAME_TOOLTIP}}" maxLen="256" minLen="4" id="pxlName" name="pxlName" validated="{{formValidated}}" validationMsg="{{pxlConst.VALIDATION_PXL_NAME}}"
+                                                            width="wd250">
+                                                        </app-form-input>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </mat-expansion-panel>
+
+                            <!-------------------------------------------second sub-header----------------------------------------------------------->
+                            <mat-expansion-panel expanded="true" hideToggle disabled>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title id='tile-settings'>
+                                        <div class="consteppers">2</div>
+                                        <div class="accor-titles">Conversion Settings</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div>
+                                    <div class='pad20-side'>
+                                        <div id='page-content'>
+                                            <div id='form-container'>
+                                                <div class='form-body'>
+                                                    <div class='col-12 mrl15'>
+                                                        <!----------------------------C2C-feild----------------------------------------------->
+                                                        <div *ngIf='selectedTypeStr !="View"'>
+                                                            <div class='form-group'>
+                                                                <div class="row mrl0 ">
+                                                                    <div class="col-md-4 col-lg-4">
+                                                                        <div class="form-label pt-3">
+                                                                            {{pxlConst.PXL_CLICK_LABEL}}
+                                                                            <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{pxlConst.PXL_CLICK_TOOLTIP}}"></em>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-8 col-lg-8">
+                                                                        <div class="">
+                                                                            <div class="d-flex flex-row">
+                                                                                <div id='pxlClickValue' name='pxlClickValue'>
+                                                                                    <mat-form-field>
+
+                                                                                        <mat-select [(ngModel)]="clickTime.value" name="n" placeholder="Maximum Time">
+                                                                                            <mat-option *ngFor="let n of Num" [value]="n">
+                                                                                                {{n}}
+                                                                                            </mat-option>
+                                                                                        </mat-select>
+                                                                                    </mat-form-field>
+                                                                                </div>
+                                                                                <div class='ml-3' id='pxlClickUnit' name='pxlClickUnit'>
+                                                                                    <mat-form-field>
+
+                                                                                        <mat-select [(ngModel)]="clickTime.unit" name="d">
+                                                                                            <mat-option *ngFor="let d of Duration" [value]="d">
+                                                                                                {{d}}
+                                                                                            </mat-option>
+                                                                                        </mat-select>
+                                                                                    </mat-form-field>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!----------------------------V2C-feild-------------------------------------------------->
+                                                        <div *ngIf='selectedTypeStr !="Click"'>
+                                                            <div class='form-group'>
+                                                                <div class="row mrl0 mrb20">
+                                                                    <div class="col-md-4 col-lg-4">
+                                                                        <div class="form-label pt-3">
+                                                                            {{pxlConst.PXL_VIEW_LABEL}}
+                                                                            <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{pxlConst.PXL_VIEW_TOOLTIP}}"></em>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-8 col-lg-8">
+                                                                        <div class="">
+                                                                            <div class="d-flex flex-row">
+                                                                                <div id='pxlConValue' name='pxlConValue'>
+                                                                                    <mat-form-field>
+
+                                                                                        <mat-select [(ngModel)]="viewTime.value" name="n" placeholder="Maximum Time">
+                                                                                            <mat-option *ngFor="let n of Num" [value]="n">
+                                                                                                {{n}}
+                                                                                            </mat-option>
+                                                                                        </mat-select>
+                                                                                    </mat-form-field>
+                                                                                </div>
+                                                                                <div class='ml-3' id='pxlConUnit' name='pxlConUnit'>
+                                                                                    <mat-form-field>
+
+                                                                                        <mat-select [(ngModel)]="viewTime.unit" name="d">
+                                                                                            <mat-option *ngFor="let d of Duration" [value]="d">
+                                                                                                {{d}}
+                                                                                            </mat-option>
+                                                                                        </mat-select>
+                                                                                    </mat-form-field>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="clearfix"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!----------------------------CONV ALLOWED -feild---------------------------------------------------->
+                                                        <div class='form-group'>
+                                                            <div class="row mrl0">
+                                                                <div class="col-md-4 col-lg-4">
+                                                                    <div class="form-label">
+                                                                        {{pxlConst.PXL_CNV_ALWD_LABEL}}
+                                                                        <em class="fa fa-info-circle" matTooltipPosition="above" matTooltip="{{pxlConst.PXL_CNV_ALWD_TOOLTIP}}"></em>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-8 col-lg-8">
+                                                                    <div class="">
+                                                                        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="radio">
+                                                                            <mat-radio-button class="example-radio-button mb-3 mrr10" [ngClass]="[radio===2 ? 'text-secondary' : '']" [value]="1">
+                                                                                Count Every Conversion
+                                                                            </mat-radio-button>
+                                                                            <mat-radio-button class="example-radio-button" [value]="2">
+                                                                                <div class="d-flex flex-row">
+                                                                                    <div class='text-line mr-1 pt-2' *ngIf="radio===1" [ngClass]="[radio===1 ? 'text-secondary' : '']">
+                                                                                        Count
+                                                                                    </div>
+                                                                                    <mat-form-field class="mrr15" *ngIf="radio==2">
+                                                                                        <input matInput placeholder="Count" [(ngModel)]='pixelDto.userFcap' id="pxlConAlwd" name="pxlConAlwd" maxlength="1024" minlength="4" [ngClass]="{ 'input-danger': !formValidated && radio===2 && (!pixelDto.userFcap||isInvalidNumber(pixelDto.userFcap) ) }"
+                                                                                        />
+                                                                                    </mat-form-field>
+                                                                                    <div class='text-line mr-1 pt-2' *ngIf="radio===1" [ngClass]="[radio===1 ? 'text-secondary' : '']">
+                                                                                        Conversions Per User
+                                                                                    </div>
+                                                                                    <div id="pxlConAlwdValue" name="pxlConAlwdValue" class="wd150">
+                                                                                        <mat-form-field [hidden]="radio===1" [ngClass]="{ 'input-danger':!formValidated && radio===2 && !fcapTime.value}">
+
+                                                                                            <mat-select [(ngModel)]="fcapTime.value" name="n" placeholder="Conversions Per User">
+                                                                                                <mat-option *ngFor="let n of Num" [value]="n">
+                                                                                                    {{n}}
+                                                                                                </mat-option>
+                                                                                            </mat-select>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+                                                                                    <div class='ml-3 wd100' id="pxlConAlwdUnit" name="pxlConAlwdUnit">
+                                                                                        <mat-form-field [hidden]="radio===1" [ngClass]="{ 'input-danger':!formValidated && radio===2 && !fcapTime.unit}">
+
+                                                                                            <mat-select [(ngModel)]="fcapTime.unit" name="d">
+                                                                                                <mat-option *ngFor="let d of Duration" [value]="d">
+                                                                                                    {{d}}
+                                                                                                </mat-option>
+                                                                                            </mat-select>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </mat-radio-button>
+                                                                        </mat-radio-group>
+                                                                        <mat-error class="error" *ngIf="!formValidated && radio===2 && !pixelDto.userFcap">
+                                                                            {{pxlConst.VALIDATION_EMPTY}}
+                                                                        </mat-error>
+                                                                        <mat-error class="error" *ngIf="!formValidated && radio===2 && !!pixelDto.userFcap && isInvalidNumber(pixelDto.userFcap)">
+                                                                            {{pxlConst.VALIDATION_INVALID}}
+                                                                        </mat-error>
+                                                                        <mat-error class="error" *ngIf="!formValidated && radio===2 && (!fcapTime.value || !fcapTime.unit )">
+                                                                            {{pxlConst.VALIDATION_REQUIRED}}
+                                                                        </mat-error>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                </div>
+            </div>
+            <mat-action-row class="pr-3">
+
+                <button class='mrl10' mat-button (click)='onCancel()'>Cancel</button>
+                <button id='pxlSaveExit' [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button class='btn-primary mrl15' (click)="save()">Save &
+Exit</button>
+
+            </mat-action-row>
+        </div>
+    </div>
+</block-ui>

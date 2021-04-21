@@ -1,0 +1,17 @@
+.help-text {
+    color: #f44336;
+}
+
+.wd200 {
+    width: 200px;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}

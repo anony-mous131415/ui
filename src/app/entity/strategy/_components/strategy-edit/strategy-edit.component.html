@@ -1,0 +1,89 @@
+<navbar></navbar>
+<div class='page-container strategy-form-container' [ngClass]="{'expCursor':mode}">
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+    <div id='page-content'>
+
+        <div class='row justify-content-center'>
+            <div class="col-xs-12 col-md-10 col-lg-8">
+                <div id="form-container">
+                    <div class="form-header sticky-top z10">
+                        <span style="text-transform: none !important;">{{getName()}}</span>
+                        <button id="strategy-cancel" class="pull-right" mat-button (click)="onCancel()">Cancel</button>
+                    </div>
+                    <div class="">
+
+                        <mat-accordion #accordion="matAccordion" id="strategy-form">
+                            <mat-expansion-panel hideToggle [expanded]="selStepperIndex===0" [disabled]="getDisabledStatus(0)" (opened)="panelClick(0 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">1</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_BASIC }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-basic [mode]="mode" (skadTrigger)="skadTrigger($event)" ></app-strategy-edit-basic>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel hideToggle [expanded]="selStepperIndex===1" [disabled]="getDisabledStatus(1)" (opened)="panelClick(1 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">2</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_INVENTORY }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-inventory [mode]="mode"></app-strategy-edit-inventory>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="selStepperIndex===2" hideToggle [disabled]="getDisabledStatus(2)" (opened)="panelClick(2 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">3</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_TARGETING }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-targeting [mode]="mode"></app-strategy-edit-targeting>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="selStepperIndex===3" hideToggle [disabled]="getDisabledStatus(3)" (opened)="panelClick(3 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">4</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_BUDGET }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-budget [mode]="mode"></app-strategy-edit-budget>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="selStepperIndex===4" hideToggle [disabled]="getDisabledStatus(4)" (opened)="panelClick(4 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">5</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_CREATIVES }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-creatives [mode]="mode" [apiSkadParam]='apiSkadParam'></app-strategy-edit-creatives>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="selStepperIndex===5" hideToggle [disabled]="getDisabledStatus(5)" (opened)="panelClick(5 , $event)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="strsteppers">6</div>
+                                        <div class="accor-titles">{{ SCONST.STEP_TITLE_REVIEW }}</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-strategy-edit-review [mode]="mode" [isStrategySkad]='apiSkadParam'></app-strategy-edit-review>
+                            </mat-expansion-panel>
+
+                        </mat-accordion>
+                        <div class='clearfix mrb15'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

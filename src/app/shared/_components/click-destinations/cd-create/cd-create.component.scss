@@ -1,0 +1,71 @@
+$danger-color: #f44336;
+.modal-body {
+    // max-height: 450px;
+    height: calc(100% - 119px);
+
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey !important;
+    border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: grey !important;
+    border-radius: 10px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: black !important;
+}
+
+.shift {
+    margin-top: -3vw;
+}
+
+.no-pointer {
+    pointer-events: none;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}
+
+.cdMacroMenu {
+    height: 200px !important;
+}
+
+.spanPad {
+    margin-top: 0.9em !important;
+    margin-bottom: 0.7em !important;
+}
+
+#cd-form .modal-body app-form-radio .row {
+    margin-left: 0 !important;
+}
+
+.mrb0 {
+    margin-bottom: 0px !important;
+}
+
+.label-css {
+    color: #6c757d;
+}
+
+.validation-failed {
+    font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: $danger-color;
+    font-size: 11px;
+    margin-top: 5px;
+}

@@ -1,0 +1,26 @@
+<div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">Applied filters</h4>
+    <button class="btn btn-primary btn-default" (click)="clearAllFilters()">Clear All</button>
+</div>
+<div mat-dialog-content class="my-2 modal-body">
+    <div class="card bg-light border-0 mb-3" *ngFor="let entity of bcEntities">
+        <div class="card-header col-12 d-flex flex-row">
+            <h6 class="m-0 flex-grow-1 text-font-resposive my-auto"><strong>{{bc[entity].name | uppercase}}</strong></h6>
+            <button class="btn btn-primary btn-default" (click)="clearAllFiltersEntity(entity)">Clear</button>
+        </div>
+        <div class="card-body">
+            <div class="d-flex flex-row flex-wrap m-0 p-0">
+                <button class="btn border pill mb-2" *ngFor="let value of bc[entity].values">
+          {{value.title}} &nbsp;<em class='fa fa-times' title="Remove selection"
+            (click)="removeFilter(entity, value.id)"></em>
+        </button>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="float-right modal-footer">
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button class="btn-primary mrl15" (click)="onApplyClick()">Apply</button>
+</div>

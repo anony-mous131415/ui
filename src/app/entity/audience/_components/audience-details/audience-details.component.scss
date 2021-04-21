@@ -1,0 +1,60 @@
+$dotted-border: #e4e4e4;
+#all-details {
+    background: #ffffff;
+    border-width: 1px 1px 0 1px;
+    border-style: dotted;
+    border-color: $dotted-border;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff;
+}
+
+hr {
+    border-top: 1px dotted #888;
+}
+
+.rule-id {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #979797;
+    background-color: #f7f7f7;
+    border-bottom: 1px dotted #cccccc;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+}
+
+.rule-txt {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 25px;
+    color: #979797;
+    background-color: #f7f7f7;
+    word-break: break-all;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    &:last-of-type {
+        border-bottom: 1px solid #cccccc;
+    }
+}
+
+.title-over-rule {
+    text-align: left;
+    margin-left: -1vw;
+}
+
+#sync-btn .fa-refresh {
+    margin-right: 5px;
+}
+
+.sync {
+    line-height: 36px;
+}

@@ -1,0 +1,245 @@
+<div>
+    <div class="form-body py-2  mrl40" *ngIf="strategyDTO">
+
+        <!-- Budget -->
+        <div class="form-subheader border-0 small mb-2 d-flex justify-content-between"
+            [ngClass]="{'px-0': !isBulkEdit}">
+            <div class="pdl-10 text-secondary align-self-center"><strong>{{SCONST.BUDGET_SUBHEADER_BUDGET}}</strong>
+            </div>
+
+            <!-- REVX-371 : strategy bulk edit -->
+            <div *ngIf='isBulkEdit' class="pull-right">
+                <mat-button-toggle-group *ngFor='let o of budget.allowedBulkEditOpts'
+                    [(ngModel)]="budget.selectedBulkEditOpt">
+                    <mat-button-toggle [value]="o.id" [checked]="o.id===budget.selectedBulkEditOpt" class="bc-title"
+                        disableRipple>
+                        {{o.name}}
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+        </div>
+
+        <!--revx-371 bulk edit-->
+        <div *ngIf='isBulkEdit' class='mb-2'>
+            {{budget.selectedBulkEditOpt === SCONST.REPLACE ?  SCONST.REPLACE_MSG.BUDGET : ''}}
+        </div>
+
+        <ng-container *ngIf='!isToBeHidden()'>
+
+            <!--lifetime media buget-->
+            <div class="form-group mb-3">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-3 mt-1">
+                        <div class="form-label my-auto">
+                            {{ SCONST.BUDGET_MEDIA_BUDGET_LABEL }}
+                            <em class="fa fa-info-circle" matTooltipPosition="above"
+                                matTooltip="{{ SCONST.BUDGET_MEDIA_BUDGET_TIP }}"></em>
+                        </div>
+                    </div>
+                    <div class="col-9 my-auto">
+                        <div>
+                            <div>
+                                <mat-radio-group class="d-flex flex-column"
+                                    [(ngModel)]="strBudgetDetails.lifetimeMediaBudget"
+                                    (change)="onLifeTimeMediaBudgetChange($event)">
+
+                                    <!--revx-371 bulk edit-->
+                                    <mat-radio-button class="mb-2" id="lifetime-budget-unlimited" [value]="-1">
+                                        Unlimited (Auto) <span
+                                            *ngIf="!isBulkEdit && strBudgetDetails.lifetimeMediaBudget === -1">&nbsp;&nbsp;&nbsp;&nbsp;{{campaignBudgetDescUnlimited}}</span>
+                                    </mat-radio-button>
+                                    <mat-radio-button class="" id="lifetime-budget-limited" [value]="1">
+                                        <div class="d-flex flex-row">
+                                            <div class='mr-1 my-auto'>Limit to
+                                            </div>
+                                            <div class="mr-1" *ngIf="strBudgetDetails.lifetimeMediaBudget === 1">
+                                                <input id="limit-value" type="number" maxlength="1024" minlength="4"
+                                                    class="form-control wd100"
+                                                    [(ngModel)]="strBudgetDetails.lifetimeMediaBudgetValue"
+                                                    (keyup)="onLifetimeMediaBudgetValueChange($event)" />
+                                            </div>
+
+                                            <!--revx-371 bulk edit-->
+                                            <div class="my-auto" *ngIf="strBudgetDetails.lifetimeMediaBudget === 1">
+                                                <span *ngIf='!isBulkEdit'
+                                                    class="mr-1">{{campaignCurrency}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span
+                                                    *ngIf="!isBulkEdit">{{campaignBudgetDescLimitTo}}</span>
+
+                                                <span *ngIf='isBulkEdit' class="mr-1">in campaign currency</span>
+
+                                            </div>
+                                        </div>
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <mat-error class="error" *ngIf="error['lifetimeBudget'].hasError">
+                                {{error['lifetimeBudget'].msg}}
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+
+            <!--daily media budget-->
+            <div class="form-group mb-3">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-md-8 col-lg-8">
+                        <mat-form-field class="wd-full">
+                            <input id="daily-budget-value" type="number"
+                                [(ngModel)]="strBudgetDetails.dailyMediaBudgetValue" matInput
+                                placeholder="{{SCONST.BUDGET_DAILY_MEDIA_BUDGET_LABEL}}" matTooltipPosition="above"
+                                matTooltip="{{SCONST.BUDGET_DAILY_MEDIA_BUDGET_TIP}}"
+                                (keyup)="onDailyMediaBudgetValueChange($event)">
+                            <span *ngIf='!isBulkEdit' matSuffix>{{campaign?.currencyCode + ' / Day'}}</span>
+                            <span *ngIf='isBulkEdit' matSuffix>campaign currency / Day</span>
+
+                        </mat-form-field>
+                        <mat-error class="error" *ngIf="error['dailyMediaBudget'].hasError">
+                            {{error['dailyMediaBudget'].msg}}
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <!--budget pacing -->
+            <div [hidden]='isBulkEdit' class="form-group mb-3">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-3 my-1">
+                        <div class="form-label">
+                            {{ SCONST.BUDGET_PACING_LABEL }}
+                            <em class="fa fa-info-circle" matTooltipPosition="above"
+                                matTooltip="{{ SCONST.BUDGET_PACING_TIP }}"></em>
+                        </div>
+                    </div>
+                    <div class="col-9 my-auto">
+                        <div>
+                            <div>
+                                <mat-radio-group class="d-flex flex-column" [(ngModel)]="strBudgetDetails.pacing">
+                                    <mat-radio-button class="mb-2" id="pacing-opt-{{opt.id}}"
+                                        *ngFor="let opt of optsBudgetPacing" [value]="opt.value"
+                                        [disabled]="opt.disabled">
+                                        {{opt.title}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <!-- Bidding -->
+            <div class="form-subheader border-0 small px-0 mb-3">
+                <div class="pdl-10 text-secondary"><strong>{{SCONST.BUDGET_SUBHEADER_BIDDING}}</strong></div>
+            </div>
+
+            <!--bid type-->
+            <div class="form-group mb-3">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-3 my-1">
+                        <div class="form-label">
+                            {{ SCONST.BUDGET_BID_TYPE_LABEL }}
+                            <em class="fa fa-info-circle" matTooltipPosition="above"
+                                matTooltip="{{ SCONST.BUDGET_BID_TYPE_TIP }}"></em>
+                        </div>
+                    </div>
+                    <div class="col-9 my-auto">
+                        <div class="d-flex flex-row">
+                            <mat-form-field class="wd200">
+                                <mat-select id="bid-type" [(ngModel)]="strBudgetDetails.bidType"
+                                    (selectionChange)="onBidTypeChange($event)">
+                                    <mat-option id="bid-type-opt-{{bidType.value}}" *ngFor="let bidType of optBidType"
+                                        [value]="bidType.value">
+                                        {{ bidType.title }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <span class="ml-1 my-auto">{{bidTypeDesc}}</span>
+                        </div>
+                        <mat-error class="error" *ngIf="error['bidType'].hasError">
+                            {{error['bidType'].msg}}
+                        </mat-error>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+
+            <!--bid price-->
+            <div class="form-group mb-3">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-md-8 col-lg-8">
+                        <mat-form-field class="wd-full">
+                            <input id="bidPrice" type="number" [(ngModel)]="strBudgetDetails.bidPrice" matInput
+                                placeholder="{{SCONST.BUDGET_BID_PRICE_LABEL}}">
+                            <span *ngIf='!isBulkEdit' matSuffix>{{campaign?.currencyCode}}</span>
+                            <span *ngIf='isBulkEdit' matSuffix>campign currency</span>
+
+                        </mat-form-field>
+                        <mat-error class="error" *ngIf="error['bidPrice'].hasError">
+                            {{error['bidPrice'].msg}}
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <!--bidrange-->
+            <div class="form-group mb-3">
+                <div class="d-flex flex-row col-12 p-0">
+                    <div class="col-3 my-1">
+                        <div class="form-label">
+                            {{ SCONST.BUDGET_BID_RANGE_LABEL }}
+                            <em class="fa fa-info-circle" matTooltipPosition="above"
+                                matTooltip="{{ SCONST.BUDGET_BID_RANGE_TIP }}"></em>
+                        </div>
+                    </div>
+                    <div class="col-9 my-auto">
+                        <div class="d-flex flex-row">
+                            <div class="d-flex flex-column">
+                                <mat-form-field class="wd100">
+                                    <input id="bid-range-min" matInput type="number" placeholder="Min" name="flowRate"
+                                        maxlength="256" minlength="10" [(ngModel)]="strBudgetDetails.bidRangeMin" />
+
+                                </mat-form-field>
+                            </div>
+                            <div class="mx-3 pt-4">to</div>
+                            <div class="d-flex flex-column">
+                                <mat-form-field class="wd100">
+                                    <input id="bid-range-max" type="number" placeholder="Max" matInput name="flowRate"
+                                        maxlength="256" minlength="10" [(ngModel)]="strBudgetDetails.bidRangeMax" />
+
+                                </mat-form-field>
+                            </div>
+                            <div class="mx-3 pt-4">{{campaignCurrency}}</div>
+                        </div>
+                        <mat-error class="error" *ngIf="error['bidRangeMin'].hasError">
+                            {{error['bidRangeMin'].msg}}
+                        </mat-error>
+                        <mat-error class="error" *ngIf="error['bidRangeMax'].hasError">
+                            {{error['bidRangeMax'].msg}}
+                        </mat-error>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+        </ng-container>
+
+
+    </div>
+    <div class="false-footer">
+        <button id="budget-save" mat-raised-button class="btn-primary pull-right" *ngIf="mode === MODE.EDIT"
+            (click)="onReviewAndSave()">Review &
+            Save</button>
+        <button id="target-next" mat-raised-button class="btn-secondary pull-right mr-2"
+            (click)="goToNextStep()">Next</button>
+        <button id="target-back" mat-button class="pull-right mr-2" (click)="goToPrevStep()">Back</button>
+    </div>
+</div>

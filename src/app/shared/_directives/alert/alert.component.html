@@ -1,0 +1,11 @@
+<div *ngIf="message" class='alertdiv'
+  [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error', 'alert-warning': message.type === 'warning' }">
+  {{message.text}}
+  <a mat-button (click)="clearAlert()"><em class="fa fa-times"></em></a>
+</div>
+
+<div *ngIf="nativeMessage" class='alertdiv'
+  [ngClass]="{ 'alert': nativeMessage, 'alert-success': nativeMessage.type === 'success', 'alert-danger': nativeMessage.type === 'error', 'alert-warning': nativeMessage.type === 'warning' }">
+  {{nativeMessage.text}}
+  <a mat-button (click)="clearAlert()"><em class="fa fa-times"></em></a>
+</div>

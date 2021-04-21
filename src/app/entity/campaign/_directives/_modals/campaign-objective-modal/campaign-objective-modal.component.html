@@ -1,0 +1,71 @@
+<div id='modal-content' class='modal-content mh-100'>
+
+
+    <div id='modal-header' class="modal-header">
+        <h4 class="modal-title">Select Campaign Objective</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModal()" title='close'>
+      <em class="fa fa-times"></em>
+    </button>
+    </div>
+
+    <div id='modal-body' class="modal-body">
+
+
+        <div *ngIf='showWarning' class="row mx-1 alert alert-danger" role="alert">
+            <div class="col-1">
+                <em class="fa fa-exclamation-triangle" aria-hidden="true"></em>
+            </div>
+            <div class="col-11">
+                Please select one of the Campaign Objective.
+            </div>
+        </div>
+
+
+        <div id='campaignConstants.WEBSITE' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===campaignConstants.WEBSITE ? 'highlight' : '']" (click)="setObjective(campaignConstants.WEBSITE)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa  big-icon" [ngClass]="[objective===campaignConstants.WEBSITE ? 'fa-check circle' : 'fa-line-chart']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="pt-2 text-secondary">Website Conversions</h1>
+                <span>Create campaign to drive conversions on advertiser's desktop or mobile website.</span>
+            </div>
+        </div>
+
+        <div id='campaignConstants.MOBILE_APP_INSTALLS' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===campaignConstants.MOBILE_APP_INSTALLS ? 'highlight' : '']" (click)="setObjective(campaignConstants.MOBILE_APP_INSTALLS)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa big-icon" [ngClass]="[objective===campaignConstants.MOBILE_APP_INSTALLS ? 'fa-check circle' : 'fa-download']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="text-secondary pt-2">App Installs</h1>
+                <span>Create campaign that encourages users to install advertiser's mobile app.</span>
+            </div>
+        </div>
+
+        <div id='campaignConstants.MOBILE_APP_ENGAGEMENT' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===campaignConstants.MOBILE_APP_ENGAGEMENT ? 'highlight' : '']" (click)="setObjective(campaignConstants.MOBILE_APP_ENGAGEMENT)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa big-icon" [ngClass]="[objective===campaignConstants.MOBILE_APP_ENGAGEMENT ? 'fa-check circle' : 'fa-weixin']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="text-secondary pt-2">App Engagement</h1>
+                <span>Create campaign that encourages users to increase activity on advertiser's mobile app.</span>
+            </div>
+        </div>
+
+        <div id='campaignConstants.BRAND_AWARENESS' class='row mt-2 mx-1 h-25 row-container' [ngClass]="[objective===campaignConstants.BRAND_AWARENESS ? 'highlight' : '']" (click)="setObjective(campaignConstants.BRAND_AWARENESS)">
+            <div class="col-3 py-2 d-flex align-items-center justify-content-center d_hover">
+                <em class="fa big-icon" [ngClass]="[objective===campaignConstants.BRAND_AWARENESS ? 'fa-check circle' : 'fa-bullhorn']" aria-hidden="true"></em>
+            </div>
+            <div class="col-9 campaign-objective-content d_hover">
+                <h1 class="text-secondary pt-2">Brand Awareness</h1>
+                <span>Create campaign that increases awareness of your brand.</span>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id='modal-footer' class="modal-footer d-flex justify-content-end">
+        <button id='cmpgn-cancel-btn' mat-button class="mrr15" (click)='dismissModal()'>Cancel</button>
+        <button id='cmpgn-done-btn' type="button" mat-raised-button class='btn-primary' (click)="done()">Done</button>
+    </div>
+</div>

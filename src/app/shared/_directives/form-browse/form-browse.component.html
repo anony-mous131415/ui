@@ -1,0 +1,29 @@
+<div class="form-group">
+  <div class="row">
+    <div class="col-md-2 col-lg-2">
+      <div class="form-label">
+        {{ label }}
+        <em class="fa fa-info-circle" matTooltipPosition="{{ tooltipPosition }}" matTooltip="{{ tooltip }}"></em>
+      </div>
+    </div>
+    <div class="col-md-3 col-lg-3 pt-1">
+      <div class='d-flex flex-row'>
+        <div *ngIf='selectionDone' class='form-txt'>{{val}}</div>
+        <div *ngIf='selectionDone'><span class='ml-3 editModal' (click)="openModal()">EDIT</span></div>
+        <div *ngIf='!selectionDone'>
+          <button [ngClass]="{ 'btn-danger': validated == 'false' && !val }" class='btn btn-primary btn-default'
+            (click)='openModal()' id="list-export-btn">
+            <em class='fa fa-file-image-o'></em>
+            <span>{{btnPlaceHolder}}</span>
+          </button>
+        </div>
+      </div>
+      <mat-error class="error" *ngIf="validated == 'false' && !val">
+        {{validationMsg}}
+      </mat-error>
+    </div>
+
+
+  </div>
+  <div class="clearfix"></div>
+</div>

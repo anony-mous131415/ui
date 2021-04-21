@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv=”Cache-Control” content=”no-cache, no-store, must-revalidate” />
+  <meta http-equiv=”Pragma” content=”no-cache” />
+  <meta http-equiv=”Expires” content='0' />
+
+  <!--Theme service is handling the title and favicon-->
+  <title></title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' *.atomex.net *.cloudfront.net *.helpscout.net *.site24x7rum.com *.bootstrapcdn.com *.googleapis.com *.google.com http://*.hotjar.com:* https://*.hotjar.com:* http://*.hotjar.io https://*.hotjar.io wss://*.hotjar.com *.fontawesome.com; font-src 'self' data: *.gstatic.com *.fontawesome.com;" />
+
+  <link rel="preconnect" href="https://apiv2.atomex.net" crossorigin>
+  <link rel="preconnect" href="https://apiv2beta.atomex.net" crossorigin>
+  <link rel="preconnect" href="https://apiv2stage.atomex.net" crossorigin>
+  <link rel="preconnect" href="https://static.site24x7rum.com" crossorigin>
+  <link rel="preconnect" href="http://static.site24x7rum.com" crossorigin>
+  <link rel="preconnect" href="https://use.fontawesome.com" crossorigin>
+  <link rel="preconnect" href="https://stackpath.bootstrapcdn.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://col.site24x7rum.com" crossorigin>
+  <link rel="preconnect" href="http://col.site24x7rum.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.atomex.net" crossorigin>
+  <link rel="preconnect" href="https://rescdn.atomex.net" crossorigin>
+
+  <!-- other script and css -->
+  <script type="text/javascript">
+    var rumMOKey = '';
+    (function () {
+      if (window.performance && window.performance.timing && window.performance.navigation) {
+        var site24x7_rum_beacon = document.createElement('script');
+        site24x7_rum_beacon.async = true;
+        site24x7_rum_beacon.setAttribute('src', '//static.site24x7rum.com/beacon/site24x7rum-min.js?appKey=' + rumMOKey);
+        document.getElementsByTagName('head')[0].appendChild(site24x7_rum_beacon);
+      }
+    })(window)
+  </script>
+
+  <!-- Hotjar Tracking Code for www.v2.atomex.net -->
+  <script>
+      (function (h, o, t, j, a, r) {
+        h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
+        h._hjSettings = { hjid: 2357607, hjsv: 6 };
+        a = o.getElementsByTagName('head')[0];
+        r = o.createElement('script'); r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+  </script>
+
+  <script src="https://use.fontawesome.com/66f44bf8cb.js"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css"
+    href="/assets/fonts/roboto/roboto.css?family=Roboto:300,400,500,700|Roboto+Mono:300&display=swap" />
+
+  <!--Theme service is handling the favicon-->
+  <link rel="icon" type="image/x-icon" href="">
+</head>
+
+<body>
+
+  <!-- app component -->
+  <app-root></app-root>
+
+</body>
+
+</html>

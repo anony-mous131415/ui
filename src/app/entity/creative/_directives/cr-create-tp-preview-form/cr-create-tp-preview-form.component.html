@@ -1,0 +1,61 @@
+<block-ui>
+    <div class='pad20-side mrb20'>
+        <!-- showing uploaded files with error message along with that -->
+        <div class='row justify-content-center'>
+            <div class='col-12'>
+                <div id='page-content'>
+                    <div class='creative-card mrr15' *ngFor="let cr of creativeMockups; index as i" [ngClass]="{'border-bottom1': (i < (creativeMockups.length - 1) && creativeMockups.length > 1 ) }">
+
+                        <div class='topright' *ngIf='clickVerified==false' (click)="openVerifyModal(cr)">
+                            <em class='fa fa-warning' matTooltipPosition="above" matTooltip="Verify this creative"></em> Verify
+                        </div>
+
+                        <div class='topright text-success' *ngIf='clickVerified==true'>
+                            <em class='fa fa-check' matTooltipPosition="above" matTooltip="Verify this creative"></em> Verified
+                        </div>
+
+                        <!-- HTML -->
+                        <div class='cr-icon'>
+                            <em class='img-icon fa fa-file-code-o text25 mrt10 text-gray'></em>
+                        </div>
+
+                        <div class='cr-details'>
+                            <div class='cr-title' title=''>
+                                {{cr.name}}
+                            </div>
+
+                            <div class='cr-body'>
+                                <span id='dimension-form-cover'>
+                  <mat-form-field class="wd100">
+                    <input matInput [(ngModel)]='cr.size.width' [ngClass]="{'error':!formValidated && !cr.size.width}"
+                      type='number' min='1' placeholder="Width" autocomplete="off">
+                  </mat-form-field>
+                  <span class='text-gray mrl10 mrr10'>X</span>
+                                <mat-form-field class="wd100">
+                                    <input matInput autocomplete="off" [(ngModel)]='cr.size.height' [ngClass]="{'error':!formValidated && !cr.size.width}" type='number' min='1' placeholder="Height">
+                                </mat-form-field>
+                                <div class='clearfix'></div>
+                                <mat-error class="error" *ngIf='formValidated && (!cr.size.width || !cr.size.height)'>
+                                    Field is missing.
+                                </mat-error>
+                                <span class='clearfix'></span>
+                                </span>
+                                <div class='clearfix'></div>
+                            </div>
+
+                        </div>
+                        <div class='clearfix'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class='false-footer'>
+        <div class='pull-left text-danger text12' *ngIf='errorMsg.globalError'><em class='fa fa-warning'></em> {{errorMsg.globalError}}
+        </div>
+        <button mat-raised-button class='btn-primary pull-right mrr15' [appDisableDemo]='appConst.DISABLE' (click)="onContinueClick()">Create</button>
+        <button mat-button class='pull-right mrr15' (click)="onGoBackClick()">Go Back</button>
+        <div class='clearfix'></div>
+    </div>
+</block-ui>

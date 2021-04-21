@@ -1,0 +1,30 @@
+.list-group {
+  max-height: 250px !important;
+  overflow-y: auto !important;
+}
+
+.primary {
+  color: var(--primary-color) !important
+}
+
+.primary-icon {
+  color: var(--primary-color) !important;
+  opacity: 0.7 !important;
+}
+
+.border-default {
+  border-color: #dee2e6 !important;
+}
+.mat-option {
+  height: 35px !important;
+  border-bottom: 1px solid var(--secondary-color) !important;
+}
+
+.mat-form-field-infix {
+  padding: 0px !important;
+}
+
+.rounded-right {
+  -webkit-clip-path: polygon(80% 0, 100% 50%, 100% 50%, 80% 100%, 0 100%, 0 0);
+  clip-path: polygon(80% 0, 100% 50%, 100% 50%, 80% 100%, 0 100%, 0 0);
+}

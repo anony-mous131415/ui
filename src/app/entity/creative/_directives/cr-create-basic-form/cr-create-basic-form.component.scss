@@ -1,0 +1,16 @@
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+    width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+    opacity: 0.6;
+    color: #fff !important;
+}
+
+.form-body {
+    padding: 0px 0px 0px 0px !important;
+}
+.false-footer {
+    padding: 16px 0;
+}

@@ -1,0 +1,33 @@
+<div *ngIf="isAdvertiserPage">
+    <div id='page-content'>
+        <app-generic-list entity="CREATIVE" removeDefaultFilter=true advId="{{advId}}" showAutoCompleteSearch=true listTitle="CREATIVES" showActivateDeActivateBtn=true detailsPageLink="/creative/details/" createPageLink="{{createPageLink}}" dataUnavailableMsg="No creative available"
+            dropdownMenu="{{dropdownMenu}}">
+        </app-generic-list>
+    </div>
+</div>
+<div *ngIf="!isAdvertiserPage">
+    <navbar></navbar>
+    <div class='page-container'>
+        <div class='page-header'>
+            <div class='breadcrumbs-container'>
+                <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+            </div>
+            <div class='date-range-container'>
+                <app-date-range-picker></app-date-range-picker>
+            </div>
+            <div class='clearfix'></div>
+        </div>
+
+        <div id="all-details">
+            <app-adv-static-header *ngIf="advId" entityId="{{advId}}" activeTab="7" showEditOption="true">
+            </app-adv-static-header>
+
+            <div id='page-content'>
+                <app-generic-list entity="CREATIVE" removeDefaultFilter=true advId="{{advId}}" showAutoCompleteSearch=true listTitle="CREATIVES" showActivateDeActivateBtn=true detailsPageLink="/creative/details/" createPageLink="{{createPageLink}}" dataUnavailableMsg="No creative available"
+                    dropdownMenu="{{dropdownMenu}}">
+                </app-generic-list>
+
+            </div>
+        </div>
+    </div>
+</div>

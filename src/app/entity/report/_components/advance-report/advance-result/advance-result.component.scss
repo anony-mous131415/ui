@@ -1,0 +1,101 @@
+$header: #e4e4e4;
+$list-header-color: #ebebeb;
+$header-border: #bbbbbb;
+#list-body {
+    #table-content {
+        width: 100%;
+        overflow: auto;
+        max-height: 70vh;
+    }
+    .mat-row {
+        border-bottom-width: 0px;
+        width: fit-content !important;
+        .mat-cell {
+            font-family: Roboto, "Helvetica Neue", sans-serif;
+            font-size: 11px;
+            border-bottom: 1px solid #ebebeb;
+        }
+    }
+    .mat-header-row {
+        background: $header;
+        min-height: 45px;
+        border-bottom-width: 0px;
+        z-index: 500;
+        width: fit-content !important;
+        .mat-column-name {
+            border-right: 1px solid $header-border;
+        }
+    }
+    .mat-sort-header-button {
+        color: #626262;
+        text-align: left !important;
+    }
+}
+
+#advResult .mat-column-name {
+    flex: 0 0 15% !important;
+    width: 200px;
+    max-width: 200px;
+    border-right: 1px solid #e0e0e0;
+}
+
+.mat-cell {
+    width: 180px;
+    padding: 0px !important;
+    padding-left: 10px !important;
+    display: flex !important;
+    justify-content: flex-start !important; // or flex-end
+    &:first-of-type {
+        padding-left: 15px !important;
+    }
+    &:last-of-type {
+        padding-right: 15px !important;
+    }
+}
+
+.mat-sort-header-button {
+    text-align: left;
+}
+
+.mat-header-cell {
+    background: $header;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    width: 180px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    display: flex;
+    justify-content: flex-start !important;
+    padding: 0px !important;
+    padding-left: 10px !important;
+    &:first-of-type {
+        padding-left: 15px !important;
+    }
+    &:last-of-type {
+        padding-right: 15px !important;
+    }
+    .mat-sort-header-arrow,
+    em.fa-caret-down {
+        color: var(--primary-color) !important;
+    }
+}
+
+.mat-column-id {
+    min-width: 70px !important;
+}
+
+.mat-column-active {
+    flex: 0 0 3% !important;
+    min-width: 30px !important;
+}
+
+.mat-column-select {
+    flex: 0 0 3% !important;
+    min-width: 30px !important;
+}
+
+.mat-row:nth-child(odd) {
+    background-color: #f7f7f7;
+}
+
+#list-footer {
+    width: 100%;
+}

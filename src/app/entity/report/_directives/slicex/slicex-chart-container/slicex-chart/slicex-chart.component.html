@@ -1,0 +1,23 @@
+<div id="chartcontainer-{{chartData.Metric}}" class="col-12 bg-light d-flex flex-column p-2 mb-3 boxShadow">
+    <div class="p-0 d-flex flex-row col-12 mb-2">
+        <h6 class="text-dark my-auto col-3 px-1 text-font-resposive"><strong>{{ chartData.MetricDisplayName }}</strong></h6>
+        <div class="d-flex flex-row col-9 px-3 text-right">
+            <h5 id="chartcontainer-{{chartData.Metric}}-value" class="primary my-auto flex-fill text-font-resposive" [ngClass]="{'text-center': total.compValue}">
+                <strong matTooltip="{{total.valueRaw}}" matTooltipPosition="{{'above'}}">{{ total.value }}</strong>
+            </h5>
+            <h6 id="chartcontainer-{{chartData.Metric}}-comparevalue" class="secondary my-auto flex-fill border-left border-dark text-center text-font-resposive" *ngIf="total.compValue">
+                <strong matTooltip="{{total.compValueRaw}}" matTooltipPosition="above">{{ total.compValue }}</strong>
+            </h6>
+            <h6 id="chartcontainer-{{chartData.Metric}}-change" class="my-auto flex-fill border-left border-dark text-center text-font-resposive" [ngClass]="{
+        'compare-success': total.changeFactor === 1,
+        'compare-danger': total.changeFactor === -1
+      }" *ngIf="total.change"><strong>{{ total.change }}</strong>&nbsp;
+                <em class="fa" [ngClass]="{
+        'fa-caret-up': total.changeFactor === 1,
+        'fa-caret-down': total.changeFactor === -1
+      }"></em>
+            </h6>
+        </div>
+    </div>
+    <div class="p-0" id="{{ chartData.ContainerID }}"></div>
+</div>

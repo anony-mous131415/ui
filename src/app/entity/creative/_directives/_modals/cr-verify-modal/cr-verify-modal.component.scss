@@ -1,0 +1,33 @@
+#creative-holder {
+  background-color: #f3f3f3;
+  border: 1px solid #b3b3b3;
+  margin: 5px 0 15px;
+  text-align: center;
+  padding: 30px;
+}
+
+#verify-process {
+  .header {
+      margin-top: 8px;
+      color: #444;
+      font-weight: bold;
+  }
+  .steps {
+      color: #888;
+  }
+}
+
+.mat-radio-button~.mat-radio-button {
+  margin-left: 16px;
+  margin-top: 5px;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff !important;
+}

@@ -1,0 +1,13 @@
+<div mat-dialog-title class="modal-header">
+    <h4 class="flex-grow-1 my-auto modal-title">{{data.title}}</h4>
+</div>
+<div mat-dialog-content class="modal-body">
+    <mat-form-field class="wd-full presetName">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="themeName" autocomplete="off"/>
+    </mat-form-field>
+</div>
+<div class="modal-footer">
+    <button mat-button class='mrr15' (click)="onCancelClick()">Cancel</button>
+    <button mat-button class='btn-primary' (click)="onDoneClick()">Save</button>
+</div>

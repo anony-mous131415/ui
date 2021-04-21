@@ -1,0 +1,36 @@
+<div class="right-options d-flex flex-row justify-content-between">
+    <mat-form-field>
+        <mat-label>View Metric</mat-label>
+        <mat-select [(value)]="selEntityMetric">
+            <mat-option id="listmetric-{{metric.id}}" *ngFor="let metric of ddMetrics" [value]="metric.id" (onSelectionChange)="onEntityMetricSelectionChanged($event)">
+                {{metric.title}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <div class="my-auto">
+        <button class="btn btn-sm bg-transparent border" [ngClass]="{'active': showGridView}" (click)="toggleView(1)">
+          <em class='fa fa-th view-icon' title='Grid View'></em></button>
+        <button class="btn btn-sm bg-transparent border" [ngClass]="{'active': !showGridView}" (click)="toggleView(2)">
+          <em class='fa fa-tasks view-icon' title='Enlarge View'></em></button>
+    </div>
+</div>
+<div class="left-entity-container mt-2">
+    <div class="w-100 col-12 d-flex flex-wrap p-0">
+        <div class="col-12 d-flex flex-row flex-wrap p-0 m-0">
+            <div class="p-0 m-0" [ngClass]="{'col-6 list-card': showGridView, 'col-12': !showGridView}">
+                <div class="row m-0 p-0 bg-white w-100 mb-3" *ngFor="let key of col1Entities">
+                    <mat-progress-bar *ngIf="progressBar[key]" mode="indeterminate"></mat-progress-bar>
+                    <app-slicex-list class="p-0 m-0 w-100" [data]="listData[key]" [loading]="progressBar[key]" [gridview]="showGridView" [compare]="isCompareEnabled" [isActiveEntity]="isActiveEntity(key)" [sortOrder]="this.sortOrder === '+' ? 'ASC' : 'DESC'">
+                    </app-slicex-list>
+                </div>
+            </div>
+            <div class="p-0 m-0" [ngClass]="{'col-6 list-card': showGridView, 'col-12': !showGridView}">
+                <div class="row m-0 p-0 bg-white w-100 mb-3" *ngFor="let key of col2Entities">
+                    <mat-progress-bar *ngIf="progressBar[key]" mode="indeterminate"></mat-progress-bar>
+                    <app-slicex-list class="p-0 m-0 w-100" [data]="listData[key]" [loading]="progressBar[key]" [gridview]="showGridView" [compare]="isCompareEnabled" [isActiveEntity]="isActiveEntity(key)" [sortOrder]="this.sortOrder === '+' ? 'ASC' : 'DESC'">
+                    </app-slicex-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

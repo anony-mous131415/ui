@@ -1,0 +1,13 @@
+<block-ui>
+    <div>
+        <div class="form-body py-2  mrl40">
+            <app-strategy-summary [isBulkEdit]='isBulkEdit' [data]="summaryDetails"></app-strategy-summary>
+        </div>
+        <div class="false-footer ">
+            <button id="review-save" mat-raised-button class="pull-right btn-secondary" appDisableRO [appDisableDemo]='appConst.DISABLE' (click)="onSaveStrategy()">Save
+        Strategy</button>
+            <button id="review-back" mat-button class="pull-right mr-2" (click)="goToPrevStep()">Back</button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</block-ui>

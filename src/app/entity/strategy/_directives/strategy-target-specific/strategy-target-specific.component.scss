@@ -1,0 +1,42 @@
+$danger-color: #f44336;
+$success-color: #4fa845;
+.list-group {
+    max-height: 250px !important;
+    overflow-y: auto !important;
+}
+
+.primary-icon {
+    color: var(--primary-color) !important;
+    opacity: 0.7 !important;
+}
+
+.mat-option {
+    height: 35px !important;
+    border-bottom: 1px solid var(--secondary-color) !important;
+}
+
+.primary {
+    color: var(--primary-color) !important
+}
+
+.rounded-right {
+    -webkit-clip-path: polygon(80% 0, 100% 50%, 100% 50%, 80% 100%, 0 100%, 0 0);
+    clip-path: polygon(80% 0, 100% 50%, 100% 50%, 80% 100%, 0 100%, 0 0);
+}
+
+.compare-success {
+    color: $success-color !important;
+}
+
+.compare-danger {
+    color: $danger-color !important;
+}
+
+#targetAudience input {
+    font-size: 13px;
+    font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    background: #fff;
+    margin-top: 5px;
+    border-bottom: 1.5px solid #909191;
+    padding-left: 5px;
+}

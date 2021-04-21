@@ -1,0 +1,224 @@
+<navbar></navbar>
+<div class='page-container'>
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='date-range-container'>
+            <app-date-range-picker></app-date-range-picker>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+    <!--details section-->
+    <div class='entity-details' *ngIf='creative.id'>
+        <div class='row'>
+            <div class='col-9' id="all-details">
+                <!--header section-->
+                <div class='page-title-cover' *ngIf='true'>
+
+                    <div class='float-left'>
+                        <div class='title pull-left mrr5'>{{creative.name}}</div>
+                        <div class='pull-left icon-pad'><em [ngClass]="{'text-success':creative.active == true,'text-danger':creative.active == false}" class='fa fa-circle text13 mrr5'></em></div>
+                        <div class='clearfix'></div>
+                    </div>
+
+                    <div class='float-right'>
+                        <button *ngIf="creative.active==false" [appDisableDemo]='appConst.DISABLE' mat-raised-button appDisableRO class='btn-primary mrr10' (click)='updateStatus(1)' id="creative-deactivate-btn">
+              <em class='fa fa-play'></em>
+              <span>Activate</span>
+            </button>
+                        <button *ngIf="creative.active==true" [appDisableDemo]='appConst.DISABLE' mat-raised-button appDisableRO class='btn-primary mrr10' (click)='updateStatus(0)' id="creative-deactivate-btn">
+              <em class='fa fa-pause'></em>
+              <span>Deactivate</span>
+            </button>
+                        <button class="btn-secondary" mat-raised-button appDisableRO [routerLink]="['/creative/edit/'+creative.id]" id="creative-edit-btn">
+              <em class='fa fa-pencil'></em>
+              <span>Edit</span>
+            </button>
+                    </div>
+
+                    <div class='clearfix'></div>
+
+                </div>
+                <div id='details'>
+                    <div class='sub-title'>Basic Details</div>
+                    <div class='detail-body'>
+                        <div class='row'>
+                            <div id='cr-details' class='col-4'>
+                                <app-entity-details-row rowTitle="{{crConst.NAME_LABEL}}" rowValue="{{creative.name}}" marginBottom="mrb15">
+                                </app-entity-details-row>
+
+                                <app-entity-details-row rowTitle="{{crConst.LABEL_ADVERTISER}}" rowValue="{{creative.advertiser.name}}" marginBottom="mrb15">
+                                </app-entity-details-row>
+
+                                <app-entity-details-row rowTitle="{{crConst.CLK_DESTINATION_LABEL}}" rowValue="{{creative.clickDestination.name}}" marginBottom="mrb15">
+                                </app-entity-details-row>
+
+                                <app-entity-details-row rowTitle="{{crConst.LABEL_SIZE}}" rowValue="{{creative.size.width}}x{{creative.size.height}}" marginBottom="mrb15">
+                                </app-entity-details-row>
+
+                                <app-entity-details-row rowTitle="{{crConst.LABEL_CLK_VERIFIED}}" rowValue="Yes" marginBottom="mrb15">
+                                </app-entity-details-row>
+
+                                <app-entity-details-row rowTitle="{{crConst.LABEL_TYPE}}" rowValue="{{creative.type + showTemplateType(creative)}}" marginBottom="mrb15">
+                                </app-entity-details-row>
+                            </div>
+                            <div class="col"></div>
+                            <div id='cr-preview' class='col-6' style="overflow: auto;">
+                                <div class='preview-cover'>
+                                    <div class='img-cover' *ngIf='creative.type == crConst.ALLOWED_TYPES.IMAGE || creative.type == crConst.ALLOWED_TYPES.NATIVE_IMAGE'>
+                                        <img class='img' [src]="creative.previewUrl" alt="Preview" />
+                                    </div>
+                                    <div *ngIf='creative.type == crConst.ALLOWED_TYPES.VIDEO || creative.type == crConst.ALLOWED_TYPES.NATIVE_VIDEO'>
+                                        <div class='html-cover'>
+                                            <em class='fa fa-file-video-o'></em>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf='creative.type == crConst.ALLOWED_TYPES.HTML || creative.type == crConst.ALLOWED_TYPES.AD_TAG'
+                                    [ngStyle]="{height: creative.size.height+5+'px', width: creative.size.width+5+'px', margin: '0 auto'}">
+                                        <div class='html-cover'[ngStyle]="{height: creative.size.height+5+'px', width: creative.size.width+5+'px'}">
+                                            <iframe [src]='creative.previewUrl | safeUrl' scrolling='yes' width="100%" height="100%" title="Ad-tag"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='pointer mrt5 text-center a-primary' (click)="showPreviewModal(creative)"><em class='fa fa-eye'></em> Preview</div>
+
+                                <div class='text-center'>
+                                    <a *ngIf='dynamicPreviewLink' class='pointer mrt5 text-center a-primary' target="_blank" href='{{dynamicPreviewLink}}'>
+                                        <em class='fa fa-eye'></em> Dynamic Preview</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Native assets -->
+                    <div *ngIf='creative.nativeAsset && creative.type == crConst.ALLOWED_TYPES.NATIVE_VIDEO || creative.type == crConst.ALLOWED_TYPES.NATIVE_IMAGE'>
+                        <div class='sub-title'>Native Assets</div>
+                        <div class='detail-body'>
+                            <div class='row'>
+                                <div class='col-9'>
+                                    <div>
+                                        <app-entity-details-row rowTitle="{{crConst.NATIVE_TITLE}}" rowValue="{{creative.nativeAsset.title}}" marginBottom="mrb15">
+                                        </app-entity-details-row>
+
+                                        <app-entity-details-row rowTitle="{{crConst.NATIVE_BODY}}" rowValue="{{creative.nativeAsset.body}}" marginBottom="mrb15">
+                                        </app-entity-details-row>
+
+                                        <app-entity-details-row rowTitle="{{crConst.NATIVE_CALLTOACTION}}" rowValue="{{creative.nativeAsset.callToAction}}" marginBottom="mrb15">
+                                        </app-entity-details-row>
+                                    </div>
+                                </div>
+                                <div class='col-3'>
+                                    <div class='logo-cover'>
+                                        <img [src]="creative.nativeAsset.iconurl" class='logo-sm' alt="logo" />
+                                        <div class='text11'>Logo</div>
+                                    </div>
+                                    <div class='clearfix'></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DCO attributes -->
+                    <div *ngIf='creative.type == crConst.ALLOWED_TYPES.HTML && creative.dcoAd == true'>
+                        <div class='sub-title'>DCO Attributes</div>
+                        <div class='detail-body'>
+                            <div class='row'>
+                                <div class='col-8'>
+                                    <div>
+                                        <app-entity-details-row rowTitle="{{crConst.LABEL_DCO_NUM_SLOTS}}" rowValue="{{creative.dcoAttributes.noOfSlots}}" marginBottom="mrb15">
+                                        </app-entity-details-row>
+
+                                        <app-entity-details-row rowTitle="{{crConst.LABEL_DCO_MACRO_LIST}}" rowValue="{{creative.dcoAttributes.macroList}}" marginBottom="mrb15">
+                                        </app-entity-details-row>
+                                    </div>
+                                </div>
+                                <div class='col-4'>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- video attributes -->
+                    <div *ngIf='creative.type == crConst.ALLOWED_TYPES.NATIVE_VIDEO || creative.type == crConst.ALLOWED_TYPES.VIDEO'>
+                        <div class='sub-title'>Video Details</div>
+                        <div *ngFor='let video of creative.videoAttributes'>
+                            <div class='detail-body'>
+                                <div class='row'>
+                                    <div class='col-8'>
+                                        <div *ngIf='creative.type == crConst.ALLOWED_TYPES.NATIVE_VIDEO || creative.type == crConst.ALLOWED_TYPES.VIDEO'>
+                                            <app-entity-details-row rowTitle="{{crConst.LABEL_VIDEO_FORMAT}}" rowValue="{{video.format}}" marginBottom="mrb15">
+                                            </app-entity-details-row>
+
+                                            <app-entity-details-row rowTitle="{{crConst.LABEL_VIDEO_DURATION}}" rowValue="{{video.durationInSecs}} seconds" marginBottom="mrb15">
+                                            </app-entity-details-row>
+
+                                            <app-entity-details-row rowTitle="Video {{crConst.LABEL_DIMENSION}}" rowValue="{{video.videoWidth}}x{{video.videoHeight}}" marginBottom="mrb15">
+                                            </app-entity-details-row>
+
+                                            <app-entity-details-row rowTitle="Video {{crConst.LABEL_HAS_END_CARD}}" rowValue="{{video.hasCompanion?'Yes':'No'}}" marginBottom="mrb15">
+                                            </app-entity-details-row>
+                                        </div>
+                                    </div>
+                                    <div class='col-4'>
+                                        <div class='video-preview-cover'>
+                                            <div class='video-cover'>
+                                                <video id="video" controls>
+                          <source [src]="video.videoPath" type="video/mp4">
+                          Your browser does not support HTML5 video.
+                        </video>
+                                            </div>
+                                            <div class='endcard-cover' *ngIf="video.hasCompanion">
+                                                <img class='preview-img' [src]="video.companionPath" alt="Preview" />
+                                            </div>
+                                            <div class='clearfix'></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance data -->
+            <div id='performance-data' class='col-3'>
+                <mat-progress-bar *ngIf="isPerfDataLoading" mode="indeterminate"></mat-progress-bar>
+                <div class='perf-cover'>
+                    <mat-card>
+                        <div class='text-fade'>{{crConst.CR_PERF_TITLE}}
+                        </div>
+
+                        <table class='table bgWhite text-revx mrt10 text12' aria-describedby="">
+                            <tr>
+                                <td>{{crConst.CR_IMPS}}</td>
+                                <td class='text-primary text20 text-right'>
+                                    {{(crPerf.impressions?crPerf.impressions:0) | numFormat}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{crConst.CR_CLKS}}</td>
+                                <td class='text-primary text20 text-right'>
+                                    {{(crPerf.clicks?crPerf.clicks:0) | numFormat}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{crConst.CR_CONV}}</td>
+                                <td class='text-primary text20 text-right'>
+                                    {{(crPerf.conversions?crPerf.conversions:0) | numFormat}}
+                                </td>
+                            </tr>
+                        </table>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

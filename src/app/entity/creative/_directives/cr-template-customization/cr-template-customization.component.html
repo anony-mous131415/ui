@@ -1,0 +1,177 @@
+<block-ui>
+    <div class="form-body" style="padding:20px">
+        <h4 *ngIf="edit===true" class="mb-3 p-3 pb-4" style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);">Customize
+            <div class="pull-right">
+                <mat-form-field class="wd-100">
+                    <mat-label>Load Preset</mat-label>
+                    <mat-select [(ngModel)]="themeSelected" (selectionChange)="themeChanged($event)">
+                        <mat-option *ngFor="let d of allTemplateThemes" [value]="d.id">
+                            {{d.themeName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button class='btn-secondary ml-3' (click)="openThemeSaveModal('update')"
+                    *ngIf="themeSelected!==undefined">Update</button>
+                <button mat-raised-button class='btn-secondary ml-3' (click)="openThemeSaveModal('save')">Save</button>
+            </div>
+        </h4>
+        <div class='d-flex wd-full' [ngClass]="{'isEditWrapper': edit===true}">
+            <div id='form-container' class='wd-full'>
+                <div class='form-body' style="padding:0 5px 10px 0px">
+                    <div class="row" *ngIf="edit!==true">
+                        <div class="col-2">
+                            <mat-form-field class="wd-full">
+                                <mat-label>Load Preset</mat-label>
+                                <mat-select [(ngModel)]="themeSelected" (selectionChange)="themeChanged($event)">
+                                    <mat-option *ngFor="let d of allTemplateThemes" [value]="d.id">
+                                        {{d.themeName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                            <button mat-raised-button class='btn-secondary ml-3'
+                                (click)="openThemeSaveModal('update')" *ngIf="themeSelected!==undefined">Update</button>
+                            <button mat-raised-button class='btn-secondary ml-3'
+                                (click)="openThemeSaveModal('save')">Save</button>
+                        </div>
+                    </div>
+                    <div class="row mr-0">
+                        <div class="col-5">
+                            <div class="customize">
+                                <h6>Template Variables</h6>
+                                <br />
+                                <div class="row">
+                                    <div *ngFor="let tVariable of templateVariables;let i=index">
+                                        <mat-form-field class="wd120 mrl15" *ngIf="tVariable.type=='COLOR_PICKER'"
+                                            appearance="none">
+                                            <mat-label>{{tVariable.title}}</mat-label>
+                                            <div class="wd120" style='border-bottom: 1px solid black;'>
+                                                <div class="colorPickerShow"
+                                                    [ngStyle]="{background: templateVariablesValues[tVariable.key]}">
+                                                </div>
+                                                <input matInput [value]="templateVariablesValues[tVariable.key]"
+                                                    [cpOutputFormat]="'hex'" class="colorPickerInput"
+                                                    [cpOKButton]="true" [cpSaveClickOutside]="true"
+                                                    [cpOKButtonClass]="'btn btn-primary btn-xs'" [cpPosition]="'bottom'"
+                                                    [(colorPicker)]="templateVariablesValues[tVariable.key]"
+                                                    (colorPickerChange)='templateInputChange($event,tVariable.key)'
+                                                    autocomplete="off" />
+                                            </div>
+                                            <mat-hint *ngIf="tVariable.hintMessage">{{tVariable.hintMessage}}</mat-hint>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div *ngFor="let tVariable of templateVariables;let i=index">
+                                        <mat-form-field class="wd150 mrl15"
+                                            *ngIf="tVariable.type==='SELECT'&&tVariable.elasticSearchIndex">
+                                            <mat-label>{{tVariable.title}}</mat-label>
+                                            <mat-select [ngModel]="getModelForSelect(tVariable.key)"
+                                                (selectionChange)="templateInputChange($event.value,tVariable.key,tVariable)">
+                                                <mat-option *ngFor="let d of tVariable.options" [value]="d.id">
+                                                    {{d.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-hint *ngIf="tVariable.hintMessage">{{tVariable.hintMessage}}</mat-hint>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div *ngFor="let tVariable of templateVariables;let i=index">
+                                        <mat-form-field class="wd150 mrl15" *ngIf="tVariable.type==='NUMBER'">
+                                            <mat-label>{{tVariable.title}}</mat-label>
+                                            <mat-select [(ngModel)]="templateVariablesValues[tVariable.key]"
+                                                (selectionChange)="templateInputChange($event.value, tVariable.key)">
+                                                <mat-option *ngFor="let d of showNumberRange(tVariable.numberRange)"
+                                                    [value]="d">
+                                                    {{d}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-hint *ngIf="tVariable.hintMessage">{{tVariable.hintMessage}}</mat-hint>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div *ngFor="let tVariable of templateVariables;let i=index">
+                                        <mat-form-field class="wd150 mrl15" *ngIf="tVariable.type==='BOOLEAN'&&shouldShow(tVariable.key)"
+                                            floatLabel="always" appearance="none">
+                                            <mat-slide-toggle [(ngModel)]="templateVariablesValues[tVariable.key]"
+                                                (change)="templateInputChange($event.checked, tVariable.key)">
+                                                {{tVariable.title}}
+                                            </mat-slide-toggle>
+                                            <textarea matInput hidden></textarea>
+                                            <mat-hint *ngIf="tVariable.hintMessage">{{tVariable.hintMessage}}</mat-hint>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div *ngFor="let tVariable of templateVariables;let i=index" style="width:90%">
+                                        <mat-form-field class="wd-full mrl15" *ngIf="tVariable.type=='INPUT'&&shouldShow(tVariable.key)">
+                                            <mat-label>{{tVariable.title}}</mat-label>
+                                            <input matInput [(ngModel)]="templateVariablesValues[tVariable.key]"
+                                                (ngModelChange)="templateInputChange($event, tVariable.key)"
+                                                autocomplete="off" />
+                                            <mat-hint *ngIf="tVariable.hintMessage">{{tVariable.hintMessage}}</mat-hint>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div *ngFor="let tVariable of templateVariables;let i=index" class="wd-full">
+                                        <div class="m-3" *ngIf="tVariable.type=='POPUP'">
+                                            <button class='btn-primary my-auto' mat-raised-button
+                                                (click)="openLogoModal(tVariable.key)">
+                                                <span *ngIf="tVariable.key=='logoLink'">{{ logoLink ? "Edit" :
+                                                    "Select"}}
+                                                    Logo</span>
+                                                <span *ngIf="tVariable.key=='defaultLink'">{{ fallbackImageLink ? "Edit"
+                                                    :
+                                                    "Select"}} Fallback Image</span>
+                                                <span *ngIf="tVariable.key=='overlayLink'">{{ overlayImageLink ? "Edit "
+                                                    :
+                                                    "Select"}} Offer Image</span>
+                                            </button>
+                                            <img [src]="logoLink" class="img-thumbnail mx-2" [hidden]="!logoLink"
+                                                *ngIf="tVariable.key=='logoLink'" />
+                                            <img [src]="fallbackImageLink" class="img-thumbnail mx-2"
+                                                [hidden]="!fallbackImageLink" *ngIf="tVariable.key=='defaultLink'" />
+                                            <img [src]="overlayImageLink" class="img-thumbnail mx-2"
+                                                [hidden]="!overlayImageLink" *ngIf="tVariable.key=='overlayLink'" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="customize-right">
+                                <div class="card-body d-flex flex-row flex-wrap p-0 justify-content-center">
+                                    <div *ngIf="selectedTemplates.length===0">
+                                        No templates to display.
+                                    </div>
+                                    <div class="row" id="templatesCustomization">
+                                    </div>
+                                </div>
+                                <div class='clearfix'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='false-footer mrr15' *ngIf="edit!==true">
+        <button mat-raised-button class='btn-primary pull-right mrl15' (click)="onContinueClick()">Continue</button>
+        <button mat-button class='pull-right mrl15' (click)="onGoBackClick()">Go Back</button>
+        <div class='clearfix'></div>
+    </div>
+
+    <div class='false-footer mrr15 pt-2' *ngIf="edit===true" style="margin:10px; border-top: 1px solid rgba(0, 0, 0, 0.12);">
+        <button mat-raised-button class='btn-primary pull-right mrl15' (click)="editContinue()"
+            style="width: 60px;">Done</button>
+        <button mat-button class='pull-right mrl15' (click)="editCancel()">Cancel</button>
+        <div class='clearfix'></div>
+    </div>
+
+
+</block-ui>

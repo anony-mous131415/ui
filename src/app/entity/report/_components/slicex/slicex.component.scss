@@ -1,0 +1,64 @@
+#slicex.page-container .page-title-cover {
+  background: transparent !important;
+  .mat-flat-button {
+      background: #fff !important;
+      border-radius: 0 !important;
+      -webkit-border-radius: 0 !important;
+      -moz-border-radius: 0 !important;
+      -ms-border-radius: 0 !important;
+      -o-border-radius: 0 !important;
+  }
+}
+
+.show-grid {
+  display: block !important;
+}
+
+.hide-grid {
+  display: none !important;
+}
+
+.show-container {
+  display: flex !important;
+}
+
+.hide-container {
+  display: none !important;
+}
+
+.bdr-primary {
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.bdr-secondary {
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+.card-header {
+  background-color: white;
+}
+
+.primary {
+  color: var(--primary-color) !important;
+}
+
+.grabber {
+  width: 1px;
+  cursor: ew-resize;
+  border-top: 1px solid #f1f1f1;
+  overflow: hidden;
+  z-index: 999;
+  background-color: aqua;
+  background-size: initial;
+  background-repeat: no-repeat;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+}

@@ -1,0 +1,18 @@
+#templates {
+  max-height: 720px;
+  overflow: auto;
+}
+.activeShow {
+  color: var(--primary-color);
+  margin: 5px;
+}
+.notActiveShow {
+  margin: 5px;
+  cursor: pointer;
+}
+.notActiveShow:hover{
+  color: var(--primary-color);
+}
+[hidden] {
+  display: none !important;
+}

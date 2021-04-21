@@ -1,0 +1,54 @@
+$danger-color: #f44336;
+.uploadFormContainer {
+    // height: 100px;
+    border: 1px dashed #aaa !important;
+    padding: 10px;
+    i {
+        font-size: 30px;
+        color: #bbb;
+        // color: var(--primary-color);
+    }
+    &:hover {
+        i {
+            color: var(--primary-color) !important;
+        }
+        cursor: pointer;
+        background-color: #aaaaaa;
+        // opacity: 0.8;
+        border: 1px dashed var(--primary-color) !important;
+    }
+}
+
+.logo-cover {
+    width: 70px;
+    img {
+        width: 100%;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+}
+
+.native-form-body {
+    padding: 15px 0px 0px 0px !important;
+}
+
+.link {
+    color: var(--primary-color) !important;
+    cursor: pointer;
+}
+
+.mat-menu-content {
+    height: 200px !important;
+}
+
+.mat-menu-item {
+    line-height: 35px;
+    height: 35px;
+}
+
+.validation-failed {
+    font-family: Roboto, "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: $danger-color;
+    font-size: 11px;
+    margin-top: 5px;
+}

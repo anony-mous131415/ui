@@ -1,0 +1,29 @@
+<div class='page-title-cover d-flex flex-row flex-wrap'>
+    <div class='float-left flex-grow-1 my-auto'>
+        <div class='title pull-left text-wrap text-break mrr5'>{{strategyName}}</div>
+        <div class='pull-left icon-pad '><em [ngClass]="{'text-success':isActive,'text-danger':!isActive}" class='fa fa-circle text13 mrr5'></em></div>
+        <div class='clearfix'></div>
+    </div>
+    <div class='float-right my-auto'>
+        <button *ngIf="!isActive" mat-raised-button class='btn-primary mrr10' appDisableRO [appDisableDemo]='appConst.DISABLE' (click)='updateStatus(1)' id="str-deactivate-btn">
+      <em class='fa fa-play'></em>
+      <span>Start Strategy</span>
+    </button>
+        <button *ngIf="isActive" mat-raised-button class='btn-primary mrr10' appDisableRO [appDisableDemo]='appConst.DISABLE' (click)='updateStatus(0)' id="str-deactivate-btn">
+      <em class='fa fa-stop'></em>
+      <span>Stop Strategy</span>
+    </button>
+
+        <button mat-raised-button class='btn-secondary mrr10' appDisableRO (click)="onEditStrategy()" id="str-edit-btn">
+      <em class='fa fa-pencil'></em>
+      <span>Edit</span>
+    </button>
+
+        <button mat-raised-button class='btn-secondary' appDisableRO id="str-duplicate-btn" (click)='duplicateStrategy()'>
+      <em class='fa fa-clone'></em>
+      <span>Duplicate</span>
+    </button>
+    </div>
+    <div class='clearfix'></div>
+
+</div>

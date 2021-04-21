@@ -1,0 +1,13 @@
+<div id='date-range-picker' class="d-flex flex-column">
+    <ejs-daterangepicker [ngClass]="{'bdr-primary': border === 'primary', 'bdr-secondary': border === 'secondary' }" *ngIf="visible" [allowEdit]='false' [min]='minDate' [max]='maxDate' format='dd MMM yyyy' placeholder='Select a range' [(value)]='dateRange'
+        (change)="changeDateRange($event)" matTooltip="All date & time are in GMT" matTooltipPosition="above" [enabled]="datePickerEnabled">
+        <div>
+            <e-presets>
+                <span *ngFor="let preset of presets">
+          <e-preset [label]="preset.label" [start]="preset.start" [end]="preset.end">
+          </e-preset>
+        </span>
+            </e-presets>
+        </div>
+    </ejs-daterangepicker>
+</div>

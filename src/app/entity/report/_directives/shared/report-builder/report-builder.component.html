@@ -1,0 +1,256 @@
+<!-- <pre style="max-height: 500px; overflow-y: scroll;" class="bg-white">{{config | json}}</pre> -->
+
+
+<mat-accordion [multi]="true">
+
+  <mat-expansion-panel expanded="true" hideToggle disabled *ngFor="let section of config; let idx = index">
+    <mat-expansion-panel-header class="mb-3">
+      <mat-panel-title id='tile_basic'>
+        <div class="repSteppers my-auto">{{idx + 1}}</div>
+        <div class="repAccor-titles ml-1 my-auto">{{section.title}}
+          <div class="section-actions ml-3" *ngIf="section.actions !== null" style="display:inline">
+            <span class="d-fle flex-row" *ngFor="let action of section.actions">
+              <div [ngSwitch]="action.type" style="display: inline;">
+                <div *ngSwitchCase="'BUTTON'">
+                  <ng-container [ngTemplateOutlet]="actionButton" [ngTemplateOutletContext]="{action:action}">
+                  </ng-container>
+                </div>
+                <div *ngSwitchCase="'RAISED_BUTTON'">
+                  <ng-container [ngTemplateOutlet]="actionRaisedButton" [ngTemplateOutletContext]="{action:action}">
+                  </ng-container>
+                </div>
+                <div *ngSwitchCase="'SELECTALL_CHECKBOX'" style="display: inline;">
+                  <ng-container [ngTemplateOutlet]="actionCheckbox" [ngTemplateOutletContext]="{action:action}">
+                  </ng-container>
+                </div>
+              </div>
+            </span>
+          </div>
+          <mat-error class="error errDisp" *ngIf="true">
+            {{section.errorMsg}}
+          </mat-error>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div id="children-panel-{{section.id}}" *ngIf="section.children !== null">
+      <div id="children-panel-grouped" *ngIf="section.children.isGrouped">
+        <ng-container [ngTemplateOutlet]="groupedChildren" [ngTemplateOutletContext]="{section:section}"></ng-container>
+      </div>
+
+      <div id="children-panel-ungrouped" *ngIf="!section.children.isGrouped">
+        <ng-container [ngTemplateOutlet]="ungroupedChildren" [ngTemplateOutletContext]="{section:section}">
+        </ng-container>
+      </div>
+    </div>
+    <div id="children-panel-{{section.id}}" *ngIf="section.children === null">
+      No elements defined
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>
+
+<!-- GROUPED CHILDREN -->
+<ng-template #groupedChildren let-section='section'>
+  <mat-accordion class="w-100" multi>
+    <mat-expansion-panel class="border mb-2" *ngFor="let group of section.children.options">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <em class="fa icon-primary" [ngClass]="group.icon" style="font-size: x-large;" aria-hidden="true"></em>
+          <p class='ml-3 my-auto text12'>{{group.title}}</p>
+          <em [hidden]='!checkForIndicator(group)' class="fa fa-check icon-primary ml-3 my-auto" style="font-size: small;" aria-hidden="true"></em>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="d-flex flex-row flex-wrap">
+        <div class="wd-full" *ngFor="let child of group.items">
+          <div [ngSwitch]="child.type">
+            <div *ngSwitchCase="'DATE_RANGE_WITH_INTERVAL'">
+              <ng-container [ngTemplateOutlet]="childDateRangeWithInterval" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'DATE_RANGE'">
+              <ng-container [ngTemplateOutlet]="childDateRange" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'INTERVAL'">
+              <ng-container [ngTemplateOutlet]="childInterval" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'CHECKBOX'">
+              <ng-container [ngTemplateOutlet]="childCheckbox" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'RADIO'">
+              <ng-container [ngTemplateOutlet]="childRadio" [ngTemplateOutletContext]="{option:child}"></ng-container>
+            </div>
+            <div *ngSwitchCase="'INPUT_NUMBER'">
+              <ng-container [ngTemplateOutlet]="childInputNumber" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'INPUT_TEXT'">
+              <ng-container [ngTemplateOutlet]="childInputText" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'SINGLE_SELECT'">
+              <ng-container [ngTemplateOutlet]="childSingleSelect" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'MULTI_SELECT'">
+              <ng-container [ngTemplateOutlet]="childMultiSelect" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchCase="'ENTITY_SELECTOR'">
+              <ng-container [ngTemplateOutlet]="childEntitySelector" [ngTemplateOutletContext]="{option:child}">
+              </ng-container>
+            </div>
+            <div *ngSwitchDefault>NOT SUPPORTED</div>
+          </div>
+        </div>
+
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>
+
+<!-- UNGROUPED CHILDREN -->
+<ng-template #ungroupedChildren let-section='section'>
+  <div *ngFor="let child of section.children.options">
+    <div [ngSwitch]="child.type">
+      <div *ngSwitchCase="'DATE_RANGE_WITH_INTERVAL'">
+        <ng-container [ngTemplateOutlet]="childDateRangeWithInterval" [ngTemplateOutletContext]="{option:child}">
+        </ng-container>
+      </div>
+      <div *ngSwitchCase="'DATE_RANGE'">
+        <ng-container [ngTemplateOutlet]="childDateRange" [ngTemplateOutletContext]="{option:child}"></ng-container>
+      </div>
+      <div *ngSwitchCase="'INTERVAL'">
+        <ng-container [ngTemplateOutlet]="childInterval" [ngTemplateOutletContext]="{option:child}"></ng-container>
+      </div>
+      <div *ngSwitchCase="'CHECKBOX'">
+        <ng-container [ngTemplateOutlet]="childCheckbox" [ngTemplateOutletContext]="{option:child}"></ng-container>
+      </div>
+      <div *ngSwitchCase="'RADIO'">
+        <ng-container [ngTemplateOutlet]="childRadio" [ngTemplateOutletContext]="{option:child}"></ng-container>
+      </div>
+      <div *ngSwitchCase="'INPUT_NUMBER'">
+        <ng-container [ngTemplateOutlet]="childInputNumber" [ngTemplateOutletContext]="{option:child}"></ng-container>
+      </div>
+      <div *ngSwitchCase="'INPUT_TEXT'">
+        <ng-container [ngTemplateOutlet]="childInputText" [ngTemplateOutletContext]="{option:child}">
+        </ng-container>
+      </div>
+      <div *ngSwitchCase="'SINGLE_SELECT'">
+        <ng-container [ngTemplateOutlet]="childSingleSelect" [ngTemplateOutletContext]="{option:child}">
+        </ng-container>
+      </div>
+      <div *ngSwitchCase="'MULTI_SELECT'">
+        <ng-container [ngTemplateOutlet]="childMultiSelect" [ngTemplateOutletContext]="{option:child}">
+        </ng-container>
+      </div>
+      <div *ngSwitchCase="'ENTITY_SELECTOR'">
+        <ng-container [ngTemplateOutlet]="childEntitySelector" [ngTemplateOutletContext]="{option:child}">
+        </ng-container>
+      </div>
+      <div *ngSwitchDefault>NOT SUPPORTED</div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- TEMPLATE FOR DATE RANGE PICKER WITH INTERVAL -->
+<ng-template #childDateRangeWithInterval let-option='option'>
+  <!-- <app-adcon-date-picker [showInterval]="true" type="advanced"></app-adcon-date-picker> -->
+  <app-report-builder-date-picker [data]="option"></app-report-builder-date-picker>
+</ng-template>
+
+<!-- TEMPLATE FOR DATE RANGE PICKER -->
+<ng-template #childDateRange let-option='option'>
+  <app-adcon-date-picker [showInterval]="false" type="advanced"></app-adcon-date-picker>
+</ng-template>
+
+<!-- TEMPLATE FOR INTERVAL -->
+<ng-template #childInterval let-option='option'>
+  {{option.title}}
+</ng-template>
+
+<!-- TEMPLATE FOR CHECKBOX -->
+<ng-template #childCheckbox let-option='option'>
+  <div class='mt-3 mb-1 d-block text12' *ngIf="option.source.type === 'STATIC'">{{option.title}}</div>
+  <span class="d-flex flex-row flex-wrap">
+    <mat-checkbox class="col-3" *ngFor="let opt of optionsMap[option.id]" [checked]="opt.isSelected"
+      (change)="onCheckboxChange($event, option, opt)" [matTooltip]="opt.tooltip" matTooltipPosition="after">
+      <span class="text12">{{opt.name}}</span>
+    </mat-checkbox>
+  </span>
+</ng-template>
+
+<!-- TEMPLATE FOR RADIO -->
+<ng-template #childRadio let-option='option'>
+  {{option.title}}
+</ng-template>
+
+<!-- TEMPLATE FOR INPUT:NUMBER -->
+<ng-template #childInputNumber let-option='option'>
+  {{option.title}}
+</ng-template>
+
+<!-- TEMPLATE FOR INPUT:TEXT -->
+<ng-template #childInputText let-option='option'>
+  {{option.title}}
+</ng-template>
+
+<!-- TEMPLATE FOR SINGLE SELECT -->
+<ng-template #childSingleSelect let-option='option'>
+  <em class="{{option.icon}} icon-primary fa-2x ml-3 align-middle" *ngIf="option.icon"></em>
+  <mat-form-field class="ml-4">
+    <mat-select [(ngModel)]="this.reportElementValueMap[option.id][0]">
+      <mat-option id="{{opt.id}}" [value]="opt.id" *ngFor="let opt of optionsMap[option.id]">
+        {{opt.name}}
+      </mat-option>
+
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<!-- TEMPLATE FOR MULTI SELECT -->
+<ng-template #childMultiSelect let-option='option'>
+  <mat-form-field>
+    <mat-select multiple [placeholder]="option.title" [(ngModel)]="this.reportElementValueMap[option.id]">
+      <div class="d-flex flex-row col-12">
+        <input matInput class="py-2" placeholder="Search" autocomplete="off">
+      </div>
+      <mat-option id="{{opt.id}}" [value]="opt.id" *ngFor="let opt of optionsMap[option.id]">
+        {{opt.name}}
+      </mat-option>
+
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<!-- TEMPLATE FOR ENTITY SELECTOR-->
+<ng-template #childEntitySelector let-option='option'>
+  <span class='mt-3 mb-3 d-block text12'>{{option.description}}</span>
+  <div class="d-flex">
+    <button mat-flat-button class="mr-2" color="accent" (click)='openEntitySelectorModal(option)'><em class='fa fa-file-image-o'></em>Select</button>
+    <button mat-flat-button class="mr-2" color="accent" (click)='openViewModal(option)'><em class='fa fa-file-image-o'></em>View Selection</button>
+    <button mat-flat-button class="mr-2" color="accent" (click)='resetSelection(option)'><em class='fa fa-file-image-o'></em>Reset Selection</button>
+  </div>
+</ng-template>
+
+<!-- TEMPLATE FOR ACTION BUTTON  -->
+<ng-template #actionButton let-action='action'>
+  <button id="{{action.id}}" mat-button (click)="onActionButtonClick(action)">{{action.title}}</button>
+</ng-template>
+
+<!-- TEMPLATE FOR ACTION RAISED BUTTON -->
+<ng-template #actionRaisedButton let-action='action'>
+  <button id="{{action.id}}" mat-raised-button (click)="onActionButtonClick(action)">{{action.title}}</button>
+</ng-template>
+
+<!-- TEMPLATE FOR ACTION CHECKBOX -->
+<ng-template #actionCheckbox let-action='action'>
+  <mat-checkbox (change)="onActionCheckboxChange($event, action)" [checked]="this.reportElementValueMap[action.id]">
+      <span class="text12">{{action.title}}</span>
+    </mat-checkbox>
+</ng-template>
+

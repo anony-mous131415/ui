@@ -1,0 +1,45 @@
+.mat-row {
+  min-height: 35px !important;
+}
+
+#table-content {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+.selection {
+  max-height: 300px !important;
+  overflow-y: auto !important;
+}
+
+.selection-sm {
+  max-height: 150px !important;
+  overflow-y: auto !important;
+}
+
+.primary {
+  color: var(--primary-color) !important;
+}
+
+.mat-toolbar {
+  position: sticky;
+  top: 0.1px;
+  font-size: 13px;
+  height: 20px;
+  padding: 0px;
+  justify-content: space-between;
+}
+
+.bg-gray {
+  background-color: #F7F7F7 !important;
+}
+
+.btn-primary.mat-raised-button,
+.btn-secondary.mat-raised-button {
+  width: auto !important;
+}
+
+.mat-raised-button[disabled] {
+  opacity: 0.6;
+  color: #fff;
+}

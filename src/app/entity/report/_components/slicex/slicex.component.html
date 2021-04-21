@@ -1,0 +1,64 @@
+<navbar></navbar>
+<div class="page-container" id="slicex">
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{mainbreadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+    <div class="page-title-cover pl-0 pr-0">
+        <div class="d-flex flex-row flex-wrap col-12 p-0 justify-content-between">
+            <div class="float-left col-6 p-0 d-flex flex-row align-items-center">
+                <div class='title pull-left'>SLICEX</div>
+                <button mat-flat-button mat-stroked-button class="ml-4 " [ngClass]="{'primary mat-raised-button': viewMode === 0}" (click)="switchViewMode(0)" [hidden]="showGrid">All</button>
+                <button mat-flat-button mat-stroked-button [ngClass]="{'primary mat-raised-button': viewMode === 1}" (click)="switchViewMode(1)" [hidden]="showGrid">Graphs</button>
+                <button mat-flat-button mat-stroked-button [ngClass]="{'primary mat-raised-button': viewMode === 2}" (click)="switchViewMode(2)" [hidden]="showGrid">Grids</button>
+                <div class='clearfix'></div>
+            </div>
+            <div class="float-right d-flex flex-row flex-wrap col-6 p-0 justify-content-end">
+                <app-slicex-date-picker [identifier]="'primary'" [enabled]="'true'" [border]="'primary'" [presets]="datePickerPresets" [config]="dateConfig"></app-slicex-date-picker>
+                <mat-checkbox class="mx-4 my-auto" [disabled]="isCheckboxDisabled" [(ngModel)]="cbChecked" (change)="onCompareCheckboxChange($event)">Compare</mat-checkbox>
+                <app-slicex-date-picker [identifier]="'compare'" [enabled]="isCompareDatePickerEnabled" [border]="'secondary'" [presets]="datePickerCompPresets" [config]="dateCompConfig"></app-slicex-date-picker>
+            </div>
+            <div class='clearfix'></div>
+        </div>
+        <div class="my-auto p-0 justify-content-between">
+            <app-slicex-filter [bc]="checkBreadcrumbs(breadcrumbs)" (clear)="onClearBreadcrumSelection($event)">
+            </app-slicex-filter>
+        </div>
+    </div>
+
+    <app-slicex-grid class="shadow-lg" [ngClass]="{'show-grid': showGrid, 'hide-grid': !showGrid}" [gridOptions]="gridOptions" [compare]="isCompareDatePickerEnabled" (export)="onGridExport($event)">
+    </app-slicex-grid>
+    <div class='clearfix'></div>
+
+    <div class="alert alert-danger alert-dismissible" *ngIf="error !== null && error.isError">
+        <button type="button" class="close" data-dismiss="alert" (click)="closeError()">&times;</button>
+        <strong>Error:</strong>&nbsp; {{error?.errorMsg}}
+    </div>
+
+    <!-- REVX-507 -->
+    <div class="alert alert-warning alert-dismissible" *ngIf="info && info.isInfo">
+        <button type="button" class="close" data-dismiss="alert" (click)="closeInfo()">&times;</button>
+        <strong>Info:</strong>&nbsp; {{info?.infoMsg}}
+    </div>
+
+    <!-- <div class="alert alert-warning alert-dismissible" *ngIf="true">
+        <button type="button" class="close" data-dismiss="alert" (click)="closeInfo()">&times;</button>
+        <strong>Info:</strong>&nbsp; message for info
+    </div> -->
+
+    <div class="slicex-container d-flex flex-row flex-wrap col-12 p-0 mt-3" [ngClass]="{'show-container': !showGrid, 'hide-container': showGrid}">
+        <div class="slicex-left p-0" [ngClass]="{'col-xs-12 col-lg-7 border-right pr-2': viewMode===0,
+'col-12':viewMode===2}" [hidden]="viewMode===1">
+            <app-slicex-list-container class="w-100 flex-grow-1" (onGridOptionsChange)="onGridOptionsChange($event)">
+            </app-slicex-list-container>
+        </div>
+        <div class="slicex-right col-xs-12 col-lg-5 p-0 pl-2 border-left" [ngClass]="{'col-xs-12 col-lg-5 border-left pl-2': viewMode===0,
+  'col-12':viewMode===1}" [hidden]="viewMode===2">
+            <app-slicex-chart-container class="w-100" (onError)="onError($event)" (onInfoMsg)="onInfoMsg($event)">
+            </app-slicex-chart-container>
+        </div>
+    </div>
+    <div class='clearfix'></div>
+</div>

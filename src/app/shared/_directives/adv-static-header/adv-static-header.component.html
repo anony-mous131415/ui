@@ -1,0 +1,96 @@
+<div class='page-title-cover'>
+  <div class='float-left'>
+    <div class='title pull-left mrr5'>{{advCompact.name}}</div>
+    <div class='pull-left icon-pad'>
+      <em [ngClass]="{'text-success':advCompact.active == true,'text-danger':advCompact.active == false}"
+        class='fa fa-circle text13 mrr5'></em>
+    </div>
+    <div class='clearfix'></div>
+  </div>
+  <div class='float-right' *ngIf='showEditOption=="true"'>
+    <button *ngIf="advCompact.active==false" [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button
+      class="btn-primary mrr10" (click)='updateStatus(1)' id="adv-deactivate-btn">
+      <em class='fa fa-play'></em>
+      <span>Activate</span>
+    </button>
+    <button *ngIf="advCompact.active==true" [appDisableDemo]='appConst.DISABLE' appDisableRO mat-raised-button
+      class="btn-primary mrr10" (click)='updateStatus(0)' id="adv-deactivate-btn">
+      <em class='fa fa-pause'></em>
+      <span>Deactivate</span>
+    </button>
+    <button class="btn-secondary" mat-raised-button appDisableRO id="adv-edit-btn"
+      [routerLink]="['/advertiser/create/'+entityId]">
+      <em class='fa fa-pencil'></em> <span>Edit</span>
+    </button>
+  </div>
+  <div class='clearfix mrb10'></div>
+
+    <ul class='sub-menu'>
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId, true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId]">
+            DETAILS
+        </li>
+        <!-- <li matRipple routerLinkActive="selected" [routerLink]="['pixel']">
+            CONVERSION TRACKER
+        </li>
+        <li matRipple routerLinkActive="selected" [routerLink]="['creative']">
+            CREATIVES
+        </li>
+        <li matRipple routerLinkActive="selected" [routerLink]="['catalog']">PRODUCT CATALOG
+        </li>
+        <li matRipple routerLinkActive="selected" [routerLink]="['clickdestinations']">
+            CLICK DESTINATIONS</li>
+        <li matRipple routerLinkActive="selected" [routerLink]="['smarttag']">GET SMART TAG
+        </li>
+        <li matRipple routerLinkActive="selected" [routerLink]="['settings']">
+            SETTINGS
+        </li> -->
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId+'/pixel', true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId, 'pixel']">
+            CONVERSION TRACKER
+        </li>
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId+'/creative', true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId, 'creative']">
+            CREATIVES
+        </li>
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId+'/catalog', true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId, 'catalog']">
+            PRODUCT CATALOG
+        </li>
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId+'/clickdestinations', true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId, 'clickdestinations']">
+            CLICK DESTINATIONS
+        </li>
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId+'/smarttag', true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId, 'smarttag']">
+            GET SMART TAG
+        </li>
+        <li matRipple [class.selected]="router.isActive('/advertiser/details'+entityId+'/settings', true)"
+            routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+            [routerLink]="['/advertiser', 'details', entityId, 'settings']">
+            SETTINGS
+        </li>
+        <!-- <li matRipple routerLinkActive="selected" (click)='onHeaderClickRedirect("pixel")'>
+            CONVERSION TRACKER
+        </li>
+        <li matRipple routerLinkActive="selected" (click)='onHeaderClickRedirect("creative")'>
+            CREATIVES
+        </li>
+        <li matRipple routerLinkActive="selected" (click)='onHeaderClickRedirect("catalog")'>PRODUCT CATALOG
+        </li>
+        <li matRipple routerLinkActive="selected" (click)='onHeaderClickRedirect("clickdestinations")'>
+            CLICK DESTINATIONS</li>
+        <li matRipple routerLinkActive="selected" (click)='onHeaderClickRedirect("smarttag")'>GET SMART TAG
+        </li>
+        <li matRipple routerLinkActive="selected" (click)='onHeaderClickRedirect("settings")'>
+            SETTINGS
+        </li> -->
+    </ul>
+    <div class="sub-menu-bar"></div>
+</div>

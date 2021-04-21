@@ -1,0 +1,196 @@
+{
+    "basic": {
+        "name": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "APPEND",
+                    "name": "Append"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "schedule": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        }
+    },
+
+
+    "inventory": {
+        "inventory": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "APPEND",
+                    "name": "Append"
+                },
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "auction": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "apps": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "APPEND",
+                    "name": "Append"
+                },
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        }
+    },
+
+    
+    "targeting": {
+        "geo": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "APPEND",
+                    "name": "Append"
+                },
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "audience": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "APPEND",
+                    "name": "Append"
+                },
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "days": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "os": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        },
+        "deal": {
+            "allowedBulkEditOpts": [
+                {
+                    "id": "APPEND",
+                    "name": "Append"
+                },
+                {
+                    "id": "REPLACE",
+                    "name": "Replace"
+                },
+                {
+                    "id": "NO_CHANGE",
+                    "name": "No Change"
+                }
+            ],
+            "selectedBulkEditOpt": "NO_CHANGE"
+        }
+    },
+
+
+    "budget": {
+        "allowedBulkEditOpts": [
+            {
+                "id": "REPLACE",
+                "name": "Replace"
+            },
+            {
+                "id": "NO_CHANGE",
+                "name": "No Change"
+            }
+        ],
+        "selectedBulkEditOpt": "NO_CHANGE"
+    },
+
+
+    "creatives": {
+        "allowedBulkEditOpts": [
+            {
+                "id": "APPEND",
+                "name": "Append"
+            },
+            {
+                "id": "REPLACE",
+                "name": "Replace"
+            },
+            {
+                "id": "NO_CHANGE",
+                "name": "No Change"
+            }
+        ],
+        "selectedBulkEditOpt": "NO_CHANGE"
+    }
+}

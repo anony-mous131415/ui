@@ -1,0 +1,16 @@
+<navbar></navbar>
+<div class='page-container'>
+    <div class='page-header'>
+        <div class='breadcrumbs-container'>
+            <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+        </div>
+        <div class='date-range-container'>
+            <app-date-range-picker></app-date-range-picker>
+        </div>
+        <div class='clearfix'></div>
+    </div>
+
+    <app-generic-list listTitle="AUDIENCES" entity="AUDIENCE" detailsPageLink="/audience/details/" showActivateDeActivateBtn=true showAutoCompleteSearch=true createPageLink="/audience/create" dropdownMenu="{{dropdownMenu}}" dataUnavailableMsg="This Licensee doesn't have any Audience.">
+    </app-generic-list>
+
+</div>

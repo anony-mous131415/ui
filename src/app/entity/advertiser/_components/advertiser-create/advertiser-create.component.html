@@ -1,0 +1,348 @@
+<navbar></navbar>
+<block-ui>
+  <div class='page-container adv-form-container add-edit-adv'>
+    <div class='page-header'>
+      <div class='breadcrumbs-container'>
+        <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+      </div>
+      <div class='clearfix'></div>
+    </div>
+
+    <div id='page-content'>
+
+      <div class='row justify-content-center'>
+        <div class='col-xs-12 col-md-10 col-lg-8'>
+
+          <div id='form-container'>
+            <div class='form-header sticky-top z10'>
+              <span class=''>{{advPojo && advPojo.id ? "Edit Advertiser" : "Create Advertiser"}}</span>
+
+            </div>
+            <mat-accordion id='campaign-form' [multi]="true">
+              <!--basic details-->
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile-basic'>
+                    <div class="advsteppers">1</div>
+                    <div class="accor-titles">Basic Details</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div>
+                  <div class='pad20-side'>
+                    <div id='page-content'>
+                      <div id='form-container'>
+                        <div class='form-body'>
+                          <div class='col-12 mrl15'>
+                            <div class="clearfix"></div>
+                            <app-form-input [(ngModel)]="advPojo.name" label="{{advConst.NAME_LABEL}}*" maxLen="256"
+                              minLen="4" id="advName" name="advName" validationMsg="{{advConst.VALIDATION_NAME}}"
+                              validated="{{formValidated}}">
+                            </app-form-input>
+
+                            <!--advertiser domain-->
+                            <div class="col-md-8 col-lg-8">
+                              <mat-form-field class="wd-full">
+                                <input id='advDomain' [(ngModel)]="advPojo.domain" name="advDomain" matInput
+                                  placeholder="{{advConst.DOMAIN_LABEL}}" matTooltipPosition="above"
+                                  matTooltip="{{advConst.DOMAIN_TOOLTIP}}" minlength="4" maxlength="100">
+                              </mat-form-field>
+                              <mat-error class="error" *ngIf="!formValidated  && !advPojo.domain">
+                                {{advConst.VALIDATION_DOMAIN_MISSING}}
+                              </mat-error>
+                              <mat-error class="error"
+                                *ngIf="!formValidated && advPojo.domain && !strHasDot(advPojo.domain)">
+                                {{advConst.VALIDATION_DOMAIN_DOT}}
+                              </mat-error>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8 col-lg-8">
+                              <mat-form-field class="wd-full">
+                                <input id='webDeclareUrl' [(ngModel)]="advPojo.webDeclareUrl" name="webDeclareUrl"
+                                  matInput placeholder="{{advConst.WEB_DECLARED_URL_LABEL}}" matTooltipPosition="above"
+                                  matTooltip="{{advConst.WEB_DECLARED_URL_TOOLTIP}}" minlength="4" maxlength="256">
+                              </mat-form-field>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <app-form-select [(ngModel)]="advPojo.category" entity="CATEGORY"
+                              label="{{advConst.CATEGORY_LABEL}}*" tooltipPosition="above"
+                              tooltip="{{advConst.CATEGORY_LABEL}}" validated="{{formValidated}}"
+                              validationMsg="{{advConst.VALIDATION_CATEGORY}}" id="advCategory" name="advCategory"
+                              width="wd250">
+                            </app-form-select>
+
+                            <!-- REVX-401 -->
+                            <app-form-select [(ngModel)]="advPojo.mmp" entity="MMP" label="{{advConst.MMP_LABEL}}*"
+                              tooltipPosition="above" tooltip="{{advConst.MMP_TOOLTIP}}" validated="{{formValidated}}"
+                              validationMsg="{{advConst.VALIDATION_MMP}}" id="mmp" name="mmp" width="wd250">
+                            </app-form-select>
+
+                            <app-form-select [(ngModel)]="advPojo.category" entity="CATEGORY"
+                              label="{{advConst.CATEGORY_LABEL}}*" tooltipPosition="above"
+                              tooltip="{{advConst.CATEGORY_TOOLTIP}}" validated="{{formValidated}}"
+                              validationMsg="{{advConst.VALIDATION_CATEGORY}}" id="advCategory" name="advCategory"
+                              width="wd250">
+                            </app-form-select>
+
+                            <app-form-select [(ngModel)]="advPojo.currency" entity="CURRENCY"
+                              label="{{advConst.CURRENCY_LABEL}}*" tooltipPosition="above"
+                              tooltip="{{advConst.CURRENCY_TOOLTIP}}" validated="{{formValidated}}"
+                              validationMsg="{{advConst.VALIDATION_CURRENCY}}" id="advCurrency" name="advCurrency"
+                              width="wd250" disable='{{advPojo.id?true:false}}'>
+                            </app-form-select>
+
+                            <div class="clearfix"></div>
+                            <app-form-select [(ngModel)]="advPojo.language" entity="LANGUAGE"
+                              label="{{advConst.LANGUAGE_LABEL}}*" tooltipPosition="above"
+                              tooltip="{{advConst.LANGUAGE_TOOLTIP}}" validated="{{formValidated}}"
+                              validationMsg="{{advConst.VALIDATION_LANGUAGE}}" id="advLanguage" name="advLanguage"
+                              width="wd250">
+                            </app-form-select>
+                            <div class="clearfix mrb15"></div>
+                            
+                              <!--
+                                REVX-450: Advertiser logo section
+                                Provide option to upload the logo.
+                                This will be a mandatory field.
+                                The size of the logo should be 300 X 300
+                            -->
+
+                            <div class="form-group mb-3">
+                              <div class="d-flex flex-row col-12 p-0">
+                                <div class="col-3 my-auto">
+                                  <div class="form-label my-auto">
+                                    {{ advConst.UPLOAD_LOGO_LABEL }}
+                                  </div>
+                                </div>
+                                <div class="col-9 my-auto p-0">
+                                  <div class="d-flex flex-row">
+
+                                    <div class="d-flex flex-row col-12">
+                                      <button class='btn-primary my-auto' mat-raised-button
+                                        (click)="openLogoUploadModel()">
+                                        <em class='fa fa-file-image-o'></em>
+                                        <span>{{defaultLogoLink ? 'Edit': 'Select'}}</span>
+                                      </button>
+                                      <div class="logo-cover ml-3" *ngIf="defaultLogoLink">
+                                        <img [src]="defaultLogoLink.url" class='logo-sm'
+                                          [alt]="defaultLogoLink.name || 'Logo'" />
+                                      </div>
+                                      <div class='clearfix'></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="clearfix"></div>
+                              <mat-error class="error ml-3"
+                                *ngIf="!formValidated && !(defaultLogoLink && defaultLogoLink.url)">
+                                {{advConst.UPLOAD_LOGO_VALIDATION}}
+                              </mat-error>
+                              <div class="clearfix"></div>
+                            </div>
+
+                            <app-form-checkbox [(ngModel)]="isAppInfo" entity='{{appConst.ENTITY.ADVERTISER}}'
+                              label="{{advConst.APP_INFORMATION}}" tooltipPosition="above"
+                              tooltip="{{advConst.IS_APP_TOOLTIP}}" checkboxLevel="{{isAppInfo==true?'Yes':'No'}}"
+                              (advEvent)='advEvent($event)'>
+                            </app-form-checkbox>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+
+              <!--app info-->
+              <div [hidden]="isAppInfo==false">
+                <mat-expansion-panel expanded="true" hideToggle disabled>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title id='tile-app'>
+                      <div class="advsteppers">2</div>
+                      <div class="accor-titles">{{advConst.APP_INFORMATION}}</div>
+
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div>
+                    <div class='pad20-side'>
+                      <div id='page-content'>
+                        <div id='form-container'>
+                          <div class='form-body' [hidden]="isAppInfo==false">
+                            <div class='col-12 mrl15'>
+
+                              <!--Android Package Name-->
+                              <div class="col-md-8 col-lg-8">
+                                <mat-form-field class="wd-full">
+                                  <input id="advANDROID_PKG" name="advANDROID_PKG"
+                                    [(ngModel)]="advPojo.androidPhoneBundle" autocomplete="off" matInput
+                                    placeholder="{{advConst.ANDROID_PKG_LABEL}}" matTooltipPosition="above"
+                                    matTooltip="{{advConst.ANDROID_PKG_TOOLTIP}}" maxlength="1024" minlength="4">
+                                </mat-form-field>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && !advPojo.androidPhoneBundle && !advPojo.androidDeclareUrl && !advPojo.iosPhoneBundle && !advPojo.iosDeclareUrl">
+                                  {{advConst.VALIDATION_ANDROID_PKG_ALL_FEILDS_MISSING}}
+                                </mat-error>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && advPojo.androidPhoneBundle && !strHasDot(advPojo.androidPhoneBundle)">
+                                  {{advConst.VALIDATION_ANDROID_PKG_NAME_MISSING_DOT}}
+                                </mat-error>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && !advPojo.androidPhoneBundle && advPojo.androidDeclareUrl">
+                                  {{advConst.VALIDATION_ANDROID_PKG_DECLARED_URL_FILLED}}
+                                </mat-error>
+                              </div>
+                              <div class="clearfix"></div>
+
+                              <!--Android Declared Url -->
+                              <div class="col-md-8 col-lg-8">
+                                <mat-form-field class="wd-full">
+                                  <input id="advANDROID_PKG" name="advANDROID_PKG"
+                                    [(ngModel)]="advPojo.androidDeclareUrl" autocomplete="off" matInput
+                                    placeholder="{{advConst.ANDROID_DECLARED_URL_LABEL}}" matTooltipPosition="above"
+                                    matTooltip="{{advConst.ANDROID_DECLARED_URL_TOOLTIP}}" maxlength="1024"
+                                    minlength="4">
+                                </mat-form-field>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && advPojo.androidPhoneBundle && !advPojo.androidDeclareUrl">
+                                  {{advConst.VALIDATION_ANDROID_DECLARED_URL_REQ_NOW}}
+                                </mat-error>
+                              </div>
+                              <div class="clearfix"></div>
+
+                              <!--iOS App Id -->
+                              <div class="col-md-8 col-lg-8">
+                                <mat-form-field class="wd-full">
+                                  <input id="advANDROID_PKG" name="advANDROID_PKG" [(ngModel)]="advPojo.iosPhoneBundle"
+                                    autocomplete="off" matInput placeholder="{{advConst.IOS_PKG_LABEL}}"
+                                    matTooltipPosition="above" matTooltip="{{advConst.IOS_PKG_TOOLTIP}}"
+                                    maxlength="1024" minlength="4">
+                                </mat-form-field>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && !advPojo.androidPhoneBundle && !advPojo.androidDeclareUrl && !advPojo.iosPhoneBundle && !advPojo.iosDeclareUrl">
+                                  {{advConst.VALIDATION_IOS_PKG_ALL_FEILDS_MISSING}}
+                                </mat-error>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && !advPojo.iosPhoneBundle && advPojo.iosDeclareUrl">
+                                  {{advConst.VALIDATION_IOS_PKG_DECLARED_URL_FILLED}}
+                                </mat-error>
+                              </div>
+                              <div class="clearfix"></div>
+
+                              <!--iOS Declared Url -->
+                              <div class="col-md-8 col-lg-8">
+                                <mat-form-field class="wd-full">
+                                  <input id="advANDROID_PKG" name="advANDROID_PKG" [(ngModel)]="advPojo.iosDeclareUrl"
+                                    autocomplete="off" matInput placeholder="{{advConst.IOS_DECLARED_URL_LABEL}}"
+                                    matTooltipPosition="above" matTooltip="{{advConst.IOS_DECLARED_URL_TOOLTIP}}"
+                                    maxlength="1024" minlength="4">
+                                </mat-form-field>
+                                <mat-error class="error"
+                                  *ngIf="!formValidated && advPojo.iosPhoneBundle && !advPojo.iosDeclareUrl">
+                                  {{advConst.VALIDATION_IOS_DECLARED_URL_REQ_NOW}}
+                                </mat-error>
+                              </div>
+                              <div class="clearfix"></div>
+
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </div>
+
+
+              <!--contact info-->
+              <mat-expansion-panel expanded="true" hideToggle disabled>
+                <mat-expansion-panel-header>
+                  <mat-panel-title id='tile-contact'>
+                    <div class="advsteppers">{{isAppInfo? 3 : 2}}</div>
+                    <div class="accor-titles">{{advConst.CONTACT_INFO_LABEL}}</div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div>
+                  <div class='pad20-side'>
+                    <div id='page-content'>
+                      <div id='form-container'>
+
+                        <div class='form-body'>
+                          <div class='col-12 mrl15'>
+                            <div class="col-md-8 col-lg-8">
+                              <mat-form-field class="wd-full">
+                                <input id="advDomain" name="advDomain" maxlength="100" minlength="4"
+                                  [(ngModel)]="advPojo.email" autocomplete="off" matInput
+                                  placeholder="{{advConst.EMAIL_LABEL}}" matTooltipPosition="above"
+                                  matTooltip="{{advConst.EMAIL_TOOLTIP}}">
+                              </mat-form-field>
+                              <mat-error class="error" *ngIf="!formValidated && !advPojo.email">
+                                {{advConst.VALIDATION_EMAIL_MISSING}}
+                              </mat-error>
+                              <mat-error class="error"
+                                *ngIf="!formValidated && advPojo.email && !validateEmail(advPojo.email)">
+                                {{advConst.VALIDATION_EMAIL_INVALID}}
+                              </mat-error>
+                            </div>
+                            <div class="clearfix"></div>
+                            <app-form-textarea [(ngModel)]="advPojo.contactAddress" tooltipPosition="above"
+                              label="{{advConst.ADDRESS_LABLE}}*" tooltip="{{advConst.ADDRESS_TOOLTIP}}" maxLen="1024"
+                              minLen="4" id="advContactInfo" name="advContactInfo" validated="{{formValidated}}"
+                              validationMsg="{{advConst.VALIDATION_ADDRESS}}" width="wd250">
+                            </app-form-textarea>
+
+                            <div class="clearfix"></div>
+                            <!--Region(country id)-->
+                            <!-- REVX-306: Change entity from COUNTRY to ADVERTISER_REGION -->
+                            <app-form-select [(ngModel)]="advPojo.region" entity="ADVERTISER_REGION"
+                              tooltipPosition="above" label="{{advConst.REGION_LABLE}}*"
+                              tooltip="{{advConst.REGION_TOOLTIP}}" id="advREGION" name="advREGION"
+                              validated="{{formValidated}}" validationMsg="{{advConst.VALIDATION_REGION}}" width="wd250"
+                              disable='false' (countryEvent)='countryEvent($event)'>
+                            </app-form-select>
+
+                            <div class="clearfix"></div>
+                            <!--Time-Zone-->
+                            <!-- REVX-306: decoupling advertiser region and timezone. Removing the disabled attribute as well -->
+                            <app-form-select [(ngModel)]="advPojo.timeZone" filterValue='{{getFilterValue()}}'
+                              entity="TIMEZONE" tooltipPosition="above" label="{{advConst.TIMEZONE_LABEL}}*"
+                              tooltip="{{advConst.TIMEZONE_TOOLTIP}}" id="advTimezone" name="advTimezone"
+                              validated="{{formValidated}}" validationMsg="{{advConst.TIMEZONE_TOOLTIP}}" width="wd250">
+                            </app-form-select>
+                            <div class="clearfix mrb15"></div>
+
+                            <app-form-status [(ngModel)]="advPojo.active" label="{{advConst.STATUS_LABEL}}"
+                              tooltipPosition="above" tooltip="{{advConst.STATUS_TOOLTIP}}"
+                              buttonLabel="{{advPojo.active == true?'Active':'Inactive'}}">
+                            </app-form-status>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <mat-action-row class="mrr15">
+                  <button id='advCancel' mat-button [routerLink]="['/advertiser']">Cancel</button>
+                  <button mat-raised-button class='btn-secondary ml-3' id='advSaveExit' appDisableRO
+                    [appDisableDemo]='appConst.DISABLE' (click)="save()">Save &
+                    Exit</button>
+                </mat-action-row>
+
+
+              </mat-expansion-panel>
+
+
+
+            </mat-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</block-ui>

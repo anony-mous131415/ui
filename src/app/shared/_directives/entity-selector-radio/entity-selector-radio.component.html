@@ -1,0 +1,145 @@
+<div id='modal-content' class='modal-content mh-100 entSelect'>
+
+    <div id='modal-body' class="modal-body">
+        <!----------------------------------------------TABLE STARTS------------------------------------------------------------------------------------------->
+        <div id='list-header'>
+            <div class="float-left d-flex flex-row mrt10">
+                <div class='list-title'>
+                    Select {{entityType | lowercase}}
+                </div>
+
+                <div *ngIf="entityType==='PIXEL'" class='ml-2 mt-1'>
+                    <span class='anchor' (click)='openPxlForm()'> Add a new Pixel</span>
+                </div>
+            </div>
+
+            <div class="float-right d-flex">
+
+                <div class="float-right mrr10 d-flex">
+                    <div class="mr-2 mt-2">
+                        <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                    </div>
+                    <!-- <input class='' matInput matInputAutofocus placeholder="Search" id="list-search"
+                        [(ngModel)]='dashboardFilters.value' (keyup.enter)="applySearchFilter($event.target.value)"
+                        [disabled]='showProgressBar' autocomplete="off" />
+                    <span id='list-search-btn' class='icon-outside'
+                        (click)='applySearchFilter(searchInput.value)'></span> -->
+                    <div class="my-form-group">
+                        <input id="name" name="name" type="text" class="my-form-control" placeholder="Search"
+                            [(ngModel)]='dashboardFilters.value' (keyup.enter)="applySearchFilter($event.target.value)"
+                            [disabled]='showProgressBar' autocomplete="off">
+                        <label for="name" class="my-form-label">Search</label>
+                    </div>
+
+                </div>
+
+                <div class='float-right'>
+                    <button mat-button id="list-refresh-btn" (click)="resetSearchObjects(true)" matTooltip="Refresh"
+                        matTooltipPosition="above" [disabled]='showProgressBar'>
+                        <em class="fa fa-refresh"></em>
+                    </button>
+                </div>
+
+            </div>
+
+
+
+
+            <div class='clearfix'></div>
+
+        </div>
+
+
+        <div id='list-body'>
+            <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+            <div id='table-container'>
+                <div #tableContent id='table-content'>
+                    <mat-radio-group [(ngModel)]="selectedElement">
+
+                        <mat-table [ngClass]='{"table-scroll":!showDataUnavailableMsg}' class="table-border"
+                            [dataSource]="listSource" matSort>
+
+                            <ng-container *ngFor="let column of listMetrics" [matColumnDef]="column.id">
+
+
+                                <div *ngIf='column.id == "selected" '>
+
+                                    <mat-header-cell *matHeaderCellDef>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                        <mat-radio-button [value]="row" (change)="showWarning=false">
+                                        </mat-radio-button>
+                                    </mat-cell>
+                                </div>
+
+                                <!-- Only for status column header -->
+                                <div *ngIf='column.id == "active" '>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>
+
+                                        <a class='pointer'>
+                                            <em class='fa fa-circle mrr3'
+                                                [ngClass]="{'text-success':selectedStatus === true,'text-danger':selectedStatus === false, 'text-default':selectedStatus === null}"></em>
+                                        </a>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                        <div>
+                                            <em class='fa fa-circle mc-status'
+                                                [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></em>
+                                        </div>
+                                    </mat-cell>
+                                </div>
+
+                                <!-- for all other coloumns -->
+                                <div *ngIf='column.id != "active" &&  column.id != "selected" '>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.title }}
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                        {{column.cell(row)}}
+                                    </mat-cell>
+                                </div>
+
+                            </ng-container>
+
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;"></mat-header-row>
+                            <mat-row *matRowDef="let row ;columns: displayedColumns;" (click)="selectedElement= row">
+                            </mat-row>
+
+                        </mat-table>
+
+                    </mat-radio-group>
+
+                    <div *ngIf='showDataUnavailableMsg' class='data-unavailable-msg'><em class='fa fa-warning'></em>
+                        {{dataUnavailableMsg}}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id='list-footer'>
+            <mat-paginator [length]="listLen" [pageSize]="10" [pageSizeOptions]="[10,20,50,100,200,300 ,400,500,1000]"
+                showFirstLastButtons>
+            </mat-paginator>
+        </div>
+
+        <div *ngIf='showWarning' class="row mx-1 alert alert-danger" role="alert">
+            <div class="col-1">
+                <em class="fa fa-exclamation-triangle" aria-hidden="true"></em>
+            </div>
+            <div class="col-11">
+                Please select one of the {{entityType | titlecase}} to continue.
+            </div>
+        </div>
+        <!----------------------------------------------TABLE ENDS--------------------------------------------------------------------------------------------->
+    </div>
+
+    <div id='modal-footer' class="modal-footer d-flex justify-content-end">
+        <button id='entityCancel' mat-button class='mrl15' (click)='dismissModal()'>Cancel</button>
+
+        <button id='entityDone' [disabled]='showProgressBar' mat-raised-button class='btn-primary mrl15'
+            (click)="done()">Done</button>
+    </div>
+
+</div>

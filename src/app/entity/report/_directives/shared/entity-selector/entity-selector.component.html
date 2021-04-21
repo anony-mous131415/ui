@@ -1,0 +1,443 @@
+<div mat-dialog-title class="modal-header col-12 d-flex flex-row">
+    <h4 class="flex-grow-1 my-auto modal-title">{{config.title}}</h4>
+</div>
+
+<div mat-dialog-content class="modal-body p-0" id="entSelect">
+    <div class='my-container'>
+        <div class='row m-0'>
+            <div class='col-8 p-0'>
+                <div id='list-header'>
+
+                    <!--bread-crumbs  and BACK button-->
+                    <div class="float-left mrr15 d-flex flex-column" *ngIf='config.entity && config.entity.length>1'>
+
+                        <div class="b-crumbs">
+                            <mdb-breadcrumb customClass="black-text purple lighten-4">
+                                <mdb-breadcrumb-item>
+                                    <span class='bc-title link'>{{config.entity[0]}}</span>
+                                    <a class='bc-name' *ngIf='l1_obj_selected.name'>:&nbsp;{{l1_obj_selected.name}}</a>
+                                </mdb-breadcrumb-item>
+                                <mdb-breadcrumb-item *ngIf='l1_obj_selected.name'>
+                                    <span class='bc-title link'>{{config.entity[1]}}</span>
+                                    <a class='bc-name' *ngIf='l2_obj_selected.name'>:&nbsp;{{l2_obj_selected.name}}</a>
+                                </mdb-breadcrumb-item>
+                                <mdb-breadcrumb-item *ngIf='l2_obj_selected.name'>
+                                    <em class="fa fa-angle-right mr-1 mt-1"></em>
+                                    <span class='bc-title'>{{config.entity[2]}}</span>
+                                </mdb-breadcrumb-item>
+                            </mdb-breadcrumb>
+                        </div>
+
+                        <div class='py-1'>
+                            <button mat-button [disabled]='showProgressBar' (click)="backToParent()">Go Back</button>
+                        </div>
+
+                    </div>
+                    <div class='float-right'>
+                        <button mat-button id="list-refresh-btn" (click)="reload()" matTooltip="Refresh"
+                            matTooltipPosition="above" [disabled]='showProgressBar'>
+                            <em class="fa fa-refresh"></em>
+                        </button>
+                    </div>
+                    <div class="float-right mrr10">
+                        <mat-form-field>
+                            <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                            <input matInput id='cd-filter' [(ngModel)]="searchInput" [disabled]='showProgressBar'
+                                (keyup.enter)="searchTableOnEnter()" placeholder="Search" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+
+                    <div class='clearfix'></div>
+                </div>
+
+                <div id='list-body'>
+                    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+                    <div id='table-container'>
+                        <div #tableContent id='table-content'>
+                            <app-slider-three-way [activePane]="CURR_TABLE_LEVEL">
+
+                                <!-------------------------------Advertiser/aggregator/country/creative-size--------------------------------->
+                                <div leftPane [hidden]='CURR_TABLE_LEVEL != 1'>
+                                    <div>
+
+                                        <mat-table id="l1-table"
+                                            [ngClass]="{'table-scroll' : l1_current_ids && l1_current_ids.length!==0}"
+                                            [dataSource]="l1_source" matSort #sort='matSort'>
+
+                                            <ng-container *ngFor="let column of listMetrics" [matColumnDef]="column.id">
+
+                                                <!-- checkbox not show for creatives selection -->
+                                                <div *ngIf="column.id == 'select' && isCreativeModal">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id == 'select' && !isCreativeModal">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        <mat-checkbox [checked]="getMasterCheckboxStatus()"
+                                                            (change)="selectAllClick()" [disabled]='showProgressBar'>
+                                                        </mat-checkbox>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                        <mat-checkbox [checked]="!row.isNotSelected"
+                                                            (change)="updateStatus(row)" [disabled]='showProgressBar'>
+                                                        </mat-checkbox>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id == 'active'">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        <em class='fa fa-circle mrr3 text-default'></em>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" id='l1-active'>
+                                                        <i class='fa fa-circle mc-status'
+                                                            [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></i>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id == 'name'">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                                        arrowPosition='after'>
+                                                        {{ column.title}}
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" id='l1-id'>
+                                                        {{row.name}}</mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id =='next'">
+                                                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" (click)="select_l1(row)">
+                                                        <button mat-button class='mat-button'
+                                                            [ngClass]="{ 'ban-color' : row.isNotSelected }"><i
+                                                                class='fa'
+                                                                [ngClass]="{'fa-caret-right' : !row.isNotSelected , 'fa-ban': row.isNotSelected}"
+                                                                matTooltip="{{advancedConst.BAN_TOOLTIP}}"
+                                                                matTooltipPosition='below'
+                                                                matTooltipClass='matTooltipClass'
+                                                                [matTooltipDisabled]="!row.isNotSelected"></i></button>
+                                                    </mat-cell>
+                                                </div>
+
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;">
+                                            </mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                        </mat-table>
+
+                                        <div *ngIf='!showProgressBar && l1_current_ids && l1_current_ids.length===0'
+                                            class='my-4 text-center no-data'>
+                                            <i class='fa fa-warning'></i> No data available currently.</div>
+
+                                        <mat-paginator #paginator [pageSize]='50' [length]="l1_listLen"
+                                            [pageSizeOptions]="[50, 100, 200 , 500 , 1000 , 1500 , 2000]"
+                                            showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+                                <!-----------------------------------Campaign/state/creatives----------------------------------->
+                                <div centerPane [hidden]='CURR_TABLE_LEVEL != 2'>
+                                    <div>
+
+                                        <mat-table id="l2-associate-table"
+                                            [ngClass]="{'table-scroll' : l2_current_ids && l2_current_ids.length!==0}"
+                                            [dataSource]="l2_source" matSort #sort2='matSort'>
+
+                                            <ng-container *ngFor="let column of listMetrics" [matColumnDef]="column.id">
+
+                                                <div *ngIf="column.id == 'select'">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        <mat-checkbox [checked]="getMasterCheckboxStatus()"
+                                                            (change)="selectAllClick()" [disabled]='showProgressBar'>
+                                                        </mat-checkbox>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                        <mat-checkbox [checked]="!row.isNotSelected"
+                                                            (change)="updateStatus(row)" [disabled]='showProgressBar'>
+                                                        </mat-checkbox>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id === 'active'">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        <em class='fa fa-circle mrr3 text-default'></em>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" id='l1-active'>
+                                                        <i class='fa fa-circle mc-status'
+                                                            [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></i>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id === 'name'">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                                        arrowPosition='after'>
+                                                        {{ column.title}}
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" id='l1-id'>
+                                                        {{row.name}}</mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id=='next' && config.entity.length===3">
+                                                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" (click)="select_l2(row)">
+                                                        <button mat-button class='mat-button'
+                                                            [ngClass]="{ 'ban-color' : row.isNotSelected }"><i
+                                                                class='fa'
+                                                                [ngClass]="{'fa-caret-right' : !row.isNotSelected , 'fa-ban': row.isNotSelected}"
+                                                                matTooltip="{{advancedConst.BAN_TOOLTIP}}"
+                                                                matTooltipPosition='below'
+                                                                matTooltipClass='matTooltipClass'
+                                                                [matTooltipDisabled]="!row.isNotSelected"></i></button>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <!--for creatives selection only-->
+                                                <div *ngIf="column.id=='next' && config.entity.length!==3">
+                                                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                    </mat-cell>
+                                                </div>
+
+                                            </ng-container>
+
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true;">
+                                            </mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+
+                                        </mat-table>
+
+                                        <div *ngIf='!showProgressBar && l2_current_ids && l2_current_ids.length===0'
+                                            class='my-4 text-center no-data'>
+                                            <i class='fa fa-warning'></i> No data available currently.</div>
+
+                                        <mat-paginator #paginator2 [pageSize]='50' [length]="l2_listLen"
+                                            [pageSizeOptions]="[50, 100, 200 , 500 , 1000 , 1500 , 2000]"
+                                            showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+                                <!-----------------------------strategy/city------------------------------------->
+                                <div rightPane [hidden]='CURR_TABLE_LEVEL != 3'>
+
+                                    <div>
+                                        <mat-table
+                                            [ngClass]="{'table-scroll' : l3_current_ids && l3_current_ids.length!==0}"
+                                            id="l3-associate-table" [dataSource]="l3_source" matSort #sort3='matSort'>
+
+                                            <ng-container *ngFor="let column of listMetrics" [matColumnDef]="column.id">
+
+                                                <div *ngIf="column.id == 'select'">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        <mat-checkbox [checked]="getMasterCheckboxStatus()"
+                                                            (change)="selectAllClick()" [disabled]='showProgressBar'>
+                                                        </mat-checkbox>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                        <mat-checkbox [checked]="!row.isNotSelected"
+                                                            (change)="updateStatus(row)" [disabled]='showProgressBar'>
+                                                        </mat-checkbox>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id === 'active'">
+                                                    <mat-header-cell *matHeaderCellDef>
+                                                        <em class='fa fa-circle mrr3 text-default'></em>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" id='l1-active'>
+                                                        <i class='fa fa-circle mc-status'
+                                                            [ngClass]="{'text-success':row.active === true,'text-danger':row.active === false}"></i>
+                                                    </mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id === 'name'">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header
+                                                        arrowPosition='after'>
+                                                        {{ column.title}}
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row" id='l3-id'>
+                                                        {{row.name}}</mat-cell>
+                                                </div>
+
+                                                <div *ngIf="column.id=='next'">
+                                                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                    </mat-cell>
+                                                </div>
+
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                        </mat-table>
+
+                                        <div *ngIf=' !showProgressBar && l3_current_ids && l3_current_ids.length===0'
+                                            class='my-4 text-center no-data'>
+                                            <i class='fa fa-warning'></i> No data available currently.</div>
+
+
+                                        <mat-paginator #paginator3 [pageSize]='50' [length]="l3_listLen"
+                                            [pageSizeOptions]="[50, 100, 200 , 500 , 1000 , 1500 , 2000]"
+                                            showFirstLastButtons>
+                                        </mat-paginator>
+
+                                    </div>
+                                </div>
+
+                            </app-slider-three-way>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-----------------------------My selection------------------------------------->
+            <div class='col-4 pr-0'>
+
+                <mat-card class="tp-card">
+                    <mat-card-content>
+                        <div class='row'>
+                            <div class='col-6'>
+                                <h6 class='mrb20'>My Selections</h6>
+                            </div>
+                            <div class='col-6 text-right text-default text-gray text12 link pointer' id='clearAll'
+                                (click)="clearAllClick()" [ngClass]="{'disableUI':showProgressBar}">Clear All Selections
+                            </div>
+                        </div>
+
+                        <div class='selection-body'>
+
+                            <mat-accordion [multi]='true'>
+                                <!-------------------------1st ENTITY (hide for creative selection)------------------->
+                                <ng-container *ngIf='!isCreativeModal'>
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header class="pl-2">
+                                            <mat-panel-title>
+                                                <p class='mt-4'>{{config.header[0]}} </p>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <div>
+
+                                            <div *ngIf='!l1_display.isArray'>
+                                                <div *ngIf='l1_display.type === advancedConst.UI_TYPE.INCLUDE'>
+                                                    <p class="mb-0">All Selected</p>
+                                                </div>
+                                                <div *ngIf='l1_display.type === advancedConst.UI_TYPE.EXCLUDE'>
+                                                    <p class="mb-0">None Selected</p>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf='l1_display.isArray'>
+                                                <p *ngFor='let obj of l1_display.arrayOfObjects'>
+                                                    <em class='fa fa-square'></em>
+                                                    <span class=''>&nbsp;{{l1_display.type}} - {{obj.name}}</span>
+                                                    <span class='pull-right pointer pointer' title='Remove'>
+                                                        <i (click)="updateStatus(obj)"
+                                                            class='text-gray text13 fa fa-close'></i>
+                                                    </span>
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </mat-expansion-panel>
+                                </ng-container>
+
+                                <!-------------------------2nd ENTITY------------------->
+                                <mat-expansion-panel *ngIf='config.header[1]'>
+                                    <mat-expansion-panel-header class="pl-2">
+                                        <mat-panel-title>
+                                            <p class='mt-4'>{{config.header[1]}} </p>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+
+                                        <div *ngIf='!l2_display.isArray'>
+                                            <div *ngIf='l2_display.type === advancedConst.UI_TYPE.INCLUDE'>
+                                                <p class="mb-0">All Selected</p>
+                                            </div>
+                                            <div *ngIf='l2_display.type === advancedConst.UI_TYPE.EXCLUDE'>
+                                                <p class="mb-0">None Selected</p>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf='l2_display.isArray'>
+                                            <p *ngFor='let obj of l2_display.arrayOfObjects'>
+                                                <em class='fa fa-square'></em>
+                                                <span class=''>&nbsp;{{l2_display.type}} - {{obj.name}}</span>
+                                                <span class='pull-right pointer pointer' title='Remove'>
+                                                    <i (click)="updateStatus(obj)"
+                                                        class='text-gray text13 fa fa-close'></i>
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </mat-expansion-panel>
+
+
+                                <!-------------------------3rd ENTITY------------------->
+                                <mat-expansion-panel *ngIf='config.header[2]'>
+                                    <mat-expansion-panel-header class="pl-2">
+                                        <mat-panel-title>
+                                            <p class='mt-4'>{{config.header[2]}} </p>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div>
+
+                                        <div *ngIf='!l3_display.isArray'>
+                                            <div *ngIf='l3_display.type === advancedConst.UI_TYPE.INCLUDE'>
+                                                <p class="mb-0">All Selected</p>
+                                            </div>
+                                            <div *ngIf='l3_display.type === advancedConst.UI_TYPE.EXCLUDE'>
+                                                <p class="mb-0">None Selected</p>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf='l3_display.isArray'>
+                                            <p *ngFor='let obj of l3_display.arrayOfObjects'>
+                                                <em class='fa fa-square'></em>
+                                                <span class=''>&nbsp;{{l3_display.type}} - {{obj.name}}</span>
+                                                <span class='pull-right pointer pointer' title='Remove'>
+                                                    <i (click)="updateStatus(obj)"
+                                                        class='text-gray text13 fa fa-close'></i>
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </mat-expansion-panel>
+
+                            </mat-accordion>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+        </div>
+        <div class='clearfix'></div>
+    </div>
+</div>
+
+
+<div class='modal-footer'>
+    <span class='pull-left mrr10'>
+        <div *ngIf='showErrorMessage' class="error-message pull-left">
+            <i class="fa fa-warning" aria-hidden="true"></i>
+            {{showErrorMessage}}
+        </div>
+    </span>
+    <span class='pull-right m-0'>
+        <button id='associateStrCancle' [disabled]='showProgressBar' mat-button class='mrr15 mrl15'
+            (click)="cancel()">Cancel</button>
+        <button id='saveStrategies' mat-raised-button class='btn-primary' [disabled]='showProgressBar'
+            (click)="done()">Done</button>
+    </span>
+</div>

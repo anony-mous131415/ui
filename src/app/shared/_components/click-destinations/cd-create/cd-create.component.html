@@ -1,0 +1,222 @@
+<div mat-dialog-title class="modal-header">
+    <h4 class="flex-grow-1 my-auto modal-title">{{injectedData.cd.id?'Edit Click Destination':'New Click Destination'}}
+    </h4>
+</div>
+
+
+<div mat-dialog-content class="modal-body">
+    <div id='page-content'>
+
+        <div id='form-container'>
+            <div class='form-body'>
+
+                <app-form-input [(ngModel)]="injectedData.cd.name" tooltipPosition="above"
+                    label="{{cdConst.LABEL_NAME}}*" tooltip="{{cdConst.TOOLTIP_NAME}}" maxLen="256" minLen="4"
+                    id="cdName" validationMsg="{{cdConst.VALIDATION_NAME_MISSING}}" validated="{{mandatoryValidated}}"
+                    width="wd250">
+                </app-form-input>
+                <div class='clearfix'></div>
+
+                <!--REVX-724 : add new check box , is skad here : disable check box in edit flow -->
+                <!--if selected : hide web and android urls also hide generate radio(s2s , click) -->
+                <div class="form-group mx-3 my-3">
+                    <div class="row ">
+                        <div class="col-md-3 col-lg-3">
+                            <div class="form-label label-css">
+                                {{ cdConst.LABEL_SKAD }}
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-lg-8" [ngClass]="{'no-cursor-wrapper': isSkadCheckBoxDisabled() }">
+                            <div class='' [ngClass]="{'no-ptr-events': isSkadCheckBoxDisabled() }">
+                                <mat-checkbox [(ngModel)]="injectedData.cd.skadTarget" (change)='onSkadCbChange($event)'
+                                    [disabled]="isSkadCheckBoxDisabled()">
+                                    {{injectedData.cd.skadTarget===true?'Yes':'No'}}
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div class=" clearfix">
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--is dynamic chec-box-->
+                <div [hidden]='!dcoMacros' class="form-group mx-3">
+                    <div class="row ">
+                        <div class="col-md-3 col-lg-3">
+                            <div class="form-label label-css">
+                                {{ cdConst.IS_DCO }}
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-lg-8">
+                            <div class=''>
+                                <mat-radio-group [(ngModel)]="injectedData.cd.dco" class="row">
+                                    <mat-radio-button *ngFor="let dcoType of isDcoOptions;let i=index"
+                                        [value]="dcoType.id" class='col-4'
+                                        [ngClass]="{'text-secondary':injectedData.cd.dco!==dcoType.id , 'mb-3': i===0 }"
+                                        (click)='onDynamicStatusChange($event,dcoType.id)'>
+                                        {{dcoType.label}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <div class=" clearfix">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- //REVX-724 -->
+                <div [hidden]="injectedData.cd.skadTarget">
+
+                    <!--generate URL radio-->
+                    <div class="form-group mt-3 mx-3">
+                        <div class="row">
+                            <div class="col-md-3 col-lg-3">
+                                <div class="form-label label-css">
+                                    Generate
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-8">
+                                <div>
+                                    <mat-radio-group [(ngModel)]="injectedData.cd.generatedUrlType" class="row">
+                                        <mat-radio-button *ngFor="let genType of generateOptions;let i=index"
+                                            [value]="genType.id" class='col-4'
+                                            [ngClass]="{'text-secondary':injectedData.cd.generatedUrlType!==genType.id , 'mb-3': i===0 }"
+                                            (click)='onGenerateRadioChange($event,genType.id)'>
+                                            {{genType.label}}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <!--web click -->
+                    <app-cd-text-area [(ngModel)]="injectedData.cd.webClickUrl" label="{{cdConst.WEB_CLICK_URL}}"
+                        id="webClickUrl" width="wd-per-80" [rowsInput]='5' [hasError]='false'
+                        [isMacroList]='isMacroListAllowed' [macroList]='dcoMacros'>
+                    </app-cd-text-area>
+
+
+                    <!--web  s2s-->
+                    <app-cd-text-area [(ngModel)]="injectedData.cd.webS2sClickTrackingUrl"
+                        label="{{cdConst.WEB_S2S_TRACKING_URL}}" id="webS2SUrl" width="wd-per-80" [rowsInput]='5'
+                        [hasError]='false'>
+                    </app-cd-text-area>
+
+
+                    <!--web  impression-->
+                    <app-cd-text-area [(ngModel)]="injectedData.cd.webImpressionTracker"
+                        label="{{cdConst.WEB_IMP_TRACKING_URL}}" id="webImpUrl" width="wd-per-80" [rowsInput]='5'
+                        [hasError]='false' [hasInfo]='true' infoMsg='{{cdConst.ADD_MULTIPLE_IMP_TRACKER}}'>
+                    </app-cd-text-area>
+
+
+                    <!--ANDROID click-->
+                    <!--REVX-401-->
+                    <app-cd-text-area [(ngModel)]="currentUrls.androidClick" label="{{cdConst.AND_CLICK_URL}}"
+                        id="androidClickUrl" width="wd-per-80" [rowsInput]='5'
+                        [hasError]="error && error['ANDRD_CLICK'] && (error['ANDRD_CLICK'].hasError || error['ANDRD_CLICK'].hasInfo)"
+                        validationMsg="{{error && error['ANDRD_CLICK'] ? error['ANDRD_CLICK'].errOrInfoMsg : null }}"
+                        [isMacroList]='isMacroListAllowed' [macroList]='dcoMacros'>
+                    </app-cd-text-area>
+
+
+
+                    <!--REVX-401-->
+                    <!-- android s2s-->
+                    <app-cd-text-area [(ngModel)]="currentUrls.androidS2S" label="{{cdConst.AND_S2S_TRACKING_URL}}"
+                        id="androidS2SUrl" width="wd-per-80" [rowsInput]='5'
+                        [hasError]="error && error['ANDRD_S2S'] && (error['ANDRD_S2S'].hasError || error['ANDRD_S2S'].hasInfo)"
+                        validationMsg="{{error && error['ANDRD_S2S'] ? error['ANDRD_S2S'].errOrInfoMsg : null }}">
+                    </app-cd-text-area>
+
+
+                    <!-- android impression-->
+                    <app-cd-text-area [(ngModel)]="injectedData.cd.androidImpressionTracker"
+                        label="{{cdConst.AND_IMP_TRACKING_URL}}" id="androidImpUrl" width="wd-per-80" [rowsInput]='5'
+                        [hasError]='false' [hasInfo]='true' infoMsg='{{cdConst.ADD_MULTIPLE_IMP_TRACKER}}'>
+                    </app-cd-text-area>
+
+                </div>
+
+
+                <!-- IOS CLICK-->
+                <!--REVX-401-->
+                <app-cd-text-area [(ngModel)]="currentUrls.iosClick" label="{{cdConst.IOS_CLICK_URL}}" id="iosClickUrl"
+                    width="wd-per-80" [rowsInput]='5'
+                    [hasError]="error && error['IOS_CLICK'] && (error['IOS_CLICK'].hasError || error['IOS_CLICK'].hasInfo)"
+                    validationMsg="{{error && error['IOS_CLICK'] ? error['IOS_CLICK'].errOrInfoMsg : null }}"
+                    [isMacroList]='isMacroListAllowed' [macroList]='dcoMacros'>
+                </app-cd-text-area>
+
+
+
+                <!--REVX-401-->
+                <!-- IOS S2S-->
+                <app-cd-text-area [(ngModel)]="currentUrls.iosS2S" label="{{cdConst.IOS_S2S_TRACKING_URL}}"
+                    id="iosS2SUrl" width="wd-per-80" [rowsInput]='5'
+                    [hasError]="error && error['IOS_S2S'] && (error['IOS_S2S'].hasError || error['IOS_S2S'].hasInfo)"
+                    validationMsg="{{error && error['IOS_S2S'] ? error['IOS_S2S'].errOrInfoMsg : null }}">
+                </app-cd-text-area>
+
+
+                <!-- IOS impression-->
+                <app-cd-text-area [(ngModel)]="injectedData.cd.iosImpressionTracker"
+                    label="{{cdConst.IOS_IMP_TRACKING_URL}}" id="iosImpUrl" width="wd-per-80" [rowsInput]='5'
+                    [hasError]="error && error['IOS_IMP'] && (error['IOS_IMP'].hasError || error['IOS_IMP'].hasInfo)"
+                    validationMsg="{{error && error['IOS_IMP'] ? error['IOS_IMP'].errOrInfoMsg : null }}"
+                    [hasInfo]='true' infoMsg='{{cdConst.ADD_MULTIPLE_IMP_TRACKER}}'>
+                </app-cd-text-area>
+
+
+                <!-------------------campaign UA/RT-------------->
+                <!--REVX-724 : select UA and disable changes if skad is true -->
+                <div class="form-group mt-5 pt-4 mx-4" id="tag_placement">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3">
+                            <div class="form-label label-css">
+                                {{cdConst.CAMPAIGN_TYPE}}
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-lg-8" [ngClass]="{'no-cursor-wrapper': this.injectedData.cd.skadTarget}">
+                            <div [ngClass]="{'no-ptr-events': this.injectedData.cd.skadTarget}">
+                                <mat-radio-group [(ngModel)]="injectedData.cd.campaignType"
+                                    [disabled]="this.injectedData.cd.skadTarget" class="d-flex flex-column">
+                                    <mat-radio-button *ngFor="let genType of uaRtOptions ;let i=index"
+                                        [value]="genType.id"
+                                        [ngClass]="{'text-secondary':injectedData.cd.campaignType!==genType.id , 'mb-3': i===0 }">
+                                        {{genType.value}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div *ngIf="!mandatoryValidated  && !injectedData.cd.campaignType" class='row'>
+                    <div class='col-md-3 col-lg-3'></div>
+                    <div class='col-md-8 col-lg-8 validation-failed pl-4 pt-2'><i
+                            class="fa fa-warning"></i>{{cdConst.VALIDATION_RADIO_MISSING}}
+                    </div>
+                    <div class='clearfix'></div>
+                </div>
+                <!-------------------campaign UA/RT ends-------------->
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div mat-dialog-actions id='footer' class="modal-footer" [ngClass]="{'no-cursor-wrapper': disableFooter() }">
+    <p *ngIf="disableFooter()">{{getFooterMessage()}}</p>
+    <button mat-button class="mrr15 mrl15" (click)="cancel()">Cancel</button>
+    <button [ngClass]="{'no-ptr-events': disableFooter()}" appDisableRO [appDisableDemo]='appConst.DISABLE'
+        class="btn btn-primary btn-revx" (click)="onSaveClick()">Save</button>
+
+</div>

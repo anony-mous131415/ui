@@ -1,0 +1,172 @@
+<navbar></navbar>
+<block-ui>
+
+    <div class='page-container'>
+        <div class='page-header'>
+            <div class='breadcrumbs-container'>
+                <app-breadcrumbs bc={{breadcrumbs}}></app-breadcrumbs>
+            </div>
+
+            <div class='clearfix'></div>
+        </div>
+
+        <div id='page-content'>
+
+            <div class='row justify-content-center' id="creativeCreate">
+                <div class='col-xs-12 col-md-10 col-lg-8'>
+                    <div id='form-container'>
+                        <div class='form-header sticky-top z10'>
+                            <span class=''>Create Creative</span>
+                            <button id="creative-create-cancel" mat-button class="pull-right"
+                                (click)="onCreativeCreateCancel()">Cancel</button>
+                        </div>
+                        <mat-accordion id='creative-form'>
+
+                            <!-- STEP 1 -->
+                            <mat-expansion-panel [expanded]="step === crConst.STEP.BASIC_DETAILS" hideToggle
+                                [disabled]='!(step === crConst.STEP.BASIC_DETAILS)'>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="ctvsteppers">1</div>
+                                        <div class="accor-titles">Basic Details</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <app-cr-create-basic-form (syncBasicDetails)='syncBasicDetails($event)'
+                                    (onAssetTypeChange)='onAssetTypeChange($event)'>
+                                </app-cr-create-basic-form>
+                            </mat-expansion-panel>
+
+                            <!-- STEP 2 -->
+                            <mat-expansion-panel [expanded]="step === crConst.STEP.UPLOAD_FILES" hideToggle
+                                [disabled]='!(step === crConst.STEP.UPLOAD_FILES)' *ngIf="!isDynamicTemplateFlow()">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="ctvsteppers">2</div>
+                                        <div class="accor-titles">Upload Files</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <!-- upload section -->
+                                <div id='uploadForm' class="mrl45"
+                                    *ngIf='crObj.showUploadSection == crConst.UPLOAD_SECTION && crBasicDetails.advertiserId'>
+                                    <app-cr-create-upload-form advertiserId="{{crBasicDetails.advertiserId}}"
+                                        allowedExtensions="{{crObj.allowedExtensions}}" [isDCO]="false"
+                                        allowedFileSizeInKB="{{crObj.allowedFileSizeInKB}}"
+                                        [destinationStep]="crConst.STEP.PREVIEW"
+                                        (syncUploadedFiles)='syncUploadedFiles($event)'
+                                        (syncDCOMacro)='syncDCOMacro($event)'>
+                                    </app-cr-create-upload-form>
+                                </div>
+
+                                <!-- dco form -->
+                                <div id='dcoForm' class="mrl45"
+                                    *ngIf='crObj.showUploadSection == crConst.UPLOAD_DCO_SECTION'>
+                                    <app-cr-create-upload-form advertiserId="{{crBasicDetails.advertiserId}}"
+                                        allowedExtensions="{{crObj.allowedExtensions}}" [isDCO]="true"
+                                        allowedFileSizeInKB="{{crObj.allowedFileSizeInKB}}"
+                                        [destinationStep]="crConst.STEP.PREVIEW"
+                                        (syncUploadedFiles)='syncUploadedFiles($event)'
+                                        (syncDCOMacro)='syncDCOMacro($event)'>
+                                    </app-cr-create-upload-form>
+                                </div>
+
+                                <!-- vast form -->
+                                <div id='vastURLForm' class="mrl45"
+                                    *ngIf='crObj.showUploadSection == crConst.UPLOAD_VAST_SECTION'>
+                                    <app-cr-create-vast-form></app-cr-create-vast-form>
+                                </div>
+
+                                <!-- Third Party section -->
+                                <div id='thirdPartyAdTagForm' class="mrl30"
+                                    *ngIf='crObj.showUploadSection == crConst.UPLOAD_TP_SECTION'>
+                                    <app-cr-create-tp-form (syncTpAdTag)='syncTpAdTag($event)'></app-cr-create-tp-form>
+                                </div>
+
+
+                                <!-- REVX-525 : upload section -->
+                                <div id='uploadForm' class="mrl45" *ngIf='isTemplateFlow()'>
+                                    <app-cr-create-upload-form allowedExtensions="{{crObj.allowedExtensions}}"
+                                        [isDCO]="false" allowedFileSizeInKB="{{crObj.allowedFileSizeInKB}}"
+                                        [destinationStep]="crConst.STEP.TEMPLATE_SELECT"
+                                        (syncUploadedFiles)='syncUploadedFiles($event)'
+                                        (syncDCOMacro)='syncDCOMacro($event)'
+                                        [isTemplateFlow]="isTemplateFlow()">
+                                    </app-cr-create-upload-form>
+                                </div>
+
+
+
+                            </mat-expansion-panel>
+
+
+                            <!-- REVX-525 : below 2 components are only for [DCO=disabled + AssetType=template] -->
+                            <div *ngIf='isTemplateFlow()||isDynamicTemplateFlow()'>
+
+                                <!-- template selection componenent-->
+                                <mat-expansion-panel [expanded]="step === crConst.STEP.TEMPLATE_SELECT" hideToggle
+                                    [disabled]='!(step === crConst.STEP.TEMPLATE_SELECT)'>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div class="ctvsteppers">{{isDynamicTemplateFlow()?'2':'3'}}</div>
+                                            <div class="accor-titles">Template Selection {{ isDynamicTemplateFlow() ? '(Dynamic)':'(Static)'}}</div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <app-cr-template-selection (syncTemplateSelection)="syncTemplateSelection($event)" [isDcoFlow]="isDynamicTemplateFlow()"
+                                    [sizeFilter]="sizeFilter" [crBasicDetails]="crBasicDetails" [uploadedImagesLocations]="uploadedImagesLocations">
+                                    </app-cr-template-selection>
+                                </mat-expansion-panel>
+
+
+                                <!-- template customization component -->
+                                <mat-expansion-panel [expanded]="step === crConst.STEP.TEMPLATE_CUSTOMIZE" hideToggle
+                                    [disabled]='!(step === crConst.STEP.TEMPLATE_CUSTOMIZE)' style="overflow: visible;">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <div class="ctvsteppers">{{isDynamicTemplateFlow()?'3':'4'}}</div>
+                                            <div class="accor-titles">Template Customization {{ isDynamicTemplateFlow() ? '(Dynamic)':'(Static)'}}</div>
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <app-cr-template-customization
+                                        (syncTemplateCustomization)="syncTemplateCustomization($event)" [selectedTemplates]="selectedTemplates"
+                                        [crBasicDetails]="crBasicDetails">
+                                    </app-cr-template-customization>
+                                </mat-expansion-panel>
+                            </div>
+
+
+                            <!-- STEP 3/5 -->
+                            <mat-expansion-panel [expanded]="step === crConst.STEP.PREVIEW" hideToggle
+                                [disabled]='!(step === crConst.STEP.PREVIEW)'>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <div class="ctvsteppers">{{getPreviewStepNumber()}}</div>
+                                        <div class="accor-titles">Preview and verify creatives</div>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <div id='preview_section' class="mrl45"
+                                    *ngIf='rawCreativesJSONStr && crObj.showUploadSection != crConst.UPLOAD_TP_SECTION'>
+                                    <app-cr-create-preview-form isDCO='{{crObj.isDCO}}'
+                                        [prevStepId]="isTemplateFlow()||isDynamicTemplateFlow()? crConst.STEP.TEMPLATE_CUSTOMIZE : crConst.STEP.UPLOAD_FILES"
+                                        advertiserId='{{crBasicDetails.advertiserId}}'
+                                        rawCreativesJSONStr="{{rawCreativesJSONStr}}"
+                                        (syncCreativeDTOs)="syncCreativeDTOs($event)">
+                                    </app-cr-create-preview-form>
+                                </div>
+
+                                <div id='preview_section' class="mrl45"
+                                    *ngIf='rawCreativesJSONStr && crObj.showUploadSection == crConst.UPLOAD_TP_SECTION'>
+                                    <app-cr-create-tp-preview-form advertiserId='{{crBasicDetails.advertiserId}}'
+                                        rawCreativesJSONStr="{{rawCreativesJSONStr}}"
+                                        (syncCreativeDTOs)="syncCreativeDTOs($event)">
+                                    </app-cr-create-tp-preview-form>
+                                </div>
+                            </mat-expansion-panel>
+
+                        </mat-accordion>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</block-ui>

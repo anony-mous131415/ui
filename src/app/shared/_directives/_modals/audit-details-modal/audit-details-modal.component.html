@@ -1,0 +1,172 @@
+<!-- <div class="modal-spacing"> -->
+
+    <div mat-dialog-title class="modal-header border-header px-3 pb-3 d-flex justify-content-between">
+
+        <div class="flex-grow-2 my-auto">
+            <div class="d-flex">
+                <h4 class="my-auto">Change Details : &nbsp;</h4>
+                <h4 class="my-auto">{{config.dateTitle}}</h4>
+            </div>
+        </div>
+
+
+        <div class="">
+
+            <mat-form-field>
+                <em class="fa fa-search" matPrefix aria-hidden="true"></em>
+                <input matInput id='filter-input' (keyup)="applyFilter($event)" placeholder="Search" autocomplete="off">
+
+            </mat-form-field>
+        </div>
+
+    </div>
+
+
+    <div mat-dialog-content class="modal-body col-12">
+        <app-slider [activePane]="selectedPane===PANE_LEFT ? 'left' : 'right'">
+            <div leftPane>
+                <div id='list-body'>
+                    <mat-progress-bar *ngIf="showProgressBar" mode="indeterminate"></mat-progress-bar>
+
+                    <div id='table-container'>
+                        <div #tableContent id='table-content'>
+                            <mat-table class="table-border table-scroll px-3" [dataSource]="listSource" matSort #sort1='matSort'>
+
+                                <!-- time Column -->
+                                <ng-container matColumnDef="time">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> TIME </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.time}} </mat-cell>
+                                </ng-container>
+
+                                <!-- entity Column -->
+                                <ng-container matColumnDef="entity">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> ENTITY </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div matTooltipPosition='above' matTooltip="{{element.entity}}" matTooltipClass="auditModalTooltip">
+                                            {{(element.entity.length > 40) ? (element.entity | slice:0:40)+'...' : (element.entity)}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+
+                                <!-- feild Column -->
+                                <ng-container matColumnDef="feild">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> FEILD NAME </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div matTooltipPosition='above' matTooltip="{{element.feild}}" matTooltipClass="auditModalTooltip">
+                                            {{(element.feild.length > 15) ? (element.feild | slice:0:15)+'...' : (element.feild)}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- madeBy Column -->
+                                <ng-container matColumnDef="madeBy">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> MADE BY </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div matTooltipPosition='above' matTooltip="{{element.madeBy}}" matTooltipClass="auditModalTooltip">
+                                            {{(element.madeBy.length > 22) ? (element.madeBy | slice:0:22)+'...' : (element.madeBy)}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+
+                                <!-- oldValue Column -->
+                                <ng-container matColumnDef="oldValue">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> OLD VALUE </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div matTooltipPosition='above' matTooltip="{{element.oldValue}}" matTooltipClass="auditModalTooltip">
+                                            {{(element.oldValue.length > 22) ? (element.oldValue | slice:0:22)+'...' : (element.oldValue)}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+
+
+                                <!-- newValue Column -->
+                                <ng-container matColumnDef="newValue">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> NEW VALUE </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <div matTooltipPosition='above' matTooltip="{{element.newValue}}" matTooltipClass="auditModalTooltip">
+                                            {{(element.newValue.length > 22) ? (element.newValue | slice:0:22)+'...' : (element.newValue)}}
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- next button -->
+                                <ng-container matColumnDef="nextBtn">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header disabled>DETAILS</mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="pointer" (click)="onNextButtonClick(element)">
+                                        <em matTooltipPosition='above' matTooltipClass="auditModalTooltip" matTooltip="Click to view details." class="fa fa-caret-right fa-lg zoom" aria-hidden="true"></em>
+                                    </mat-cell>
+                                </ng-container>
+
+
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                                <mat-row *matRowDef="let row; let i =index ; columns: displayedColumns;" [ngClass]="{'bg-gray' :  i%2 ===1 }">
+                                </mat-row>
+
+                            </mat-table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div rightPane>
+                <div class="d-flex flex-column px-3">
+
+                    <div class="d-flex flex-column">
+                        <div class="mt-3">
+                            <span class="font-weight-bold">TIME :</span> {{selelctedDetails && selelctedDetails.time ? selelctedDetails.time:"NA"}}
+                        </div>
+                        <div class="mt-3">
+                            <span class="font-weight-bold">ENTITY :</span> {{selelctedDetails && selelctedDetails.entity ? selelctedDetails.entity:"NA"}}
+
+                        </div>
+                        <div class="mt-3">
+                            <span class="font-weight-bold">FEILD NAME :</span> {{selelctedDetails && selelctedDetails.feild ? selelctedDetails.feild:"NA"}}
+
+                        </div>
+                        <div class="mt-3">
+                            <span class="font-weight-bold">MADE BY :</span> {{selelctedDetails && selelctedDetails.madeBy ? selelctedDetails.madeBy :"NA"}}
+
+                        </div>
+                        <div class="mt-3">
+                            <span class="font-weight-bold">OLD VALUE :</span> {{selelctedDetails && selelctedDetails.oldValue ? selelctedDetails.oldValue:"NA"}}
+
+                        </div>
+                        <div class="mt-3">
+                            <span class="font-weight-bold">NEW VALUE :</span> {{selelctedDetails && selelctedDetails.newValue ? selelctedDetails.newValue:"NA"}}
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </app-slider>
+    </div>
+
+
+    <div mat-dialog-actions class="px-3 d-flex border-footer modal-footer">
+
+        <div class="flex-grow-1 d-flex justify-content-start">
+            <div [hidden]="selectedPane === PANE_RIGHT">
+                <mat-paginator #paginator1 [pageSize]='5' [length]="10" [pageSizeOptions]="[3,5,10,50,100,200]" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+        </div>
+
+        <div class="my-auto">
+            <button mat-button class="mrr15 mrl15" (click)="onGoBackClick()" [hidden]="selectedPane === PANE_LEFT">Go
+        back</button>
+            <button mat-raised-button class="btn-primary my-auto" (click)="closeModal()">Ok</button>
+        </div>
+    </div>
+
+<!-- </div> -->
